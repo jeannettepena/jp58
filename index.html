@@ -831,7 +831,7 @@ function tHTML(t){
   </div>`;
 }
 
-function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
+function toggleTodo(id){const t=todos.find(x=>String(x.id)===String(id));if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
 
 function setF(f,btnId){
   filt=f;
@@ -998,12 +998,12 @@ function dueLabel(d){
 
 async function deleteTodo(id){
   await sbDelete('jp58_todos', id);
-  const i=todos.findIndex(x=>x.id===id);
+  const i=todos.findIndex(x=>String(x.id)===String(id));
   if(i>-1){todos.splice(i,1);renderTodos();renderSectionTodos();showToast('Task removed ✓');}
 }
 
 function editTodo(id){
-  const t=todos.find(x=>x.id===id);
+  const t=todos.find(x=>String(x.id)===String(id));
   if(!t)return;
   // Pre-fill modal WITHOUT calling openModal (which resets the button)
   document.getElementById('td-text').value=t.text;
@@ -1064,7 +1064,7 @@ const STATUS_COLORS={
 
 function editStatus(elId, id){
   const arr=elId==='pipeline-list'?pipeline:elId==='projects-list'?projects:contentItems;
-  const item=arr.find(x=>x.id===id);
+  const item=arr.find(x=>String(x.id)===String(id));
   if(!item)return;
   const opts=elId==='projects-list'?PROJECT_STATUSES:elId==='pipeline-list'?PIPELINE_STATUSES:CONTENT_STATUSES;
   const row=document.getElementById('mr-'+id);
@@ -1079,7 +1079,7 @@ function saveStatus(elId, id){
   if(!sel)return;
   const val=sel.value;
   const arr=elId==='pipeline-list'?pipeline:elId==='projects-list'?projects:contentItems;
-  const item=arr.find(x=>x.id===id);
+  const item=arr.find(x=>String(x.id)===String(id));
   if(item&&val){item.status=val;item.color=STATUS_COLORS[val]||item.color;}
   renderAllMini();
   saveData();
@@ -1091,15 +1091,15 @@ function saveStatus(elId, id){
   if(!inp)return;
   const val=inp.value.trim();
   const arr=elId==='pipeline-list'?pipeline:elId==='projects-list'?projects:contentItems;
-  const item=arr.find(x=>x.id===id);
+  const item=arr.find(x=>String(x.id)===String(id));
   if(item&&val)item.status=val;
   renderAllMini();
 }
 
 function removeMini(elId, id){
-  if(elId==='pipeline-list') pipeline=pipeline.filter(x=>x.id!==id);
-  else if(elId==='projects-list') projects=projects.filter(x=>x.id!==id);
-  else if(elId==='content-list') contentItems=contentItems.filter(x=>x.id!==id);
+  if(elId==='pipeline-list') pipeline=pipeline.filter(x=>String(x.id)!==String(id));
+  else if(elId==='projects-list') projects=projects.filter(x=>String(x.id)!==String(id));
+  else if(elId==='content-list') contentItems=contentItems.filter(x=>String(x.id)!==String(id));
   renderAllMini();
 }
 
