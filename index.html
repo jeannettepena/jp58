@@ -1007,13 +1007,13 @@ function deleteTodo(id){
 function editTodo(id){
   const t=todos.find(x=>x.id===id);
   if(!t)return;
-  // Pre-fill modal
+  // Pre-fill modal WITHOUT calling openModal (which resets the button)
   document.getElementById('td-text').value=t.text;
   document.getElementById('td-sec').value=t.sec;
   document.getElementById('td-pri').value=t.pri;
   document.getElementById('td-note').value=t.note||'';
   document.getElementById('td-due').value=t.due||'';
-  // Change save button to update
+  // Set save button to Update AFTER pre-filling
   const saveBtn=document.querySelector('#m-todo .mf .ca.on');
   saveBtn.textContent='Update';
   saveBtn.onclick=()=>{
@@ -1028,7 +1028,8 @@ function editTodo(id){
     renderTodos();renderSectionTodos();
     showToast('Task updated ✓');
   };
-  openModal('m-todo');
+  // Open modal directly without clearing fields
+  document.getElementById('m-todo').classList.add('open');
 }
 
 function renderMiniList(elId, arr){
