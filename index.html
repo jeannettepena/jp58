@@ -1156,14 +1156,21 @@ async function sbGet(table){
 
 async function sbUpsert(table, data){
   if(!data || !data.length) return;
-  // Clean data - convert IDs to string, remove undefined/function values
+  // Only send exact columns that exist in Supabase schema
+  const COLS = {
+    jp58_todos: ['id','text','who','pri','sec','note','due','done'],
+    jp58_events: ['id','date','time','title','note','cat'],
+    jp58_pipeline: ['id','name','sub','status','color'],
+    jp58_projects: ['id','name','sub','status','color'],
+    jp58_content: ['id','name','sub','status','color'],
+  };
+  const cols = COLS[table] || Object.keys(data[0]||{});
   const clean = data.map(item => {
     const obj = {};
-    for(const [k,v] of Object.entries(item)){
-      if(v !== undefined && typeof v !== 'function'){
-        obj[k] = k === 'id' ? String(v) : v;
-      }
-    }
+    cols.forEach(k => {
+      const v = item[k];
+      obj[k] = k === 'id' ? String(v ?? Date.now()) : (v ?? null);
+    });
     return obj;
   });
   const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
