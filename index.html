@@ -1155,20 +1155,42 @@ async function sbGet(table){
 }
 
 async function sbUpsert(table, data){
-  await fetch(`${SB_URL}/rest/v1/${table}`, {
+  if(!data || !data.length) return;
+  // Clean data - convert IDs to string, remove undefined/function values
+  const clean = data.map(item => {
+    const obj = {};
+    for(const [k,v] of Object.entries(item)){
+      if(v !== undefined && typeof v !== 'function'){
+        obj[k] = k === 'id' ? String(v) : v;
+      }
+    }
+    return obj;
+  });
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
     method: 'POST',
     headers: {
       'apikey': SB_KEY,
       'Authorization': `Bearer ${SB_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': 'resolution=merge-duplicates'
+      'Prefer': 'resolution=merge-duplicates,return=minimal'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(clean)
+  });
+  if(!r.ok){
+    const err = await r.text();
+    console.log(`sbUpsert ${table} error:`, err);
+  }
+}
+
+async function sbDeleteAll(table){
+  await fetch(`${SB_URL}/rest/v1/${table}?id=neq.0`, {
+    method: 'DELETE',
+    headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}
   });
 }
 
 async function sbDelete(table, id){
-  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${String(id)}`, {
     method: 'DELETE',
     headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}
   });
@@ -1182,6 +1204,15 @@ async function saveData(){
     await sbUpsert('jp58_projects', projects);
     await sbUpsert('jp58_content', contentItems);
   }catch(e){ console.log('Save error:', e); }
+}
+
+async function refreshFromDB(){
+  await loadData();
+  renderTodos();
+  renderSectionTodos();
+  renderAllMini();
+  renderEvents();
+  buildWeek();
 }
 
 async function loadData(){
