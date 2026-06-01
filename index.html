@@ -831,7 +831,7 @@ function tHTML(t){
   </div>`;
 }
 
-function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
+async function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();await saveData();}}
 
 function setF(f,btnId){
   filt=f;
@@ -996,9 +996,10 @@ function dueLabel(d){
   return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
 }
 
-function deleteTodo(id){
+async function deleteTodo(id){
+  await sbDelete('jp58_todos', id);
   const i=todos.findIndex(x=>x.id===id);
-  if(i>-1){todos.splice(i,1);renderTodos();renderSectionTodos();saveData();showToast('Task removed');}
+  if(i>-1){todos.splice(i,1);renderTodos();renderSectionTodos();showToast('Task removed ✓');}
 }
 
 function editTodo(id){
@@ -1141,42 +1142,68 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-// ── PERSISTENCE ───────────────────────────────────────────
-function saveData(){
-  try{
-    localStorage.setItem('jp58-todos', JSON.stringify(todos));
-    localStorage.setItem('jp58-events', JSON.stringify(events));
-    localStorage.setItem('jp58-pipeline', JSON.stringify(pipeline));
-    localStorage.setItem('jp58-projects', JSON.stringify(projects));
-    localStorage.setItem('jp58-content', JSON.stringify(contentItems));
-  }catch(e){}
+// ── SUPABASE ───────────────────────────────────────────────
+const SB_URL = 'https://kiqxkbwnfqlkeaexqihl.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpcXhrYnduZnFsa2VhZXhxaWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNjYwOTEsImV4cCI6MjA5NTg0MjA5MX0.1n8CV8zzRbk_HMeUvwx3mjyzZNPiBcGvBRvaGZgnECE';
+
+async function sbGet(table){
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?order=created_at.asc`, {
+    headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}
+  });
+  if(!r.ok) return null;
+  return await r.json();
 }
 
-function loadData(){
-  // Version check - clear stale data if code version changed
-  const ver = '2.1';
-  if(localStorage.getItem('jp58-ver') !== ver){
-    localStorage.clear();
-    localStorage.setItem('jp58-ver', ver);
-    return; // use default data from code
-  }
+async function sbUpsert(table, data){
+  await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
+    },
+    body: JSON.stringify(data)
+  });
+}
+
+async function sbDelete(table, id){
+  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'DELETE',
+    headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}
+  });
+}
+
+async function saveData(){
   try{
-    const t=localStorage.getItem('jp58-todos');
-    const e=localStorage.getItem('jp58-events');
-    const p=localStorage.getItem('jp58-pipeline');
-    const pr=localStorage.getItem('jp58-projects');
-    const c=localStorage.getItem('jp58-content');
-    if(t) todos.splice(0,todos.length,...JSON.parse(t));
-    if(e) events.splice(0,events.length,...JSON.parse(e));
-    if(p) pipeline.splice(0,pipeline.length,...JSON.parse(p));
-    if(pr) projects.splice(0,projects.length,...JSON.parse(pr));
-    if(c) contentItems.splice(0,contentItems.length,...JSON.parse(c));
-  }catch(e){}
+    await sbUpsert('jp58_todos', todos);
+    await sbUpsert('jp58_events', events);
+    await sbUpsert('jp58_pipeline', pipeline);
+    await sbUpsert('jp58_projects', projects);
+    await sbUpsert('jp58_content', contentItems);
+  }catch(e){ console.log('Save error:', e); }
+}
+
+async function loadData(){
+  try{
+    const [t,e,p,pr,c] = await Promise.all([
+      sbGet('jp58_todos'),
+      sbGet('jp58_events'),
+      sbGet('jp58_pipeline'),
+      sbGet('jp58_projects'),
+      sbGet('jp58_content')
+    ]);
+    if(t && t.length) todos.splice(0, todos.length, ...t);
+    if(e && e.length) events.splice(0, events.length, ...e);
+    if(p && p.length) pipeline.splice(0, pipeline.length, ...p);
+    if(pr && pr.length) projects.splice(0, projects.length, ...pr);
+    if(c && c.length) contentItems.splice(0, contentItems.length, ...c);
+  }catch(e){ console.log('Load error:', e); }
 }
 
 // ── INIT ───────────────────────────────────────────────
-function init(){
-  loadData();
+async function init(){
+  await loadData();
   const h=new Date().getHours();
   
   
