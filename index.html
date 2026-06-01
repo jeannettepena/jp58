@@ -836,7 +836,7 @@ function tHTML(t){
   </div>`;
 }
 
-function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();}}
+function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
 
 function setF(f,btnId){
   filt=f;
@@ -860,6 +860,7 @@ function sectionAdd(sec,inputId){
   todos.unshift({id:Date.now(),text,who:'Jeannette',pri:'m',sec,note:'',due:'',done:false});
   document.getElementById(inputId).value='';
   renderTodos();renderSectionTodos();
+  saveData();
   showToast('Task added ✓');
 }
 
@@ -971,6 +972,7 @@ function addEvent(){
   closeModal('m-ev');
   buildWeek();
   if(date===selDay)renderEvents();
+  saveData();
   showToast('Event saved ✓');
 }
 
@@ -1001,7 +1003,7 @@ function dueLabel(d){
 
 function deleteTodo(id){
   const i=todos.findIndex(x=>x.id===id);
-  if(i>-1){todos.splice(i,1);renderTodos();renderSectionTodos();showToast('Task removed');}
+  if(i>-1){todos.splice(i,1);renderTodos();renderSectionTodos();saveData();showToast('Task removed');}
 }
 
 function editTodo(id){
@@ -1026,6 +1028,7 @@ function editTodo(id){
     saveBtn.textContent='Save';
     saveBtn.onclick=addTodo;
     renderTodos();renderSectionTodos();
+    saveData();
     showToast('Task updated ✓');
   };
   // Open modal directly without clearing fields
@@ -1081,6 +1084,8 @@ function saveStatus(elId, id){
   const item=arr.find(x=>x.id===id);
   if(item&&val){item.status=val;item.color=STATUS_COLORS[val]||item.color;}
   renderAllMini();
+  saveData();
+  saveData();
 }
 
 function saveStatus(elId, id){
@@ -1106,7 +1111,7 @@ function addPipeline(){
   const statusColors={'var(--amber)':'var(--amber)','var(--sky)':'var(--sky)','var(--teal)':'var(--teal)','var(--rose)':'var(--rose)','var(--ink4)':'var(--ink4)'};
   const color=document.getElementById('pip-color').value;
   pipeline.push({id:Date.now(),name,sub:document.getElementById('pip-sub').value||'',status:document.getElementById('pip-status').value||'Active',color});
-  closeModal('m-pipeline');renderAllMini();showToast('Added to pipeline ✓');
+  closeModal('m-pipeline');renderAllMini();saveData();showToast('Added to pipeline ✓');
 }
 
 function addProject(){
@@ -1115,7 +1120,7 @@ function addProject(){
   const status=document.getElementById('proj-status').value;
   const color=STATUS_COLORS[status]||'var(--gold)';
   projects.push({id:Date.now(),name,sub:document.getElementById('proj-sub').value||'',status,color});
-  closeModal('m-project');renderAllMini();showToast('Project added ✓');
+  closeModal('m-project');renderAllMini();saveData();showToast('Project added ✓');
 }
 
 function addContent(){
@@ -1124,7 +1129,7 @@ function addContent(){
   const platform=document.getElementById('con-sub').value;
   const colorMap={'Real & Raw':'var(--coral)','Latitude 58°':'var(--teal)','Instagram':'var(--lav)','FB Live':'var(--coral)','TikTok':'var(--ink2)','YouTube':'var(--rose)'};
   contentItems.push({id:Date.now(),name,sub:platform,status:document.getElementById('con-status').value||'Draft',color:colorMap[platform]||'var(--ink3)'});
-  closeModal('m-content');renderAllMini();showToast('Content added ✓');
+  closeModal('m-content');renderAllMini();saveData();showToast('Content added ✓');
 }
 
 function renderAllMini(){
@@ -1139,8 +1144,35 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2600);
 }
 
+// ── PERSISTENCE ───────────────────────────────────────────
+function saveData(){
+  try{
+    localStorage.setItem('jp58-todos', JSON.stringify(todos));
+    localStorage.setItem('jp58-events', JSON.stringify(events));
+    localStorage.setItem('jp58-pipeline', JSON.stringify(pipeline));
+    localStorage.setItem('jp58-projects', JSON.stringify(projects));
+    localStorage.setItem('jp58-content', JSON.stringify(contentItems));
+  }catch(e){}
+}
+
+function loadData(){
+  try{
+    const t=localStorage.getItem('jp58-todos');
+    const e=localStorage.getItem('jp58-events');
+    const p=localStorage.getItem('jp58-pipeline');
+    const pr=localStorage.getItem('jp58-projects');
+    const c=localStorage.getItem('jp58-content');
+    if(t) todos.splice(0,todos.length,...JSON.parse(t));
+    if(e) events.splice(0,events.length,...JSON.parse(e));
+    if(p) pipeline.splice(0,pipeline.length,...JSON.parse(p));
+    if(pr) projects.splice(0,projects.length,...JSON.parse(pr));
+    if(c) contentItems.splice(0,contentItems.length,...JSON.parse(c));
+  }catch(e){}
+}
+
 // ── INIT ───────────────────────────────────────────────
 function init(){
+  loadData();
   const h=new Date().getHours();
   
   
