@@ -897,7 +897,39 @@ function showPanel(name,triggerEl){
 }
 
 // ── MODALS ─────────────────────────────────────────────
-function openModal(id){document.getElementById(id).classList.add('open');}
+function openModal(id){
+  // Clear task modal fields when opening fresh
+  if(id==='m-todo'){
+    document.getElementById('td-text').value='';
+    document.getElementById('td-sec').value='realestate';
+    document.getElementById('td-pri').value='m';
+    document.getElementById('td-due').value='';
+    document.getElementById('td-note').value='';
+    // Reset save button in case it was in edit mode
+    const saveBtn=document.querySelector('#m-todo .mf .ca.on');
+    if(saveBtn){saveBtn.textContent='Save';saveBtn.onclick=addTodo;}
+  }
+  if(id==='m-ev'){
+    document.getElementById('ev-title').value='';
+    document.getElementById('ev-date').value='';
+    document.getElementById('ev-time').value='';
+    document.getElementById('ev-notes').value='';
+  }
+  if(id==='m-pipeline'){
+    document.getElementById('pip-name').value='';
+    document.getElementById('pip-status').value='';
+    document.getElementById('pip-sub').value='';
+  }
+  if(id==='m-project'){
+    document.getElementById('proj-name').value='';
+    document.getElementById('proj-sub').value='';
+  }
+  if(id==='m-content'){
+    document.getElementById('con-name').value='';
+    document.getElementById('con-status').value='';
+  }
+  document.getElementById(id).classList.add('open');
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 
