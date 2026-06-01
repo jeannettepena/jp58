@@ -355,12 +355,37 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
 
       <!-- REAL ESTATE -->
       <div id="panel-realestate" class="panel">
-        <div class="sec-panel">
-          <div class="sec-head"><div class="sec-icon"><i data-lucide="building-2" style="width:28px;height:28px;stroke:var(--sky);stroke-width:1.5"></i></div><div><div class="sec-title">Real Estate</div><div class="sec-desc">Pending tasks · Details in 58 HUB with Rebecca</div></div></div>
-          <div id="sec-realestate"></div>
-          <div class="qadd" style="background:var(--white);border:1px solid var(--border);border-radius:14px;margin-top:8px;">
-            <input class="qa-in" placeholder="Add real estate task..." id="qt-re" onkeydown="if(event.key==='Enter')sectionAdd('realestate','qt-re')">
-            <button class="qa-go" onclick="sectionAdd('realestate','qt-re')">Add</button>
+        <div class="sec-panel" style="max-width:900px">
+          <div class="sec-head"><div class="sec-icon"><i data-lucide="building-2" style="width:28px;height:28px;stroke:var(--sky);stroke-width:1.5"></i></div><div><div class="sec-title">Real Estate</div><div class="sec-desc">Live from 58 HUB · Updated by Rebecca in real time</div></div>
+            <button class="ca" onclick="loadREData()" style="margin-left:auto">↻ Refresh</button>
+          </div>
+
+          <!-- Listings -->
+          <div class="card" style="margin-bottom:16px">
+            <div class="ch"><div class="ct">Listings</div><span style="font-size:10px;color:var(--ink3)">For Sale · For Rent · Pocket</span></div>
+            <div id="re-listings"><div class="empty">Loading...</div></div>
+          </div>
+
+          <!-- Clients / Follow-up -->
+          <div class="card" style="margin-bottom:16px">
+            <div class="ch"><div class="ct">Clients & Follow-up</div></div>
+            <div id="re-clients"><div class="empty">Loading...</div></div>
+          </div>
+
+          <!-- Team Tasks -->
+          <div class="card" style="margin-bottom:16px">
+            <div class="ch"><div class="ct">Team Tasks</div></div>
+            <div id="re-tasks"><div class="empty">Loading...</div></div>
+          </div>
+
+          <!-- My RE tasks -->
+          <div class="card">
+            <div class="ch"><div class="ct">My RE notes</div></div>
+            <div id="sec-realestate"></div>
+            <div class="qadd" style="background:var(--paper)">
+              <input class="qa-in" placeholder="Add personal real estate note..." id="qt-re" onkeydown="if(event.key==='Enter')sectionAdd('realestate','qt-re')">
+              <button class="qa-go" onclick="sectionAdd('realestate','qt-re')">Add</button>
+            </div>
           </div>
         </div>
       </div>
@@ -920,6 +945,7 @@ function showPanel(name,triggerEl){
   }
   const titles={home:'JP58',gcal:'Google Calendar',jai:'J·AI Assistant',realestate:'Real Estate',fifty8:'Fifty Eight Degrees',latitude:'Latitude 58°',realraw:'Real & Raw',renacer:'RenaSer · Quantum58',finanzas:'Finanzas',wellness:'Wellness',hijos:'Family'};
   document.getElementById('topbar-title').textContent=titles[name]||'JP58';
+  if(name==='realestate') loadREData();
 }
 
 // ── MODALS ─────────────────────────────────────────────
@@ -1134,6 +1160,65 @@ function renderAllMini(){
   renderMiniList('pipeline-list', pipeline);
   renderMiniList('projects-list', projects);
   renderMiniList('content-list', contentItems);
+}
+
+
+// ── REAL ESTATE LIVE DATA ─────────────────────────────────
+async function loadREData(){
+  const SB='https://kiqxkbwnfqlkeaexqihl.supabase.co';
+  const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpcXhrYnduZnFsa2VhZXhxaWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNjYwOTEsImV4cCI6MjA5NTg0MjA5MX0.1n8CV8zzRbk_HMeUvwx3mjyzZNPiBcGvBRvaGZgnECE';
+  async function get(table){
+    const r=await fetch(SB+'/rest/v1/'+table+'?order=created_at.asc',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+    return r.ok?await r.json():[];
+  }
+  try{
+    const [listings,clients,taskData]=await Promise.all([get('jp58_listings'),get('jp58_clients'),get('jp58_tasks')]);
+
+    // Render listings
+    const ll=document.getElementById('re-listings');
+    if(ll){
+      if(!listings.length){ll.innerHTML='<div class="empty">No listings yet · Add in 58 HUB</div>';}
+      else{
+        const statusBadge=s=>({Active:'b-active','Under Contract':'b-contract','Closing Soon':'b-closing','Coming Soon':'b-coming',Evaluating:'b-coming',Pocket:'b-pocket',Available:'b-active','Application Received':'b-pending',Leased:'b-sale'})[s]||'b-active';
+        ll.innerHTML='<table class="data-table"><thead><tr><th>Address</th><th>Type</th><th>Status</th><th>Price</th><th>Client</th><th>Agent</th></tr></thead><tbody>'+
+          listings.map(l=>`<tr><td><strong>${l.addr}</strong></td><td style="font-size:12px">${l.type}</td><td><span class="badge ${statusBadge(l.status)}">${l.status}</span></td><td>${l.price||'TBD'}</td><td style="font-size:12px;color:var(--ink3)">${l.client||'—'}</td><td><span class="badge" style="background:var(--linen);color:var(--ash)">${l.agent||'—'}</span></td></tr>`).join('')+
+        '</tbody></table>';
+      }
+    }
+
+    // Render clients
+    const cc=document.getElementById('re-clients');
+    if(cc){
+      if(!clients.length){cc.innerHTML='<div class="empty">No clients yet · Add in 58 HUB</div>';}
+      else{
+        const priColor=p=>p==='high'?'var(--rose)':p==='med'?'var(--amber)':'var(--sage)';
+        cc.innerHTML=clients.map(c=>`
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 18px;border-bottom:1px solid var(--border)">
+            <div style="width:32px;height:32px;border-radius:50%;background:${c.color||'var(--sky)'}20;color:${c.color||'var(--sky)'};display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:13px;font-weight:600;flex-shrink:0">${c.initials||'?'}</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">${c.name}</div><div style="font-size:11px;color:var(--ink3);margin-top:1px">${c.property||''} · ${c.action||''}</div></div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+              <span style="font-size:10px;color:${priColor(c.priority)};font-weight:500">${c.date||''}</span>
+              <span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--linen);color:var(--ash)">${c.agent||''}</span>
+            </div>
+          </div>`).join('');
+      }
+    }
+
+    // Render tasks
+    const tt=document.getElementById('re-tasks');
+    if(tt){
+      if(!taskData.length){tt.innerHTML='<div class="empty">No tasks yet · Add in 58 HUB</div>';}
+      else{
+        const priDot=p=>p==='high'||p==='h'?'var(--rose)':p==='med'||p==='m'?'var(--amber)':'var(--sage)';
+        tt.innerHTML=taskData.map(t=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 18px;border-bottom:1px solid var(--border)">
+            <div style="width:6px;height:6px;border-radius:50%;background:${priDot(t.priority)};flex-shrink:0"></div>
+            <div style="flex:1;font-size:12px;color:${t.done?'var(--ink4)':'var(--ink)'};text-decoration:${t.done?'line-through':'none'}">${t.text}<span style="font-size:10px;color:var(--ink4);margin-left:6px">${t.file||''}</span></div>
+            <span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--linen);color:var(--ash)">${t.who||''}</span>
+          </div>`).join('');
+      }
+    }
+  }catch(e){console.log('RE load error:',e);}
 }
 
 function showToast(msg){
