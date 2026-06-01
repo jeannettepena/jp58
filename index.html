@@ -1193,11 +1193,17 @@ async function loadData(){
       sbGet('jp58_projects'),
       sbGet('jp58_content')
     ]);
+    // If Supabase has data, use it. Otherwise seed with defaults and save.
     if(t && t.length) todos.splice(0, todos.length, ...t);
+    else await sbUpsert('jp58_todos', todos);
     if(e && e.length) events.splice(0, events.length, ...e);
+    else await sbUpsert('jp58_events', events);
     if(p && p.length) pipeline.splice(0, pipeline.length, ...p);
+    else await sbUpsert('jp58_pipeline', pipeline);
     if(pr && pr.length) projects.splice(0, projects.length, ...pr);
+    else await sbUpsert('jp58_projects', projects);
     if(c && c.length) contentItems.splice(0, contentItems.length, ...c);
+    else await sbUpsert('jp58_content', contentItems);
   }catch(e){ console.log('Load error:', e); }
 }
 
