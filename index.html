@@ -1153,6 +1153,13 @@ function saveData(){
 }
 
 function loadData(){
+  // Version check - clear stale data if code version changed
+  const ver = '2.1';
+  if(localStorage.getItem('jp58-ver') !== ver){
+    localStorage.clear();
+    localStorage.setItem('jp58-ver', ver);
+    return; // use default data from code
+  }
   try{
     const t=localStorage.getItem('jp58-todos');
     const e=localStorage.getItem('jp58-events');
