@@ -279,6 +279,7 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
             <div class="intention">
               <div class="int-lbl">Today's intention</div>
               <textarea class="int-in" id="intention" rows="2" placeholder="Write your intention for today..."></textarea>
+            <div id="daily-quote" style="font-family:var(--ff-display);font-size:13px;font-style:italic;font-weight:300;color:var(--ink4);margin-top:8px;line-height:1.6;padding-top:8px;border-top:1px solid var(--gold-p);"></div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:0;">
   <button onclick="shiftWeek(-1)" style="background:var(--white);border:1px solid var(--border);border-radius:10px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-l)'" onmouseout="this.style.borderColor='var(--border)'">
@@ -1176,9 +1177,12 @@ function init(){
   const h=new Date().getHours();
   
   
-  const greet=h<12?'Good morning, Jeannette':h<17?'Good afternoon, Jeannette':'Good evening, Jeannette';
+  const greet=h<12?'Buenos días, Jeannette ☀️':h<17?'Buenas tardes, Jeannette 🌿':'Buenas noches, Jeannette 🌙';
   document.getElementById('topbar-title').textContent=greet;
   document.getElementById('topbar-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  // Daily quote
+  const qEl = document.getElementById('daily-quote');
+  if(qEl) qEl.textContent = getDailyQuote();
   selectDay('2026-06-01');
   renderTodos();
   renderSectionTodos();
@@ -1195,6 +1199,44 @@ showPanel = function(name, triggerEl){
 };
 
 // ── J-AI ──────────────────────────────────────────────
+const QUOTES = [
+  "El éxito no es un destino, es un camino que se construye cada día. — Jeannette Peña",
+  "Where focus goes, energy flows. — Tony Robbins",
+  "You are the architect of your own life. Build it wisely.",
+  "La gratitud convierte lo que tenemos en suficiente.",
+  "Your energy introduces you before you even speak.",
+  "Cada día es una nueva oportunidad de crear la vida que sueñas.",
+  "Be the energy you want to attract.",
+  "Lo que piensas, sientes y actúas crea tu realidad. — Joe Dispenza",
+  "You didn't come this far to only come this far.",
+  "El universo conspira a favor de quien trabaja con intención.",
+  "Muévete en la frecuencia de lo que deseas. — Anita Moorjani",
+  "Your vibe is your brand. Protect your energy.",
+  "La mujer que sabe lo que quiere, crea lo que necesita.",
+  "Every morning is a chance to rewrite your story.",
+  "Sé el puente que otros necesitan cruzar.",
+  "Clarity is power. Know what you want and go get it.",
+  "Tu historia no te define — tú defines tu historia. — RenaSer",
+  "The secret of getting ahead is getting started.",
+  "Cuando cambias la forma en que ves las cosas, las cosas que ves cambian.",
+  "You are building something extraordinary. Keep going.",
+  "La disciplina es elegirte a ti misma, una y otra vez.",
+  "Dream big. Plan smart. Work hard. Stay grateful.",
+  "Eres la suma de todo lo que has superado.",
+  "Do it with passion or not at all.",
+  "Latitude 58° — where Texas meets the world.",
+  "Bridge builders change the world. You are one.",
+  "Tus raíces son tu fortaleza. Tus alas son tu visión.",
+  "The only limit is the one you set yourself.",
+  "Cada obstáculo es una invitación a crecer.",
+  "You are not just selling real estate. You are building legacies.",
+];
+
+function getDailyQuote(){
+  const day = new Date().getDate() + new Date().getMonth() * 31;
+  return QUOTES[day % QUOTES.length];
+}
+
 const JAI_CONTEXT = `You are J-AI, the personal assistant embedded in JP58 — Jeannette Peña's command center.
 
 ABOUT JEANNETTE:
