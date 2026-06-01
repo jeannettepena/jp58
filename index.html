@@ -256,7 +256,7 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
     <div class="sb-sep"></div>
     <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
     <div class="sb-sep"></div>
-    <div class="sb-item" onclick="showPanel('jai',this)" data-panel="jai" id="jai-btn" style="background:rgba(184,150,90,0.15);border:1px solid rgba(184,150,90,0.3);border-radius:12px;margin:0 10px;width:44px;"><span style="font-family:var(--ff-display);font-size:13px;font-weight:600;color:var(--gold-l);letter-spacing:0.02em">J·AI</span><span class="sb-tip">J-AI Assistant</span></div>
+    <a href="https://claude.ai" target="_blank" class="sb-item" style="background:rgba(184,150,90,0.15);border:1px solid rgba(184,150,90,0.3);border-radius:12px;margin:0 10px;width:44px;text-decoration:none;"><span style="font-family:var(--ff-display);font-size:13px;font-weight:600;color:var(--gold-l);letter-spacing:0.02em">J·AI</span><span class="sb-tip">Open J-AI Assistant</span></a>
   </nav>
 
   <!-- MAIN -->
@@ -451,81 +451,47 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
 
       <!-- GOOGLE CALENDAR -->
       <div id="panel-gcal" class="panel">
-        <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-          <div>
+        <div style="max-width:600px">
+          <div style="margin-bottom:24px">
             <div style="font-family:var(--ff-display);font-size:28px;font-weight:300;color:var(--ink)">Google Calendar</div>
-            <div style="font-size:12px;color:var(--ink3);margin-top:2px">jcantu.realtor@gmail.com · Houston, TX</div>
+            <div style="font-size:12px;color:var(--ink3);margin-top:3px">jcantu.realtor@gmail.com · Houston, TX</div>
           </div>
-          <a href="https://calendar.google.com/calendar/r/week" target="_blank" style="font-size:11px;color:var(--gold);text-decoration:none;border:1px solid var(--gold-l);padding:6px 14px;border-radius:20px;font-family:var(--ff-body);">Open Google Calendar ↗</a>
-        </div>
 
-        <!-- Quick links -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;">
-          <a href="https://calendar.google.com/calendar/r/day" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;text-decoration:none;transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-l)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:20px;margin-bottom:6px">📅</div>
-            <div style="font-size:12px;font-weight:500;color:var(--ink)">Today</div>
-            <div style="font-size:10px;color:var(--ink3)">Day view</div>
-          </a>
-          <a href="https://calendar.google.com/calendar/r/week" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;text-decoration:none;transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-l)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:20px;margin-bottom:6px">🗓</div>
-            <div style="font-size:12px;font-weight:500;color:var(--ink)">This week</div>
-            <div style="font-size:10px;color:var(--ink3)">Week view</div>
-          </a>
-          <a href="https://calendar.google.com/calendar/r/month" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;text-decoration:none;transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-l)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:20px;margin-bottom:6px">📆</div>
-            <div style="font-size:12px;font-weight:500;color:var(--ink)">Month</div>
-            <div style="font-size:10px;color:var(--ink3)">Month view</div>
-          </a>
-        </div>
+          <!-- Quick access -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px">
+            <a href="https://calendar.google.com/calendar/r/day" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;text-decoration:none;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--gold)';this.style.background='var(--gold-p)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--white)'">
+              <div style="margin-bottom:8px"><i data-lucide="calendar" style="width:24px;height:24px;stroke:var(--gold);stroke-width:1.5"></i></div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink)">Today</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px">Day view</div>
+            </a>
+            <a href="https://calendar.google.com/calendar/r/week" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;text-decoration:none;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--gold)';this.style.background='var(--gold-p)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--white)'">
+              <div style="margin-bottom:8px"><i data-lucide="calendar-days" style="width:24px;height:24px;stroke:var(--gold);stroke-width:1.5"></i></div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink)">This week</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px">Week view</div>
+            </a>
+            <a href="https://calendar.google.com/calendar/r/month" target="_blank" style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;text-decoration:none;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--gold)';this.style.background='var(--gold-p)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--white)'">
+              <div style="margin-bottom:8px"><i data-lucide="calendar-range" style="width:24px;height:24px;stroke:var(--gold);stroke-width:1.5"></i></div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink)">Month</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px">Month view</div>
+            </a>
+          </div>
 
-        <!-- Embed with fallback -->
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;">
-          <iframe 
-            src="https://calendar.google.com/calendar/embed?src=jcantu.realtor%40gmail.com&ctz=America%2FChicago&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=WEEK&bgcolor=%23ffffff&color=%23B8965A" 
-            style="width:100%;height:660px;border:none;display:block;" 
-            frameborder="0" 
-            scrolling="no"
-            id="gcal-iframe"
-            onload="document.getElementById('gcal-fallback').style.display='none'"
-            onerror="document.getElementById('gcal-fallback').style.display='flex'">
-          </iframe>
-          <div id="gcal-fallback" style="display:none;position:absolute;inset:0;background:var(--paper);flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-            <div style="font-size:40px">📅</div>
-            <div style="font-family:var(--ff-display);font-size:20px;color:var(--ink)">Calendar blocked by browser</div>
-            <div style="font-size:12px;color:var(--ink3);text-align:center;max-width:320px">Some browsers block Google Calendar embeds.<br>Click below to open your calendar directly.</div>
-            <a href="https://calendar.google.com/calendar/r/week" target="_blank" style="background:var(--gold);color:var(--white);padding:10px 24px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;">Open Google Calendar ↗</a>
+          <!-- Add event shortcut -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:16px">
+            <div style="font-family:var(--ff-display);font-size:16px;font-weight:400;color:var(--ink);margin-bottom:4px">Add to Google Calendar</div>
+            <div style="font-size:12px;color:var(--ink3);margin-bottom:16px">Tell J-AI in the chat and she'll add it, or click below to open Google Calendar directly.</div>
+            <a href="https://calendar.google.com/calendar/r/eventedit" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--white);padding:9px 20px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;font-family:var(--ff-body)">
+              <i data-lucide="plus" style="width:14px;height:14px;stroke:white;stroke-width:2.5"></i>
+              New event in Google Calendar
+            </a>
           </div>
-        </div>
-      </div>
 
-      <!-- J-AI -->
-      <div id="panel-jai" class="panel">
-        <div class="jai-wrap">
-          <div class="jai-head">
-            <div class="jai-title">J·AI</div>
-            <div class="jai-sub">Your assistant · Add events, tasks, and more — I'll update JP58 and your Google Calendar</div>
-          </div>
-          <div class="jai-action-pills">
-            <button class="jai-pill" onclick="jaiQuick('Add an event to my calendar')">+ Add event</button>
-            <button class="jai-pill" onclick="jaiQuick('Add a task')">+ Add task</button>
-            <button class="jai-pill" onclick="jaiQuick('What are my urgent tasks this week?')">Urgent tasks</button>
-            <button class="jai-pill" onclick="jaiQuick('Show me my pipeline')">Pipeline</button>
-            <button class="jai-pill" onclick="jaiQuick('Add a Fifty Eight project')">+ Project</button>
-          </div>
-          <div class="jai-messages" id="jai-messages">
-            <div class="jai-msg ai">
-              <div class="jai-avatar">J</div>
-              <div class="jai-bubble">Hi Jeannette 👋 I'm J-AI — your JP58 assistant.<br><br>Tell me what you need and I'll add it to your tasks, calendar, or pipeline. For example:<br><br>
-              <em>"Add a meeting with Daina Thursday at 10am — Real Estate"</em><br>
-              <em>"Add task: follow up with Julio about Rio Villa"</em><br>
-              <em>"What's urgent this week?"</em></div>
+          <!-- Tip -->
+          <div style="background:var(--gold-p);border:1px solid var(--gold-l);border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start">
+            <i data-lucide="lightbulb" style="width:16px;height:16px;stroke:var(--gold-d);stroke-width:1.5;flex-shrink:0;margin-top:2px"></i>
+            <div style="font-size:12px;color:var(--gold-d);line-height:1.6">
+              <strong>Tip:</strong> Tell me in the JP58 chat — "Add a meeting with Daina Thursday at 10am" — and I'll add it to Google Calendar and JP58 at the same time.
             </div>
-          </div>
-          <div class="jai-input-row">
-            <textarea class="jai-input" id="jai-input" placeholder="Tell me what to add or ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();jaiSend();}"></textarea>
-            <button class="jai-send" id="jai-send-btn" onclick="jaiSend()">
-              <i data-lucide="send" style="width:16px;height:16px;stroke:white;stroke-width:2"></i>
-            </button>
           </div>
         </div>
       </div>
