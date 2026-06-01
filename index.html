@@ -27,8 +27,7 @@
 html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:var(--ink);font-size:14px;line-height:1.6;overflow:hidden;}
 
 /* ── LOGIN ─────────────────────────────────────── */
-#login{position:fixed;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s;}
-#login.out{opacity:0;pointer-events:none;}
+#login{display:none !important;}
 .lb{width:320px;text-align:center;}
 .lb-mono{font-family:var(--ff-display);font-size:52px;font-weight:300;color:var(--ink);letter-spacing:-.02em;line-height:1;}
 .lb-58{color:var(--gold);}
@@ -209,16 +208,7 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="lb">
-    <div class="lb-mono">JP<span class="lb-58">58</span></div>
-    <div class="lb-sub">Your command center · Private</div>
-    <input class="lb-in" type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
-    <button class="lb-btn" onclick="login()">Enter →</button>
-    <div class="lb-err" id="lerr">Incorrect password</div>
-  </div>
-</div>
+
 
 <!-- APP -->
 <div id="app">
@@ -614,22 +604,11 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
 <div class="toast" id="toast"></div>
 
 <script>
-const PASS='the58group';
 let selDay='2026-06-01';
 let filt='all';
 let weekStart=new Date('2026-06-01');
 
-function login(){
-  if(document.getElementById('pw').value===PASS){
-    document.getElementById('login').classList.add('out');
-    setTimeout(()=>document.getElementById('login').style.display='none',500);
-    document.getElementById('app').classList.add('on');
-    init();
-  } else {
-    document.getElementById('lerr').style.display='block';
-    document.getElementById('pw').value='';
-  }
-}
+
 
 // ── DATA ──────────────────────────────────────────────
 const events=[
