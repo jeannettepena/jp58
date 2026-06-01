@@ -831,7 +831,7 @@ function tHTML(t){
   </div>`;
 }
 
-async function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();await saveData();}}
+function toggleTodo(id){const t=todos.find(x=>x.id===id);if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
 
 function setF(f,btnId){
   filt=f;
@@ -1024,8 +1024,8 @@ function editTodo(id){
     saveBtn.textContent='Save';
     saveBtn.onclick=addTodo;
     renderTodos();renderSectionTodos();
-    saveData();
     showToast('Task updated ✓');
+    saveData();
   };
   // Open modal directly — bypass openModal to avoid field clearing
   document.getElementById('m-todo').classList.add('open');
