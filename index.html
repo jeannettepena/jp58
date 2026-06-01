@@ -554,9 +554,7 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
         </div>
       </div>
       <div class="frow">
-        <div class="field"><label>Assigned to</label>
-          <select id="td-who"><option>Jeannette</option></select>
-        </div>
+
         <div class="frow">
         <div class="field"><label>Due date</label><input id="td-due" type="date"></div>
         <div class="field"><label>Note</label><input id="td-note" type="text" placeholder="Optional note"></div>
@@ -936,7 +934,7 @@ function openModal(id){
     document.getElementById('td-pri').value='m';
     document.getElementById('td-due').value='';
     document.getElementById('td-note').value='';
-    // Reset save button in case it was in edit mode
+    document.querySelector('#m-todo .mt').textContent='Add task';
     const saveBtn=document.querySelector('#m-todo .mf .ca.on');
     if(saveBtn){saveBtn.textContent='Save';saveBtn.onclick=addTodo;}
   }
@@ -1031,8 +1029,10 @@ function editTodo(id){
     saveData();
     showToast('Task updated ✓');
   };
-  // Open modal directly without clearing fields
+  // Open modal directly — bypass openModal to avoid field clearing
   document.getElementById('m-todo').classList.add('open');
+  // Change title to show Edit mode
+  document.querySelector('#m-todo .mt').textContent = 'Edit task';
 }
 
 function renderMiniList(elId, arr){
