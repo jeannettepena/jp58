@@ -199,6 +199,34 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
 .mini-badge{font-size:10px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:opacity .15s;}.mini-badge:hover{opacity:0.7;}
 .mini-del{background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;opacity:0;transition:opacity .15s;padding:0 2px;line-height:1;}
 .mini-del:hover{color:var(--rose);}
+/* J-AI Chat */
+.jai-wrap{display:flex;flex-direction:column;height:calc(100vh - 54px);max-width:760px;}
+.jai-head{margin-bottom:20px;}
+.jai-title{font-family:var(--ff-display);font-size:28px;font-weight:300;color:var(--ink);}
+.jai-sub{font-size:12px;color:var(--ink3);margin-top:3px;}
+.jai-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:4px 0 20px;}
+.jai-msg{display:flex;gap:12px;align-items:flex-start;}
+.jai-msg.user{flex-direction:row-reverse;}
+.jai-bubble{max-width:85%;padding:12px 16px;border-radius:14px;font-size:13px;line-height:1.6;}
+.jai-msg.ai .jai-bubble{background:var(--white);border:1px solid var(--border);color:var(--ink);border-bottom-left-radius:4px;}
+.jai-msg.user .jai-bubble{background:var(--gold);color:var(--white);border-bottom-right-radius:4px;}
+.jai-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--ff-display);font-size:13px;font-weight:600;}
+.jai-msg.ai .jai-avatar{background:var(--gold-p);color:var(--gold-d);border:1px solid var(--gold-l);}
+.jai-msg.user .jai-avatar{background:var(--ink);color:var(--white);}
+.jai-input-row{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);}
+.jai-input{flex:1;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:11px 16px;font-size:13px;color:var(--ink);font-family:var(--ff-body);outline:none;resize:none;min-height:46px;max-height:120px;transition:border .15s;line-height:1.5;}
+.jai-input:focus{border-color:var(--gold);}
+.jai-send{background:var(--gold);color:var(--white);border:none;border-radius:12px;width:46px;height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
+.jai-send:hover{background:var(--gold-d);}
+.jai-send:disabled{background:var(--ink4);cursor:not-allowed;}
+.jai-typing{display:flex;gap:4px;align-items:center;padding:10px 14px;}
+.jai-dot{width:6px;height:6px;border-radius:50%;background:var(--ink4);animation:jaidot 1.2s infinite;}
+.jai-dot:nth-child(2){animation-delay:.2s;}
+.jai-dot:nth-child(3){animation-delay:.4s;}
+@keyframes jaidot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.jai-action-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.jai-pill{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--ink2);cursor:pointer;transition:all .15s;font-family:var(--ff-body);}
+.jai-pill:hover{border-color:var(--gold-l);background:var(--gold-p);color:var(--gold-d);}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--white);padding:10px 18px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(6px);transition:all .25s;border-left:3px solid var(--gold);pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 ::-webkit-scrollbar{width:4px;}
@@ -227,6 +255,8 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
     <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
     <div class="sb-sep"></div>
     <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
+    <div class="sb-sep"></div>
+    <div class="sb-item" onclick="showPanel('jai',this)" data-panel="jai" id="jai-btn" style="background:rgba(184,150,90,0.15);border:1px solid rgba(184,150,90,0.3);border-radius:12px;margin:0 10px;width:44px;"><span style="font-family:var(--ff-display);font-size:13px;font-weight:600;color:var(--gold-l);letter-spacing:0.02em">J·AI</span><span class="sb-tip">J-AI Assistant</span></div>
   </nav>
 
   <!-- MAIN -->
@@ -463,6 +493,38 @@ html,body{height:100%;font-family:var(--ff-body);background:var(--cream);color:v
             <div style="font-family:var(--ff-display);font-size:20px;color:var(--ink)">Calendar blocked by browser</div>
             <div style="font-size:12px;color:var(--ink3);text-align:center;max-width:320px">Some browsers block Google Calendar embeds.<br>Click below to open your calendar directly.</div>
             <a href="https://calendar.google.com/calendar/r/week" target="_blank" style="background:var(--gold);color:var(--white);padding:10px 24px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;">Open Google Calendar ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- J-AI -->
+      <div id="panel-jai" class="panel">
+        <div class="jai-wrap">
+          <div class="jai-head">
+            <div class="jai-title">J·AI</div>
+            <div class="jai-sub">Your assistant · Add events, tasks, and more — I'll update JP58 and your Google Calendar</div>
+          </div>
+          <div class="jai-action-pills">
+            <button class="jai-pill" onclick="jaiQuick('Add an event to my calendar')">+ Add event</button>
+            <button class="jai-pill" onclick="jaiQuick('Add a task')">+ Add task</button>
+            <button class="jai-pill" onclick="jaiQuick('What are my urgent tasks this week?')">Urgent tasks</button>
+            <button class="jai-pill" onclick="jaiQuick('Show me my pipeline')">Pipeline</button>
+            <button class="jai-pill" onclick="jaiQuick('Add a Fifty Eight project')">+ Project</button>
+          </div>
+          <div class="jai-messages" id="jai-messages">
+            <div class="jai-msg ai">
+              <div class="jai-avatar">J</div>
+              <div class="jai-bubble">Hi Jeannette 👋 I'm J-AI — your JP58 assistant.<br><br>Tell me what you need and I'll add it to your tasks, calendar, or pipeline. For example:<br><br>
+              <em>"Add a meeting with Daina Thursday at 10am — Real Estate"</em><br>
+              <em>"Add task: follow up with Julio about Rio Villa"</em><br>
+              <em>"What's urgent this week?"</em></div>
+            </div>
+          </div>
+          <div class="jai-input-row">
+            <textarea class="jai-input" id="jai-input" placeholder="Tell me what to add or ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();jaiSend();}"></textarea>
+            <button class="jai-send" id="jai-send-btn" onclick="jaiSend()">
+              <i data-lucide="send" style="width:16px;height:16px;stroke:white;stroke-width:2"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -893,7 +955,7 @@ function showPanel(name,triggerEl){
     const btn=document.querySelector(`[data-panel="${name}"]`);
     if(btn)btn.classList.add('on');
   }
-  const titles={home:'JP58',gcal:'Google Calendar',realestate:'Real Estate',fifty8:'Fifty Eight Degrees',latitude:'Latitude 58°',realraw:'Real & Raw',renacer:'RenaSer · Quantum58',finanzas:'Finanzas',wellness:'Wellness',hijos:'Family'};
+  const titles={home:'JP58',gcal:'Google Calendar',jai:'J·AI Assistant',realestate:'Real Estate',fifty8:'Fifty Eight Degrees',latitude:'Latitude 58°',realraw:'Real & Raw',renacer:'RenaSer · Quantum58',finanzas:'Finanzas',wellness:'Wellness',hijos:'Family'};
   document.getElementById('topbar-title').textContent=titles[name]||'JP58';
 }
 
@@ -1131,6 +1193,197 @@ showPanel = function(name, triggerEl){
   if(window.lucide) lucide.createIcons();
   renderAllMini();
 };
+
+// ── J-AI ──────────────────────────────────────────────
+const JAI_CONTEXT = `You are J-AI, the personal assistant embedded in JP58 — Jeannette Peña's command center.
+
+ABOUT JEANNETTE:
+- Broker Associate & Team Leader, The 58 Group | jeannette@jeannettepena.com | 713 367 8082
+- Also runs: Fifty Eight Degrees LLC (luxury remodeling/PM), Latitude 58° (newsletter), Real & Raw (podcast), RenaSer/Quantum58 (books)
+- Based in Houston, TX
+
+CURRENT ACTIVE DATA IN JP58:
+Tasks include: send repair list to David (Tims Harbor), follow up Daina Castañeda CMA, María Jasso investment, Adriana González, Macarena & Gabriel commercial, Keygate walkthrough, Rio Villa inspection, FB Live Jun 3, Latitude 58° Sep newsletter, schedule meeting with Robert (finances), OZ shot Wed Jun 4, NAD shot Fri Jun 6.
+Pipeline: 223L Chateaux (Closed), 21579 Tims Harbor (Under contract Jun 18), Longleaf Pines (app pending), Keygate (coming soon).
+Fifty Eight Projects: Longwoods Estate (Active - Hotel Mode), Rio Villa (Pending - inspection).
+Content: FB Live Jun 3 (Real & Raw), Latitude 58° September (draft).
+
+YOUR ROLE:
+- Help Jeannette add tasks, events, notes, and updates to JP58
+- When she asks to add a task or event, confirm what you're adding and call the appropriate function
+- Be warm, brief, and efficient — she's busy
+- Speak in English unless she writes in Spanish, then respond in Spanish
+- Always use her name occasionally to keep it personal
+
+FUNCTIONS AVAILABLE:
+- addTaskFromAI(text, section, priority, due) — adds a task to JP58
+- addEventFromAI(title, date, time, category) — adds an event to JP58
+- addPipelineFromAI(name, sub, status) — adds to pipeline
+- addProjectFromAI(name, sub, status) — adds Fifty Eight project
+
+When she asks to add something, respond with a confirmation AND call the function in your response like:
+[ACTION:addTask|text=...|section=...|priority=h/m/l|due=YYYY-MM-DD]
+[ACTION:addEvent|title=...|date=YYYY-MM-DD|time=HH:MM|category=...]
+
+Keep responses concise. This is a command center, not a conversation — be action-oriented.`;
+
+let jaiHistory = [];
+
+async function jaiSend(){
+  const input = document.getElementById('jai-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  input.style.height = 'auto';
+  
+  // Add user message
+  jaiAddMessage('user', msg);
+  jaiHistory.push({role:'user', content: msg});
+  
+  // Show typing
+  const typingId = jaiShowTyping();
+  document.getElementById('jai-send-btn').disabled = true;
+  
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: JAI_CONTEXT,
+        messages: jaiHistory
+      })
+    });
+    
+    const data = await response.json();
+    const text = data.content?.[0]?.text || 'Sorry, I could not process that.';
+    
+    // Remove typing
+    jaiRemoveTyping(typingId);
+    
+    // Parse and execute actions
+    const cleanText = jaiParseActions(text);
+    
+    // Add AI response
+    jaiAddMessage('ai', cleanText);
+    jaiHistory.push({role:'assistant', content: text});
+    
+  } catch(err) {
+    jaiRemoveTyping(typingId);
+    jaiAddMessage('ai', 'Connection error. Please try again.');
+  }
+  
+  document.getElementById('jai-send-btn').disabled = false;
+}
+
+function jaiParseActions(text){
+  // Parse action tags and execute them
+  const actionRegex = /\[ACTION:(\w+)\|([^\]]+)\]/g;
+  let match;
+  let clean = text;
+  
+  while((match = actionRegex.exec(text)) !== null){
+    const action = match[1];
+    const params = {};
+    match[2].split('|').forEach(p => {
+      const [k,v] = p.split('=');
+      if(k&&v) params[k.trim()] = v.trim();
+    });
+    
+    if(action === 'addTask' && params.text){
+      todos.unshift({
+        id: Date.now(),
+        text: params.text,
+        who: 'Jeannette',
+        pri: params.priority || 'm',
+        sec: params.section || 'personal',
+        note: '',
+        due: params.due || '',
+        done: false
+      });
+      renderTodos();
+      renderSectionTodos();
+      showToast('Task added by J-AI ✓');
+    }
+    
+    if(action === 'addEvent' && params.title && params.date){
+      events.push({
+        id: Date.now(),
+        date: params.date,
+        time: params.time || '',
+        title: params.title,
+        note: '',
+        cat: params.category || 'personal'
+      });
+      buildWeek();
+      if(params.date === selDay) renderEvents();
+      showToast('Event added by J-AI ✓');
+    }
+
+    if(action === 'addPipeline' && params.name){
+      pipeline.push({id:Date.now(), name:params.name, sub:params.sub||'', status:params.status||'Active', color:'var(--sky)'});
+      renderAllMini();
+      showToast('Added to pipeline ✓');
+    }
+
+    if(action === 'addProject' && params.name){
+      projects.push({id:Date.now(), name:params.name, sub:params.sub||'', status:params.status||'Active', color:'var(--gold)'});
+      renderAllMini();
+      showToast('Project added ✓');
+    }
+    
+    // Remove action tag from displayed text
+    clean = clean.replace(match[0], '').trim();
+  }
+  
+  return clean;
+}
+
+function jaiAddMessage(role, text){
+  const messages = document.getElementById('jai-messages');
+  const div = document.createElement('div');
+  div.className = `jai-msg ${role}`;
+  const initials = role === 'ai' ? 'J' : 'JP';
+  div.innerHTML = `
+    <div class="jai-avatar">${initials}</div>
+    <div class="jai-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>')}</div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  if(window.lucide) lucide.createIcons();
+}
+
+function jaiShowTyping(){
+  const messages = document.getElementById('jai-messages');
+  const id = 'typing-' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'jai-msg ai';
+  div.id = id;
+  div.innerHTML = `<div class="jai-avatar">J</div><div class="jai-bubble"><div class="jai-typing"><div class="jai-dot"></div><div class="jai-dot"></div><div class="jai-dot"></div></div></div>`;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return id;
+}
+
+function jaiRemoveTyping(id){
+  const el = document.getElementById(id);
+  if(el) el.remove();
+}
+
+function jaiQuick(text){
+  document.getElementById('jai-input').value = text;
+  jaiSend();
+}
+
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', function(){
+  const ta = document.getElementById('jai-input');
+  if(ta) ta.addEventListener('input', function(){
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+});
 
 window.onload = function(){
   init();
