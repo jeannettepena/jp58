@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — The 58 Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   THE 58 GROUP — CLIENT PORTAL TEMPLATE  (client-portal-template)
+   Ivory / black-sidebar / gold concierge system. Reusable across
+   Seller · Buyer · Tenant · Investor portals.  Instance below: SELLER
+   ===================================================================== */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --ink:#16120c;          /* sidebar */
+  --ink-soft:#211b13;     /* hover */
+  --ink-active:#2a2217;   /* active row */
+  --ivory:#f3eee3;        /* main background */
+  --ivory-deep:#ece5d6;
+  --card:#fbf9f2;         /* card surface */
+  --card-line:#e6ddcc;
+  --line:#e2d9c7;
+  --gold:#b08d4f;
+  --gold-soft:#bb9a64;
+  --gold-light:#d8be8a;
+  --terra:#b56b3d;        /* count / alert accent */
+  --text:#2a2620;         /* serif dark */
+  --text-soft:#6b6457;
+  --muted:#9a917f;
+  --side-text:#d4cab6;
+  --side-dim:#7c7058;
+  --green:#5b8a5e;
+  --amber:#c08a3e;
+  --blue:#5a7d96;
+  --shadow:0 1px 2px rgba(40,32,18,.04),0 8px 28px rgba(40,32,18,.06);
+  --shadow-lg:0 2px 6px rgba(40,32,18,.06),0 18px 50px rgba(40,32,18,.10);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--ivory);
+  color:var(--text);
+  font-family:'Montserrat',sans-serif;
+  font-weight:300;font-size:14px;line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  display:flex;min-height:100vh;
+}
+.serif{font-family:'Cormorant Garamond',serif}
+.italic{font-style:italic}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:288px;flex-shrink:0;background:var(--ink);
+  color:var(--side-text);padding:34px 0 24px;
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  border-right:1px solid #000;
+}
+.brand{padding:0 30px 6px;font-family:'Cormorant Garamond',serif;
+  font-size:30px;font-weight:400;letter-spacing:.01em;line-height:1;color:#efe7d4}
+.brand b{color:var(--gold-light);font-weight:500}
+.brand-sub{padding:0 30px;font-size:9px;letter-spacing:.34em;color:var(--side-dim);
+  text-transform:uppercase;margin-top:9px}
+
+.nav-group{margin-top:30px}
+.nav-label{padding:0 30px 8px;font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--side-dim)}
+.nav-item{display:flex;align-items:center;gap:14px;padding:11px 30px;
+  color:var(--side-text);text-decoration:none;font-size:13px;font-weight:300;
+  letter-spacing:.02em;cursor:pointer;border-left:2px solid transparent;
+  transition:background .18s,color .18s,border-color .18s}
+.nav-item:hover{background:var(--ink-soft);color:#fff}
+.nav-item.active{background:linear-gradient(90deg,var(--ink-active),transparent);
+  border-left-color:var(--gold);color:#fff}
+.nav-ico{width:16px;text-align:center;color:var(--gold-soft);font-size:13px;flex-shrink:0}
+.nav-item .pill{margin-left:auto;background:var(--terra);color:#fff;font-size:10px;
+  min-width:20px;height:20px;border-radius:11px;display:flex;align-items:center;
+  justify-content:center;padding:0 6px;font-weight:500;font-family:'Montserrat'}
+
+.side-foot{margin-top:auto;padding:18px 30px 0;border-top:1px solid #2a2217}
+.who{display:flex;align-items:center;gap:12px;margin-top:14px}
+.avatar{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:500;letter-spacing:.04em}
+.av-gold{background:var(--gold-soft);color:#1c1710}
+.who-name{font-size:13px;color:#efe7d4;line-height:1.2}
+.who-role{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--side-dim)}
+
+.admin-btn{margin:16px 30px 0;display:flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid #34291b;background:transparent;color:var(--side-text);
+  font-family:'Montserrat';font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  padding:11px;border-radius:8px;cursor:pointer;transition:.18s;width:calc(100% - 60px)}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold-light)}
+.admin-btn.on{background:var(--gold);color:#1c1710;border-color:var(--gold)}
+
+/* ---------- MAIN ---------- */
+.main{flex:1;min-width:0;padding:36px 48px 80px;max-width:1180px}
+
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;margin-bottom:30px}
+.topbar h1{font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:46px;line-height:1;color:var(--text);letter-spacing:.005em}
+.eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px}
+.updated{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-top:14px}
+
+/* status pill */
+.pill-status{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);
+  background:var(--card);padding:9px 16px 9px 14px;border-radius:30px;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--text-soft);box-shadow:var(--shadow)}
+.pill-status .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.pill-status select{border:none;background:transparent;font:inherit;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text);cursor:pointer;outline:none}
+.pill-status select:disabled{color:var(--text-soft);cursor:default;-webkit-appearance:none;appearance:none}
+
+/* ---------- HERO CARD ---------- */
+.hero{background:var(--card);border:1px solid var(--card-line);border-radius:20px;
+  padding:34px 36px;box-shadow:var(--shadow-lg);margin-bottom:34px;position:relative;overflow:hidden}
+.hero::after{content:"58°";position:absolute;right:30px;top:18px;
+  font-family:'Cormorant Garamond',serif;font-size:90px;color:var(--gold);
+  opacity:.06;line-height:1;pointer-events:none}
+.hero-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
+.hero-client{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:400;
+  color:var(--text);margin:6px 0 2px;line-height:1.05}
+.hero-addr{font-size:13px;letter-spacing:.04em;color:var(--text-soft)}
+.hero-meta{display:flex;gap:36px;flex-wrap:wrap;margin-top:24px}
+.hero-meta .m-label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.hero-meta .m-val{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text);margin-top:2px}
+.hero-meta .m-val.gold{color:var(--gold)}
+
+/* progress */
+.prog-wrap{margin-top:26px}
+.prog-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.prog-row .pl{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.prog-row .pv{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold)}
+.track{height:5px;border-radius:4px;background:var(--ivory-deep);overflow:hidden}
+.fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold-soft),var(--gold));
+  transition:width .5s ease}
+
+/* stepper */
+.stepper{display:flex;gap:6px;margin-top:26px;flex-wrap:wrap}
+.step{flex:1;min-width:84px;text-align:center}
+.step .bar{height:3px;border-radius:3px;background:var(--ivory-deep)}
+.step.done .bar{background:var(--gold)}
+.step.cur .bar{background:var(--terra)}
+.step .nm{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.step.done .nm,.step.cur .nm{color:var(--text-soft)}
+.step.cur .nm{color:var(--terra);font-weight:500}
+
+/* ---------- SECTION CARDS ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.grid .span2{grid-column:1 / -1}
+.panel{background:var(--card);border:1px solid var(--card-line);border-radius:18px;
+  padding:26px 28px;box-shadow:var(--shadow);scroll-margin-top:24px}
+.panel-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.panel-head .ph-ico{color:var(--gold-soft);font-size:14px}
+.panel-head h3{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:500;
+  color:var(--text);line-height:1;flex:1}
+.panel-head .ph-meta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.add-link{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
+  cursor:pointer;border:1px solid var(--line);padding:5px 11px;border-radius:20px;
+  background:transparent;font-family:'Montserrat';transition:.18s;white-space:nowrap}
+.add-link:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+.admin-only{display:none}
+body.admin .admin-only{display:inline-flex}
+
+/* next action highlight */
+.next{background:linear-gradient(135deg,#1d1810,#2a2217);border:none;color:#f3ecdc}
+.next .panel-head h3{color:#f6efde}
+.next .panel-head .ph-ico{color:var(--gold-light)}
+.next-body{font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.35;color:#f3ecdc}
+.next-due{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light);margin-top:14px}
+.next [contenteditable]:focus{outline:1px dashed var(--gold);outline-offset:4px;border-radius:4px}
+
+/* checklist */
+.check{list-style:none}
+.check li{display:flex;align-items:flex-start;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
+.check li:last-child{border-bottom:none}
+.box{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--line);flex-shrink:0;
+  margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:11px;
+  color:#fff;transition:.16s;background:transparent}
+.check li.done .box{background:var(--gold);border-color:var(--gold)}
+body.admin .check li{cursor:pointer}
+body.admin .check li:hover .box{border-color:var(--gold)}
+.check .ci-txt{font-size:13.5px;color:var(--text);line-height:1.5}
+.check li.done .ci-txt{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.check .ci-sub{font-size:10.5px;letter-spacing:.04em;color:var(--muted)}
+
+/* timeline */
+.tl{list-style:none;position:relative;padding-left:6px}
+.tl li{position:relative;padding:0 0 22px 28px;border-left:1.5px solid var(--line)}
+.tl li:last-child{padding-bottom:0}
+.tl .tdot{position:absolute;left:-7px;top:2px;width:13px;height:13px;border-radius:50%;
+  background:var(--ivory);border:2px solid var(--line)}
+.tl li.done .tdot{background:var(--gold);border-color:var(--gold)}
+.tl li.cur .tdot{background:var(--terra);border-color:var(--terra)}
+.tl .tdate{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.tl .ttl{font-size:14px;color:var(--text);margin-top:1px}
+.tl .tnote{font-size:11.5px;color:var(--text-soft)}
+
+/* feedback / generic rows */
+.row{padding:15px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.row-name{font-size:13.5px;color:var(--text);font-weight:400}
+.row-date{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.row-body{font-size:12.5px;color:var(--text-soft);margin-top:5px;line-height:1.55}
+
+/* offers */
+.offer{display:flex;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--line)}
+.offer:last-child{border-bottom:none}
+.offer .amt{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);min-width:130px}
+.offer .o-meta{flex:1}
+.offer .o-from{font-size:13px;color:var(--text)}
+.offer .o-terms{font-size:11px;color:var(--text-soft)}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%}
+.b-green{color:var(--green);background:rgba(91,138,94,.12)}.b-green::before{background:var(--green)}
+.b-amber{color:var(--amber);background:rgba(192,138,62,.12)}.b-amber::before{background:var(--amber)}
+.b-blue{color:var(--blue);background:rgba(90,125,150,.14)}.b-blue::before{background:var(--blue)}
+.b-gray{color:var(--muted);background:rgba(154,145,127,.14)}.b-gray::before{background:var(--muted)}
+
+/* documents */
+.doc{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
+.doc:last-child{border-bottom:none}
+.doc .d-ico{width:30px;height:30px;border-radius:8px;background:var(--ivory-deep);
+  display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:13px;flex-shrink:0}
+.doc .d-name{font-size:13px;color:var(--text);flex:1;text-decoration:none}
+.doc a.d-name:hover{color:var(--gold)}
+.doc .d-open{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+.doc .d-open:hover{text-decoration:underline}
+.doc .d-pending{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* deadlines */
+.dl{display:flex;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.dl:last-child{border-bottom:none}
+.dl .dl-date{text-align:center;min-width:54px}
+.dl .dl-day{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text);line-height:1}
+.dl .dl-mo{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.dl .dl-txt{font-size:13px;color:var(--text)}
+.dl .dl-sub{font-size:11px;color:var(--text-soft)}
+
+/* notes */
+.notes-area{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.6;color:var(--text);
+  font-style:italic;min-height:60px;white-space:pre-wrap}
+body.admin .notes-area{cursor:text}
+body.admin .notes-area:focus{outline:1px dashed var(--gold);outline-offset:6px;border-radius:6px;font-style:normal}
+
+/* team */
+.team-card{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.team-card:last-child{border-bottom:none}
+.team-card .t-name{font-size:14px;color:var(--text)}
+.team-card .t-role{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.team-card .t-contact{margin-left:auto;text-align:right}
+.team-card .t-contact a{font-size:11.5px;color:var(--text-soft);text-decoration:none;display:block}
+.team-card .t-contact a:hover{color:var(--gold)}
+
+.empty{font-size:12px;color:var(--muted);font-style:italic;padding:8px 0}
+
+/* admin banner */
+.admin-bar{display:none;background:var(--gold);color:#1c1710;border-radius:12px;
+  padding:11px 20px;margin-bottom:22px;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;align-items:center;gap:10px}
+body.admin .admin-bar{display:flex}
+
+/* mobile toggle */
+.menu-btn{display:none}
+
+@media(max-width:920px){
+  .grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  body{flex-direction:column}
+  .sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);
+    transition:transform .25s;width:280px}
+  .sidebar.open{transform:translateX(0)}
+  .main{padding:74px 20px 70px;max-width:100%}
+  .menu-btn{display:flex;position:fixed;top:16px;left:16px;z-index:60;width:44px;height:44px;
+    border-radius:12px;background:var(--ink);color:var(--gold-light);border:none;align-items:center;
+    justify-content:center;font-size:18px;cursor:pointer;box-shadow:var(--shadow)}
+  .topbar h1{font-size:34px}
+  .hero-client{font-size:30px}
+  .hero::after{display:none}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(20,16,10,.5);z-index:40}
+  .scrim.show{display:block}
+}
+</style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.scrim').classList.toggle('show')">☰</button>
+<div class="scrim" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('show')"></div>
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar">
+  <div class="brand">The 58 <b>Group</b></div>
+  <div class="brand-sub">Client Concierge Portal</div>
+
+  <div class="nav-group">
+    <div class="nav-label">Portal</div>
+    <a class="nav-item active" data-go="sec-overview"><span class="nav-ico">◆</span> Overview</a>
+    <a class="nav-item" data-go="sec-next"><span class="nav-ico">→</span> Next Steps</a>
+    <a class="nav-item" data-go="sec-checklist"><span class="nav-ico">✓</span> Listing Checklist <span class="pill" id="nav-check">0</span></a>
+    <a class="nav-item" data-go="sec-marketing"><span class="nav-ico">✦</span> Marketing Timeline</a>
+    <a class="nav-item" data-go="sec-showings"><span class="nav-ico">◈</span> Showing Feedback <span class="pill" id="nav-show">0</span></a>
+    <a class="nav-item" data-go="sec-offers"><span class="nav-ico">◇</span> Offers <span class="pill" id="nav-off">0</span></a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Records</div>
+    <a class="nav-item" data-go="sec-docs"><span class="nav-ico">▤</span> Documents</a>
+    <a class="nav-item" data-go="sec-deadlines"><span class="nav-ico">▦</span> Deadlines</a>
+    <a class="nav-item" data-go="sec-notes"><span class="nav-ico">✎</span> Notes</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Support</div>
+    <a class="nav-item" data-go="sec-team"><span class="nav-ico">◎</span> Your 58 Team</a>
+  </div>
+
+  <button class="admin-btn" id="adminToggle">⊕ Admin Mode</button>
+
+  <div class="side-foot">
+    <div class="who">
+      <div class="avatar av-gold" id="sf-init">JC</div>
+      <div>
+        <div class="who-name" id="sf-name">Client</div>
+        <div class="who-role">Seller</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+  <div class="admin-bar">⊕ Admin Mode active — status, checklist, notes, deadlines & document links are now editable. Changes save automatically on this device.</div>
+
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Seller Portal · The 58 Group</div>
+      <h1>Your Listing Journey</h1>
+      <div class="updated" id="updated">Last updated —</div>
+    </div>
+    <div class="pill-status">
+      <span class="dot"></span>
+      <select id="statusSel" disabled>
+        <option>New Lead</option><option>Active Client</option><option>Showing</option>
+        <option>Offer Sent</option><option>Under Contract</option><option>Closing</option>
+        <option>Closed</option><option>Follow-Up</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="sec-overview">
+    <div class="hero-label">Property Overview</div>
+    <div class="hero-client" id="h-client">—</div>
+    <div class="hero-addr" id="h-addr">—</div>
+
+    <div class="hero-meta">
+      <div><div class="m-label">List Price</div><div class="m-val gold" id="h-price">—</div></div>
+      <div><div class="m-label">Days on Market</div><div class="m-val" id="h-dom">—</div></div>
+      <div><div class="m-label">Showings</div><div class="m-val" id="h-showings">—</div></div>
+      <div><div class="m-label">Offers</div><div class="m-val" id="h-offers">—</div></div>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-row"><span class="pl">Listing Progress</span><span class="pv" id="prog-pct">0%</span></div>
+      <div class="track"><div class="fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="stepper" id="stepper"></div>
+  </section>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- NEXT ACTION -->
+    <section class="panel next span2" id="sec-next">
+      <div class="panel-head"><span class="ph-ico">→</span><h3>Your Next Step</h3></div>
+      <div class="next-body" id="next-body" data-edit="next">—</div>
+      <div class="next-due" id="next-due"></div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="panel" id="sec-checklist">
+      <div class="panel-head"><span class="ph-ico">✓</span><h3>Listing Checklist</h3>
+        <span class="ph-meta" id="ck-meta">0 / 0</span>
+        <button class="add-link admin-only" onclick="addCheck()">+ Add</button>
+      </div>
+      <ul class="check" id="checklist"></ul>
+    </section>
+
+    <!-- MARKETING TIMELINE -->
+    <section class="panel" id="sec-marketing">
+      <div class="panel-head"><span class="ph-ico">✦</span><h3>Marketing Timeline</h3>
+        <button class="add-link admin-only" onclick="addTimeline()">+ Add</button>
+      </div>
+      <ul class="tl" id="timeline"></ul>
+    </section>
+
+    <!-- SHOWING FEEDBACK -->
+    <section class="panel" id="sec-showings">
+      <div class="panel-head"><span class="ph-ico">◈</span><h3>Showing Feedback</h3>
+        <button class="add-link admin-only" onclick="addShowing()">+ Add</button>
+      </div>
+      <div id="showings"></div>
+    </section>
+
+    <!-- OFFERS -->
+    <section class="panel" id="sec-offers">
+      <div class="panel-head"><span class="ph-ico">◇</span><h3>Offers Received</h3>
+        <button class="add-link admin-only" onclick="addOffer()">+ Add</button>
+      </div>
+      <div id="offers"></div>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section class="panel" id="sec-docs">
+      <div class="panel-head"><span class="ph-ico">▤</span><h3>Important Documents</h3>
+        <button class="add-link admin-only" onclick="addDoc()">+ Add</button>
+      </div>
+      <div id="docs"></div>
+    </section>
+
+    <!-- DEADLINES -->
+    <section class="panel" id="sec-deadlines">
+      <div class="panel-head"><span class="ph-ico">▦</span><h3>Important Deadlines</h3>
+        <button class="add-link admin-only" onclick="addDeadline()">+ Add</button>
+      </div>
+      <div id="deadlines"></div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="panel span2" id="sec-notes">
+      <div class="panel-head"><span class="ph-ico">✎</span><h3>Notes from Your Agent</h3></div>
+      <div class="notes-area" id="notes" data-edit="notes">—</div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="panel span2" id="sec-team">
+      <div class="panel-head"><span class="ph-ico">◎</span><h3>Your 58 Group Team</h3></div>
+      <div id="team"></div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+/* =====================================================================
+   DATA  —  to create a new portal, copy this file and edit this object.
+   portalType can later be: "seller" | "buyer" | "tenant" | "investor"
+   ===================================================================== */
+const SEED = {
+  portalType:"seller",
+  client:"Carmen & Luis Herrera",
+  initials:"CH",
+  address:"1505 Candy Lane · Houston, TX 77018",
+  status:"Active Client",
+  listPrice:"$1,295,000",
+  daysOnMarket:"12",
+  next:{ text:"Review and approve the professional photography gallery so we can publish your listing across MLS, Latitude 58° and our private buyer network.", due:"Approval requested by Fri, Jun 6" },
+  notes:"We are positioning your home for the right buyer, not just any buyer. Early interest has been strong and the staging photos came back beautifully. Take your time reviewing the gallery — once approved, we go live everywhere at once for maximum first-week impact.",
+  checklist:[
+    {t:"Listing agreement signed",s:"Executed May 26",done:true},
+    {t:"Pre-listing walkthrough & staging consult",s:"Completed",done:true},
+    {t:"Professional photography & video",s:"Gallery ready for your approval",done:true},
+    {t:"Pricing strategy & CMA reviewed",s:"$1,295,000 list",done:true},
+    {t:"MLS listing input & syndication",s:"Pending photo approval",done:false},
+    {t:"Marketing collateral (flyer · social · Latitude 58°)",s:"In production",done:false},
+    {t:"Open house schedule confirmed",s:"",done:false},
+    {t:"Showing system & lockbox activated",s:"",done:false}
+  ],
+  timeline:[
+    {d:"May 26",t:"Listing launched",n:"Agreement signed, file opened",done:true},
+    {d:"May 30",t:"Staging & photography",n:"Full gallery + walkthrough video",done:true},
+    {d:"Jun 6",t:"Go live — all channels",n:"MLS · social · cross-border network",cur:true},
+    {d:"Jun 8",t:"Private preview & first open house",n:"Invited buyers and 58 Group agents",done:false},
+    {d:"Jun 14",t:"First-week performance review",n:"Showings, feedback & pricing check-in",done:false}
+  ],
+  showings:[
+    {name:"Buyer represented by Keller Williams",date:"Jun 2",fb:"Loved the natural light and layout. Buyer comparing against one other property; decision expected this week.",badge:"b-green",badgeTxt:"Strong Interest"},
+    {name:"Relocation buyer · corporate",date:"Jun 1",fb:"Felt the primary suite was ideal. Hesitant on the backyard size for children.",badge:"b-amber",badgeTxt:"Considering"}
+  ],
+  offers:[
+    {amt:"$1,260,000",from:"KW buyer · conventional",terms:"30-day close · 20% down · minor repair request",badge:"b-blue",badgeTxt:"Under Review"}
+  ],
+  docs:[
+    {name:"Listing Agreement (executed)",url:"",pending:false},
+    {name:"Seller's Disclosure Notice",url:"",pending:false},
+    {name:"Comparative Market Analysis (CMA)",url:"",pending:false},
+    {name:"Photography & Video Gallery",url:"",pending:true},
+    {name:"Marketing Plan — Latitude 58°",url:"",pending:true}
+  ],
+  deadlines:[
+    {day:"6",mo:"Jun",t:"Approve photo gallery",sub:"Required before go-live"},
+    {day:"8",mo:"Jun",t:"First open house",sub:"2:00 – 4:00 PM"},
+    {day:"14",mo:"Jun",t:"Pricing & strategy review",sub:"Performance check-in call"}
+  ],
+  team:[
+    {name:"Jeannette Peña",role:"Broker Associate · Team Leader",phone:"713-367-8082",email:"jeannette@jeannettepena.com",init:"JP"},
+    {name:"Rebecca",role:"Client Coordinator",phone:"713-367-8082",email:"jeannette@jeannettepena.com",init:"RB"}
+  ]
+};
+
+const STAGES=["New Lead","Active Client","Showing","Offer Sent","Under Contract","Closing","Closed","Follow-Up"];
+/* ===== LIVE DATA · Supabase (same project as 58 HUB) ===== */
+const SB_URL='https://kiqxkbwnfqlkeaexqihl.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpcXhrYnduZnFsa2VhZXhxaWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNjYwOTEsImV4cCI6MjA5NTg0MjA5MX0.1n8CV8zzRbk_HMeUvwx3mjyzZNPiBcGvBRvaGZgnECE';
+const SLUG=new URLSearchParams(location.search).get('c')||'';
+
+/* map between the portal data object (D) and a jp58_portals row */
+function rowToD(r){return {
+  id:r.id, portalType:r.portal_type||'seller', client:r.client||'', initials:r.initials||'',
+  address:r.address||'', status:r.status||'Active Client', listPrice:r.list_price||'', daysOnMarket:r.days_on_market||'',
+  next:r.next||{text:'',due:''}, notes:r.notes||'',
+  checklist:r.checklist||[], timeline:r.timeline||[], showings:r.showings||[], offers:r.offers||[],
+  priceReductions:r.price_reductions||[], docs:r.docs||[], deadlines:r.deadlines||[], team:r.team||[],
+  updatedAt:r.updated_at?new Date(r.updated_at).getTime():Date.now()
+}}
+function dToRow(d){return {
+  id:SLUG, portal_type:d.portalType||'seller', client:d.client||'', initials:d.initials||'',
+  address:d.address||'', status:d.status||'', list_price:d.listPrice||'', days_on_market:d.daysOnMarket||'',
+  next:d.next||{}, notes:d.notes||'',
+  checklist:d.checklist||[], timeline:d.timeline||[], showings:d.showings||[], offers:d.offers||[],
+  price_reductions:d.priceReductions||[], docs:d.docs||[], deadlines:d.deadlines||[], team:d.team||[],
+  updated_at:new Date().toISOString()
+}}
+
+/* local cache (offline fallback / no-slug demo) */
+const KEY="t58-portal-"+(SLUG||(SEED.client||"client").toLowerCase().replace(/[^a-z0-9]/g,"-"));
+function cacheLoad(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function cacheSave(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+
+async function sbLoad(){
+  if(!SLUG)return null;
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/jp58_portals?id=eq.${encodeURIComponent(SLUG)}&select=*`,{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    if(!r.ok)return null;
+    const rows=await r.json();
+    return (rows&&rows.length)?rowToD(rows[0]):null;
+  }catch(e){return null}
+}
+async function sbSave(){
+  if(!SLUG)return;
+  try{
+    await fetch(`${SB_URL}/rest/v1/jp58_portals?on_conflict=id`,{
+      method:'POST',
+      headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify([dToRow(D)])
+    });
+  }catch(e){}
+}
+
+let D=JSON.parse(JSON.stringify(SEED));
+let admin=false;
+
+function persist(){D.updatedAt=Date.now();cacheSave(D);if(SLUG)sbSave();render()}
+
+function render(){
+  // header / hero
+  el("sf-name").textContent=D.client;
+  el("sf-init").textContent=D.initials||initials(D.client);
+  el("h-client").textContent=D.client;
+  el("h-addr").textContent=D.address;
+  el("h-price").textContent=D.listPrice;
+  el("h-dom").textContent=D.daysOnMarket;
+  el("h-showings").textContent=D.showings.length;
+  el("h-offers").textContent=D.offers.length;
+  el("statusSel").value=D.status;
+  el("updated").textContent="Last updated "+fmtDate(D.updatedAt);
+
+  // progress from checklist
+  const done=D.checklist.filter(c=>c.done).length, tot=D.checklist.length;
+  const pct=tot?Math.round(done/tot*100):0;
+  el("prog-pct").textContent=pct+"%";
+  el("prog-fill").style.width=pct+"%";
+  el("ck-meta").textContent=done+" / "+tot;
+  el("nav-check").textContent=tot-done;
+  el("nav-show").textContent=D.showings.length;
+  el("nav-off").textContent=D.offers.length;
+
+  // stepper
+  const ci=Math.max(0,STAGES.indexOf(D.status));
+  el("stepper").innerHTML=STAGES.slice(0,7).map((s,i)=>
+    `<div class="step ${i<ci?'done':''} ${i===ci?'cur':''}"><div class="bar"></div><div class="nm">${s}</div></div>`).join("");
+
+  // next
+  el("next-body").textContent=D.next.text;
+  el("next-due").textContent=D.next.due||"";
+
+  // checklist
+  el("checklist").innerHTML=D.checklist.map((c,i)=>
+    `<li class="${c.done?'done':''}" onclick="toggleCheck(${i})">
+       <span class="box">${c.done?'✓':''}</span>
+       <span><span class="ci-txt">${esc(c.t)}</span>${c.s?`<br><span class="ci-sub">${esc(c.s)}</span>`:''}</span>
+     </li>`).join("")||empty();
+
+  // timeline
+  el("timeline").innerHTML=D.timeline.map((t,i)=>
+    `<li class="${t.done?'done':''} ${t.cur?'cur':''}" ${admin?`onclick="editTimeline(${i})" style="cursor:pointer"`:''}>
+       <span class="tdot"></span><div class="tdate">${esc(t.d)}</div>
+       <div class="ttl">${esc(t.t)}</div><div class="tnote">${esc(t.n||'')}</div></li>`).join("")||empty();
+
+  // showings
+  el("showings").innerHTML=D.showings.map((s,i)=>
+    `<div class="row" ${admin?`onclick="editShowing(${i})" style="cursor:pointer"`:''}>
+       <div class="row-top"><span class="row-name">${esc(s.name)}</span>
+         <span class="badge ${s.badge||'b-gray'}">${esc(s.badgeTxt||'')}</span></div>
+       <div class="row-date">${esc(s.date)}</div>
+       <div class="row-body">${esc(s.fb)}</div></div>`).join("")||empty("No showings logged yet.");
+
+  // offers
+  el("offers").innerHTML=D.offers.map((o,i)=>
+    `<div class="offer" ${admin?`onclick="editOffer(${i})" style="cursor:pointer"`:''}>
+       <div class="amt">${esc(o.amt)}</div>
+       <div class="o-meta"><div class="o-from">${esc(o.from)}</div><div class="o-terms">${esc(o.terms||'')}</div></div>
+       <span class="badge ${o.badge||'b-gray'}">${esc(o.badgeTxt||'')}</span></div>`).join("")||empty("No offers received yet.");
+
+  // docs
+  el("docs").innerHTML=D.docs.map((d,i)=>
+    `<div class="doc" ${admin?`onclick="editDoc(${i})" style="cursor:pointer"`:''}>
+       <span class="d-ico">▤</span>
+       ${d.url?`<a class="d-name" href="${esc(d.url)}" target="_blank" onclick="event.stopPropagation()">${esc(d.name)}</a>`:`<span class="d-name">${esc(d.name)}</span>`}
+       ${d.pending?`<span class="d-pending">Pending</span>`:(d.url?`<a class="d-open" href="${esc(d.url)}" target="_blank" onclick="event.stopPropagation()">Open ↗</a>`:`<span class="d-pending">On file</span>`)}
+     </div>`).join("")||empty();
+
+  // deadlines
+  el("deadlines").innerHTML=D.deadlines.map((x,i)=>
+    `<div class="dl" ${admin?`onclick="editDeadline(${i})" style="cursor:pointer"`:''}>
+       <div class="dl-date"><div class="dl-day">${esc(x.day)}</div><div class="dl-mo">${esc(x.mo)}</div></div>
+       <div><div class="dl-txt">${esc(x.t)}</div><div class="dl-sub">${esc(x.sub||'')}</div></div></div>`).join("")||empty();
+
+  // notes
+  el("notes").textContent=D.notes;
+
+  // team
+  el("team").innerHTML=D.team.map(t=>
+    `<div class="team-card">
+       <div class="avatar av-gold">${esc(t.init||initials(t.name))}</div>
+       <div><div class="t-name">${esc(t.name)}</div><div class="t-role">${esc(t.role)}</div></div>
+       <div class="t-contact"><a href="tel:${esc(t.phone)}">${esc(t.phone)}</a><a href="mailto:${esc(t.email)}">${esc(t.email)}</a></div>
+     </div>`).join("");
+}
+
+/* ---------- admin actions ---------- */
+el("statusSel").addEventListener("change",e=>{if(admin){D.status=e.target.value;persist()}});
+function toggleCheck(i){if(!admin)return;D.checklist[i].done=!D.checklist[i].done;persist()}
+function addCheck(){const t=prompt("Checklist item:");if(!t)return;const s=prompt("Sub-note (optional):")||"";D.checklist.push({t,s,done:false});persist()}
+function addTimeline(){const d=prompt("Date (e.g. Jun 6):");if(!d)return;const t=prompt("Milestone:")||"";const n=prompt("Note (optional):")||"";D.timeline.push({d,t,n,done:false});persist()}
+function editTimeline(i){if(!admin)return;const t=D.timeline[i];const a=prompt('Mark status: type "done", "current", or "upcoming"',t.done?'done':t.cur?'current':'upcoming');if(a===null)return;t.done=a==='done';t.cur=a==='current';if(confirm("Edit text? OK=yes, Cancel=keep")){t.d=prompt("Date:",t.d)||t.d;t.t=prompt("Milestone:",t.t)||t.t;t.n=prompt("Note:",t.n)||t.n}persist()}
+function addShowing(){const name=prompt("Showing source / buyer:");if(!name)return;const date=prompt("Date:")||"";const fb=prompt("Feedback:")||"";const badgeTxt=prompt('Tag (e.g. Strong Interest):')||"";D.showings.push({name,date,fb,badge:tagColor(badgeTxt),badgeTxt});persist()}
+function editShowing(i){if(!admin)return;if(confirm("Delete this showing? OK=delete, Cancel=edit")){D.showings.splice(i,1);persist();return}const s=D.showings[i];s.name=prompt("Source:",s.name)||s.name;s.date=prompt("Date:",s.date)||s.date;s.fb=prompt("Feedback:",s.fb)||s.fb;s.badgeTxt=prompt("Tag:",s.badgeTxt)||s.badgeTxt;s.badge=tagColor(s.badgeTxt);persist()}
+function addOffer(){const amt=prompt("Offer amount (e.g. $1,260,000):");if(!amt)return;const from=prompt("From:")||"";const terms=prompt("Terms:")||"";const badgeTxt=prompt("Status tag:","Under Review")||"";D.offers.push({amt,from,terms,badge:tagColor(badgeTxt),badgeTxt});persist()}
+function editOffer(i){if(!admin)return;if(confirm("Delete this offer? OK=delete, Cancel=edit")){D.offers.splice(i,1);persist();return}const o=D.offers[i];o.amt=prompt("Amount:",o.amt)||o.amt;o.from=prompt("From:",o.from)||o.from;o.terms=prompt("Terms:",o.terms)||o.terms;o.badgeTxt=prompt("Tag:",o.badgeTxt)||o.badgeTxt;o.badge=tagColor(o.badgeTxt);persist()}
+function addDoc(){const name=prompt("Document name:");if(!name)return;const url=prompt("Link (leave blank if not yet available):")||"";D.docs.push({name,url,pending:!url});persist()}
+function editDoc(i){if(!admin)return;if(confirm("Delete this document? OK=delete, Cancel=edit")){D.docs.splice(i,1);persist();return}const d=D.docs[i];d.name=prompt("Name:",d.name)||d.name;d.url=prompt("Link (blank = pending):",d.url||"");d.pending=!d.url;persist()}
+function addDeadline(){const t=prompt("Deadline:");if(!t)return;const day=prompt("Day (e.g. 14):")||"";const mo=prompt("Month (e.g. Jun):")||"";const sub=prompt("Detail (optional):")||"";D.deadlines.push({day,mo,t,sub});persist()}
+function editDeadline(i){if(!admin)return;if(confirm("Delete this deadline? OK=delete, Cancel=edit")){D.deadlines.splice(i,1);persist();return}const x=D.deadlines[i];x.t=prompt("Deadline:",x.t)||x.t;x.day=prompt("Day:",x.day)||x.day;x.mo=prompt("Month:",x.mo)||x.mo;x.sub=prompt("Detail:",x.sub)||x.sub;persist()}
+
+/* editable text blocks (next + notes) */
+document.querySelectorAll('[data-edit]').forEach(node=>{
+  node.addEventListener('blur',()=>{
+    if(!admin)return;
+    const k=node.getAttribute('data-edit');
+    if(k==='notes')D.notes=node.textContent.trim();
+    if(k==='next')D.next.text=node.textContent.trim();
+    persist();
+  });
+});
+
+/* admin toggle (light passcode gate) */
+el("adminToggle").addEventListener("click",()=>{
+  if(admin){admin=false;setAdmin();return}
+  const code=prompt("Enter admin passcode:");
+  if(code===null)return;
+  if(code==="58admin"){admin=true;setAdmin()}
+  else alert("Incorrect passcode.");
+});
+function setAdmin(){
+  document.body.classList.toggle("admin",admin);
+  el("adminToggle").classList.toggle("on",admin);
+  el("adminToggle").innerHTML=admin?"✓ Admin Mode — Exit":"⊕ Admin Mode";
+  el("statusSel").disabled=!admin;
+  document.querySelectorAll('[data-edit]').forEach(n=>n.contentEditable=admin);
+  render();
+}
+
+/* sidebar nav scroll + active state */
+document.querySelectorAll('.nav-item[data-go]').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    a.classList.add('active');
+    document.getElementById(a.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'});
+    document.querySelector('.sidebar').classList.remove('open');
+    document.querySelector('.scrim').classList.remove('show');
+  });
+});
+
+/* helpers */
+function el(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function empty(m){return `<div class="empty">${m||'Nothing to show yet.'}</div>`}
+function initials(n){return (n||'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()}
+function tagColor(t){t=(t||'').toLowerCase();if(/strong|accept|approv|active/.test(t))return'b-green';if(/review|under|progress|pend/.test(t))return'b-blue';if(/consider|hesit|wait/.test(t))return'b-amber';return'b-gray'}
+function fmtDate(ts){if(!ts)return'just now';const d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
+
+async function boot(){
+  const remote=await sbLoad();
+  if(remote)D=remote;
+  else{const c=cacheLoad();if(c)D=c;}
+  if(!D.updatedAt)D.updatedAt=Date.now();
+  render();
+}
+boot();
+</script>
+</body>
+</html>
