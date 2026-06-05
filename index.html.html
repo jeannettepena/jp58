@@ -1616,7 +1616,7 @@ function gcalInitClient(){
   if(!(window.google&&google.accounts&&google.accounts.oauth2)) return false;
   GCAL.tokenClient=google.accounts.oauth2.initTokenClient({
     client_id:GCAL.clientId, scope:GCAL.scope,
-    callback:(resp)=>{ if(resp&&resp.access_token){GCAL.token=resp.access_token;GCAL.connected=true;try{localStorage.setItem('gcal_on','1')}catch(e){}gcalLoad();} },
+    callback:(resp)=>{ if(resp&&resp.access_token){GCAL.token=resp.access_token;GCAL.connected=true;try{localStorage.setItem('gcal_on','1');const exp=Date.now()+((+resp.expires_in||3600)*1000)-120000;localStorage.setItem('gcal_tok',JSON.stringify({t:resp.access_token,e:exp}));}catch(e){}gcalLoad();} },
     error_callback:(err)=>{ console.log('GCAL auth:',err&&err.type); }
   });
   return true;
@@ -1629,9 +1629,20 @@ function gcalSilent(){
   if(!gcalInitClient()){ setTimeout(gcalSilent,600); return; }
   try{ GCAL.tokenClient.requestAccessToken({prompt:''}); }catch(e){}
 }
+function gcalRestore(){
+  try{
+    const raw=localStorage.getItem('gcal_tok');
+    if(!raw) return false;
+    const o=JSON.parse(raw);
+    if(o&&o.t&&o.e&&o.e>Date.now()+60000){
+      GCAL.token=o.t; GCAL.connected=true; gcalLoad(); return true;
+    }
+  }catch(e){}
+  return false;
+}
 async function gcalFetch(url){
   const r=await fetch(url,{headers:{Authorization:'Bearer '+GCAL.token}});
-  if(r.status===401){GCAL.token=null;GCAL.connected=false;buildWeek();renderEvents();return null;}
+  if(r.status===401){GCAL.token=null;GCAL.connected=false;try{localStorage.removeItem('gcal_tok')}catch(e){}buildWeek();renderEvents();return null;}
   return r.ok?await r.json():null;
 }
 async function gcalLoad(){
@@ -2601,7 +2612,7 @@ async function init(){
   if(window.lucide) lucide.createIcons();
   renderAllMini();
   loadLogs();
-  setTimeout(()=>{ try{ if(localStorage.getItem('gcal_on')) gcalSilent(); }catch(e){} }, 1200);
+  setTimeout(()=>{ try{ if(!gcalRestore() && localStorage.getItem('gcal_on')) gcalSilent(); }catch(e){} }, 1200);
 }
 
 // Run lucide on every panel show
