@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   };
 
   const ICAL_URLS = [
+    'https://calendar.google.com/calendar/ical/jcantu.realtor%40gmail.com/public/basic.ics',
     'https://calendar.google.com/calendar/ical/cf2aa5bc1d2ddcaded7192e315ea99532f16ff00c52a076b4b9c3478c308c52f%40group.calendar.google.com/public/basic.ics',
     // Add more calendar iCal URLs here as needed
   ];
