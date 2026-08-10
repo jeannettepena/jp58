@@ -1290,8 +1290,19 @@ function renderEvents(){
   const isToday=selDay===TODAY_ISO;
   lbl.textContent=isToday?'Today — '+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}):d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   const dayEvs=events.filter(e=>e.date===selDay).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
-  if(!dayEvs.length){list.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:12px 0;font-style:italic;">Free day · rest or create</div>';return;}
-  list.innerHTML=dayEvs.map(ev=>`
+  
+  // Also get Google Calendar events for this day
+  const gcalDayEvs = (window._icalEvents||[]).filter(ev=>{
+    const evDate = new Date(ev.start).toLocaleDateString('en-CA',{timeZone:'America/Chicago'});
+    return evDate === selDay;
+  });
+
+  if(!dayEvs.length && !gcalDayEvs.length){
+    list.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:12px 0;font-style:italic;">Free day · rest or create</div>';
+    return;
+  }
+
+  const jp58Html = dayEvs.map(ev=>`
     <div class="ev-row ${EV_COLORS[ev.cat]||'ev-business'}">
       <div class="ev-time">${ev.time||''}</div>
       <div class="ev-body">
@@ -1300,6 +1311,19 @@ function renderEvents(){
       </div>
       <button class="t-edit" onclick="deleteEvent(${ev.id})">×</button>
     </div>`).join('');
+
+  const gcalHtml = gcalDayEvs.map(ev=>{
+    const t = ev.allDay ? '' : new Date(ev.start).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Chicago'});
+    return `<div class="ev-row ev-business" style="border-left-color:var(--champ2);">
+      <div class="ev-time">${t}</div>
+      <div class="ev-body">
+        <div class="ev-name">${ev.title}</div>
+        <div class="ev-meta" style="color:var(--champ2);font-size:10px;">${ev.calendar||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.innerHTML = jp58Html + gcalHtml;
 }
 
 // ── TODOS ─────────────────────────────────────────────
@@ -2254,6 +2278,8 @@ async function icalLoadEvents(){
   try{
     const res = await fetch('/api/ical');
     const events = await res.json();
+    window._icalEvents = events; // store globally for home panel
+    renderEvents(); // refresh home panel
     if(!events.length){
       el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
       return;
