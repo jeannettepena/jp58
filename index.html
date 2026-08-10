@@ -364,9 +364,6 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
     <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal" draggable="true"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
   </div>
   <div class="sb-sep"></div>
-  <!-- By area mini icons -->
-  <div id="sb-area-icons" style="display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;"></div>
-  <div class="sb-sep"></div>
   <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
 </div>
 
@@ -1261,20 +1258,23 @@ function showPanel(name,triggerEl){
 }
 
 // ── TOAST ─────────────────────────────────────────────
-function renderSidebarAreas(){
-  const el=document.getElementById('sb-area-icons');
-  if(!el)return;
-  const order=['realestate','fifty8','latitude','realraw','renacer','finanzas','wellness','hijos'];
-  el.innerHTML=order.map(k=>{
-    const s=SECTIONS[k];
-    const cnt=todos.filter(t=>t.sec===k&&!t.done).length;
-    return`<div class="sb-item" onclick="showPanel('${k}',this)" data-panel="${k}" style="position:relative;">
-      <i data-lucide="${s.lucide}" style="stroke:${s.color};"></i>
-      ${cnt>0?`<span style="position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--champ);color:var(--navy);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;">${cnt}</span>`:''}
-      <span class="sb-tip">${s.label}${cnt>0?' · '+cnt:''}</span>
-    </div>`;
-  }).join('');
-  if(window.lucide)lucide.createIcons();
+function updateSidebarBadges(){
+  document.querySelectorAll('.sb-item[data-panel]').forEach(el=>{
+    const panel=el.dataset.panel;
+    const s=SECTIONS[panel];
+    if(!s)return;
+    const cnt=todos.filter(t=>t.sec===panel&&!t.done).length;
+    // Remove existing badge
+    const old=el.querySelector('.sb-badge');
+    if(old)old.remove();
+    if(cnt>0){
+      const badge=document.createElement('span');
+      badge.className='sb-badge';
+      badge.textContent=cnt;
+      badge.style.cssText='position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:var(--champ);color:var(--navy);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;';
+      el.appendChild(badge);
+    }
+  });
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
@@ -1300,10 +1300,10 @@ async function init(){
   renderEvents();
   renderTodos();
   renderSectionTodos();
-  renderSidebarAreas();
+  updateSidebarBadges();
   renderAllMini();
-  renderSidebarAreas();
   if(window.lucide)lucide.createIcons();
+  updateSidebarBadges();
 }
 
 
