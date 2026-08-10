@@ -118,7 +118,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .ev-row:hover{transform:translateX(3px);}
 .ev-time{font-size:10px;letter-spacing:.04em;min-width:52px;padding-top:2px;opacity:.65;}
 .ev-body{flex:1;}
-.ev-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;line-height:1.2;}
+.ev-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:400;line-height:1.2;}
 .ev-meta{font-size:10px;opacity:.55;margin-top:2px;}
 .ev-coffee{background:rgba(201,168,124,0.08);border-color:var(--champ);color:var(--ivory);}
 .ev-tequila{background:rgba(180,90,60,0.08);border-color:#C47A5A;color:var(--ivory);}
@@ -133,7 +133,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .cb{width:16px;height:16px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .cb.done{background:var(--champ);border-color:var(--champ);}
 .cb.done::after{content:'✓';font-size:10px;color:var(--navy);font-weight:700;}
-.todo-text{flex:1;font-size:12px;line-height:1.4;}
+.todo-text{flex:1;font-size:12px;line-height:1.4;font-family:'Jost',sans-serif;}
 .todo-text.done{opacity:.4;text-decoration:line-through;}
 .todo-note{font-size:10px;color:var(--ivory3);margin-top:2px;}
 .todo-pri{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
@@ -145,12 +145,12 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .t-edit:hover{color:var(--champ);}
 
 /* MINI LIST (pipeline etc) */
-.mini-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);transition:all .15s;}
+.mini-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);transition:all .15s;}
 .mini-row:last-child{border-bottom:none;}
 .mini-row:hover .mini-del{opacity:1;}
 .mini-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.mini-name{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ivory);flex:1;}
-.mini-sub{font-size:10px;color:var(--ivory3);margin-top:1px;}
+.mini-name{font-family:'Jost',sans-serif;font-size:12px;font-weight:400;color:var(--ivory);flex:1;}
+.mini-sub{font-size:10px;color:var(--ivory3);margin-top:0px;}
 .mini-badge{font-size:10px;font-weight:500;white-space:nowrap;cursor:pointer;transition:opacity .15s;}
 .mini-badge:hover{opacity:.7;}
 .mini-del{background:none;border:none;cursor:pointer;color:var(--ivory3);font-size:14px;opacity:0;transition:opacity .15s;padding:0 2px;line-height:1;}
@@ -370,17 +370,17 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 <!-- HOME -->
 <div id="panel-home" class="panel active">
-  <div class="home-grid">
-    <div>
+  <div class="home-grid" style="grid-template-columns:1fr 280px;align-items:start;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:14px;">
       <!-- Greeting & intention -->
-      <div class="gc accent" style="margin-bottom:16px;">
+      <div class="gc accent">
         <div class="label" style="margin-bottom:8px;">Today's Intention</div>
         <input class="int-in" id="intention" placeholder="Write your intention for today...">
         <div id="daily-quote" style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--champ2);margin-top:12px;line-height:1.7;padding-top:12px;border-top:1px solid var(--border2);opacity:.85;"></div>
       </div>
 
       <!-- Week strip -->
-      <div class="gc" style="margin-bottom:16px;">
+      <div class="gc">
         <div class="label" style="margin-bottom:12px;">This Week</div>
         <div class="week-strip" id="week-strip"></div>
         <div style="margin-top:16px;">
@@ -418,22 +418,21 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
     </div>
 
     <!-- RIGHT SIDEBAR -->
-    <div>
-      <div class="stat-row gc accent" style="margin-bottom:16px;">
-        <div class="stat feat gc" style="background:transparent;border:none;padding:10px;">
-          <div class="sl">Next closing</div>
-          <div class="sv">Jun 18</div>
-          <div class="ss">Tims Harbor Dr</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="gc accent" style="padding:16px;">
+        <div style="padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:10px;">
+          <div class="label">Next closing</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--champ);line-height:1;">Jun 18</div>
+          <div style="font-size:10px;color:var(--ivory3);margin-top:2px;">Tims Harbor Dr</div>
         </div>
-        <div class="stat gc" style="background:transparent;border:none;padding:10px;">
-          <div class="sl">Open tasks</div>
-          <div class="sv" id="s-open">0</div>
-          <div class="ss">This week</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="label">Open tasks</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory2);" id="s-open">0</div>
         </div>
       </div>
 
       <!-- Pipeline mini -->
-      <div class="gc" style="margin-bottom:14px;">
+      <div class="gc">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
           <div class="label">Pipeline</div>
           <button class="pill pill-ghost" style="font-size:10px;padding:3px 10px;" onclick="openModal('m-pipeline')">+ Add</button>
@@ -442,7 +441,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
       </div>
 
       <!-- Fifty Eight Projects -->
-      <div class="gc" style="margin-bottom:14px;">
+      <div class="gc">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
           <div class="label">Fifty Eight Projects</div>
           <button class="pill pill-ghost" style="font-size:10px;padding:3px 10px;" onclick="openModal('m-project')">+ Add</button>
@@ -451,7 +450,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
       </div>
 
       <!-- Content -->
-      <div class="gc" style="margin-bottom:14px;">
+      <div class="gc">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
           <div class="label">Content</div>
           <button class="pill pill-ghost" style="font-size:10px;padding:3px 10px;" onclick="openModal('m-content')">+ Add</button>
@@ -897,7 +896,7 @@ let todos=[
   {id:21,text:'Confirm OZ shot appointment',who:'Jeannette',pri:'m',sec:'wellness',note:'Wed morning',done:false},
   {id:22,text:'Confirm NAD shot appointment',who:'Jeannette',pri:'m',sec:'wellness',note:'Fri morning',done:false},
   {id:23,text:'Paulina — follow up post orientation Arkansas',who:'Jeannette',pri:'m',sec:'hijos',note:'',done:false},
-  {id:24,text:'Joselito piano — check practice schedule',who:'Jeannette',pri:'l',sec:'hijos',note:'',done:false},
+  {id:24,text:'Check practice schedule',who:'Jeannette',pri:'l',sec:'hijos',note:'',done:false},
 ];
 
 let events=[
