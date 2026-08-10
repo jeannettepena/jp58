@@ -761,38 +761,57 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 
 <!-- GOOGLE CALENDAR -->
 <div id="panel-gcal" class="panel">
-  <div style="max-width:600px;">
+  <div style="max-width:700px;">
     <div class="sec-head">
       <div class="sec-icon"><i data-lucide="calendar" style="width:22px;height:22px;stroke:var(--champ2);stroke-width:1.5"></i></div>
-      <div><div class="sec-title">Google Calendar</div><div class="sec-desc">jcantu.realtor@gmail.com · Houston, TX</div></div>
-      <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="pill pill-champ" style="margin-left:auto;text-decoration:none;">Open Google ↗</a>
+      <div><div class="sec-title">Google Calendar</div><div class="sec-desc" id="gcal-status-desc">jcantu.realtor@gmail.com · Houston, TX</div></div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+        <button id="gcal-connect-btn" class="pill pill-solid" style="font-size:11px;" onclick="gcalConnect()">Connect Calendar</button>
+        <button id="gcal-disconnect-btn" class="pill pill-ghost" style="font-size:11px;display:none;" onclick="gcalDisconnect()">Disconnect</button>
+        <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="pill pill-champ" style="text-decoration:none;font-size:11px;">Open Google ↗</a>
+      </div>
     </div>
-    <div class="gcal-grid">
-      <a href="https://calendar.google.com/calendar/r/day" target="_blank" class="gcal-btn">
-        <div class="gcal-icon">📅</div>
-        <div class="gcal-label">Today</div>
-        <div class="gcal-sub">Day view</div>
-      </a>
-      <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="gcal-btn">
-        <div class="gcal-icon">🗓</div>
-        <div class="gcal-label">This Week</div>
-        <div class="gcal-sub">Week view</div>
-      </a>
-      <a href="https://calendar.google.com/calendar/r/month" target="_blank" class="gcal-btn">
-        <div class="gcal-icon">📆</div>
-        <div class="gcal-label">Month</div>
-        <div class="gcal-sub">Month view</div>
-      </a>
+
+    <!-- Connected state — live events -->
+    <div id="gcal-connected" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="label">Upcoming Events</div>
+        <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="gcalLoadEvents()">↻ Refresh</button>
+      </div>
+      <div id="gcal-events-list" class="ev-list"></div>
     </div>
-    <div class="gc" style="margin-bottom:16px;">
-      <div class="label" style="margin-bottom:8px;">Add to Google Calendar</div>
-      <div style="font-size:12px;color:var(--ivory3);margin-bottom:14px;">Tell J·AI in the chat and she'll add it, or open Google Calendar directly.</div>
-      <a href="https://calendar.google.com/calendar/r/eventedit" target="_blank" class="pill pill-solid" style="text-decoration:none;display:inline-flex;">+ New Event in Google Calendar</a>
+
+    <!-- Disconnected state -->
+    <div id="gcal-disconnected">
+      <div class="gc accent" style="text-align:center;padding:32px;margin-bottom:16px;">
+        <div style="font-size:32px;margin-bottom:12px;">📅</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--ivory);margin-bottom:8px;">Connect your Google Calendar</div>
+        <div style="font-size:12px;color:var(--ivory3);margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.7;">One click — stays connected for months. See your real events here in JP58 without switching apps.</div>
+        <button class="pill pill-solid" style="font-size:12px;padding:8px 24px;" onclick="gcalConnect()">Connect Google Calendar</button>
+      </div>
+      <div class="gcal-grid">
+        <a href="https://calendar.google.com/calendar/r/day" target="_blank" class="gcal-btn">
+          <div class="gcal-icon">📅</div>
+          <div class="gcal-label">Today</div>
+          <div class="gcal-sub">Day view</div>
+        </a>
+        <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="gcal-btn">
+          <div class="gcal-icon">🗓</div>
+          <div class="gcal-label">This Week</div>
+          <div class="gcal-sub">Week view</div>
+        </a>
+        <a href="https://calendar.google.com/calendar/r/month" target="_blank" class="gcal-btn">
+          <div class="gcal-icon">📆</div>
+          <div class="gcal-label">Month</div>
+          <div class="gcal-sub">Month view</div>
+        </a>
+      </div>
+      <div class="gcal-tip" style="margin-top:16px;">
+        <i data-lucide="zap" style="width:16px;height:16px;stroke:var(--champ);stroke-width:1.5;flex-shrink:0;margin-top:2px;"></i>
+        <div class="gcal-tip-text">Tell J·AI: <em>"Add a meeting with Daina Thursday at 10am"</em> and it goes straight to Google Calendar.</div>
+      </div>
     </div>
-    <div class="gcal-tip">
-      <i data-lucide="zap" style="width:16px;height:16px;stroke:var(--champ);stroke-width:1.5;flex-shrink:0;margin-top:2px;"></i>
-      <div class="gcal-tip-text">Tell J·AI: <em>"Add a meeting with Daina Thursday at 10am — Real Estate"</em> and it goes straight to Google Calendar and JP58.</div>
-    </div>
+
   </div>
 </div>
 
@@ -2109,7 +2128,139 @@ showPanel=function(name,el){
   _sp2(name,el);
   if(name==='goals'){loadGoals();renderAllGoals();}
 };
-window.onload=()=>init();
+// ── GOOGLE CALENDAR OAUTH ─────────────────────────────
+const GCAL_CLIENT_ID = '406326659472-niblfki5aqpln6fr6hl1cagtio0e355u.apps.googleusercontent.com'; // public client ID
+const GCAL_REDIRECT = 'https://jp58.netlify.app';
+const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+
+let gcalTokens = null;
+
+function gcalLoadTokens(){
+  try{
+    const raw = localStorage.getItem('jp58-gcal-tokens');
+    if(raw) gcalTokens = JSON.parse(raw);
+  }catch(e){}
+}
+
+function gcalSaveTokens(tokens){
+  gcalTokens = tokens;
+  localStorage.setItem('jp58-gcal-tokens', JSON.stringify(tokens));
+}
+
+function gcalClearTokens(){
+  gcalTokens = null;
+  localStorage.removeItem('jp58-gcal-tokens');
+}
+
+function gcalConnect(){
+  const params = new URLSearchParams({
+    client_id: GCAL_CLIENT_ID,
+    redirect_uri: GCAL_REDIRECT,
+    response_type: 'code',
+    scope: GCAL_SCOPE,
+    access_type: 'offline',
+    prompt: 'consent',
+  });
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+}
+
+function gcalDisconnect(){
+  gcalClearTokens();
+  gcalUpdateUI();
+  showToast('Calendar disconnected');
+}
+
+function gcalUpdateUI(){
+  const connected = gcalTokens && gcalTokens.refresh_token;
+  document.getElementById('gcal-connected').style.display = connected ? 'block' : 'none';
+  document.getElementById('gcal-disconnected').style.display = connected ? 'none' : 'block';
+  document.getElementById('gcal-connect-btn').style.display = connected ? 'none' : '';
+  document.getElementById('gcal-disconnect-btn').style.display = connected ? '' : 'none';
+  if(connected){
+    document.getElementById('gcal-status-desc').textContent = 'jcantu.realtor@gmail.com · Connected ✓';
+  }
+}
+
+async function gcalLoadEvents(){
+  if(!gcalTokens) return;
+  const el = document.getElementById('gcal-events-list');
+  el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div>';
+
+  const now = new Date();
+  const tMin = now.toISOString();
+  const tMax = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
+
+  const params = new URLSearchParams({
+    refresh_token: gcalTokens.refresh_token,
+    access_token: gcalTokens.access_token || '',
+    timeMin: tMin,
+    timeMax: tMax,
+  });
+
+  try{
+    const res = await fetch('/api/gcal?' + params.toString());
+    if(res.status === 401){
+      gcalClearTokens();
+      gcalUpdateUI();
+      showToast('Calendar session expired — please reconnect');
+      return;
+    }
+    const data = await res.json();
+    const items = data.items || [];
+    if(!items.length){
+      el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
+      return;
+    }
+    el.innerHTML = items.map(ev => {
+      const start = ev.start.dateTime || ev.start.date;
+      const d = new Date(start);
+      const isAllDay = !ev.start.dateTime;
+      const timeStr = isAllDay
+        ? d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+        : d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+      return `<div class="ev-row ev-business" style="margin-bottom:7px;">
+        <div class="ev-time">${timeStr}</div>
+        <div class="ev-body">
+          <div class="ev-name">${ev.summary || 'No title'}</div>
+          ${ev.location ? `<div class="ev-meta">${ev.location}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Could not load events</div>';
+  }
+}
+
+// Handle OAuth callback — tokens arrive in hash
+function gcalHandleCallback(){
+  const hash = window.location.hash.slice(1);
+  if(!hash) return;
+  const params = new URLSearchParams(hash);
+  const access_token = params.get('access_token');
+  const refresh_token = params.get('refresh_token');
+  const expires_in = params.get('expires_in');
+  if(access_token && refresh_token){
+    gcalSaveTokens({ access_token, refresh_token, expires_in, saved_at: Date.now() });
+    // Clean URL
+    history.replaceState(null, '', window.location.pathname);
+    showToast('Google Calendar connected ✓');
+    gcalUpdateUI();
+    gcalLoadEvents();
+  }
+}
+
+// Extend showPanel for gcal
+const _sp3 = showPanel;
+showPanel = function(name, el){
+  _sp3(name, el);
+  if(name === 'gcal'){ gcalUpdateUI(); if(gcalTokens) gcalLoadEvents(); }
+};
+
+window.onload=()=>{
+  gcalLoadTokens();
+  gcalHandleCallback();
+  init();
+};
 </script>
 </body>
 </html>
