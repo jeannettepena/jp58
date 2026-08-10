@@ -48,16 +48,13 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .body-wrap{display:flex;flex:1;overflow:hidden;}
 
 /* SIDEBAR */
-.sidebar{width:58px;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--border);background:rgba(27,43,58,0.4);backdrop-filter:blur(20px);flex-shrink:0;}
-.sb-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;position:relative;transition:all .25s;color:var(--ivory3);border:1px solid transparent;}
+.sidebar{width:52px;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--border);background:rgba(27,43,58,0.4);backdrop-filter:blur(20px);flex-shrink:0;}
+.sb-item{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;position:relative;transition:all .25s;color:var(--ivory3);border:1px solid transparent;}
 .sb-item:hover{color:var(--champ2);background:var(--champ3);}
 .sb-item.on{color:var(--champ);background:var(--champ3);border-color:var(--border2);}
-.sb-item svg{width:18px;height:18px;}
-.sb-item[draggable="true"]{cursor:grab;}
-.sb-item[draggable="true"]:active{cursor:grabbing;}
-.sb-item.sb-drag-over{background:var(--champ3);border:1px dashed var(--border2);}
-.sb-item.sb-dragging{opacity:.3;}
-.sb-tip{position:absolute;left:48px;background:rgba(27,43,58,0.95);border:1px solid var(--border);color:var(--ivory);font-size:11px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;backdrop-filter:blur(10px);z-index:100;}
+.sb-item svg{width:16px;height:16px;}
+
+.sb-tip{position:absolute;left:44px;background:rgba(27,43,58,0.95);border:1px solid var(--border);color:var(--ivory);font-size:11px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;backdrop-filter:blur(10px);z-index:100;}
 .sb-item:hover .sb-tip{opacity:1;}
 .sb-sep{width:24px;height:1px;background:var(--border);margin:6px 0;}
 .sb-jai{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;background:var(--champ3);border:1px solid var(--border2);transition:all .25s;text-decoration:none;}
@@ -351,18 +348,17 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 <div class="sidebar" id="sidebar">
   <div class="sb-item on" onclick="showPanel('home',this)" data-panel="home" draggable="false"><i data-lucide="layout-dashboard"></i><span class="sb-tip">Dashboard</span></div>
   <div class="sb-sep"></div>
-  <div id="sb-draggable" style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;">
-    <div class="sb-item" onclick="showPanel('realestate',this)" data-panel="realestate" draggable="true"><i data-lucide="building-2"></i><span class="sb-tip">Real Estate</span></div>
-    <div class="sb-item" onclick="showPanel('fifty8',this)" data-panel="fifty8" draggable="true"><i data-lucide="hard-hat"></i><span class="sb-tip">Fifty Eight Degrees</span></div>
-    <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot" draggable="true"><i data-lucide="coffee"></i><span class="sb-tip">Coffee or Tequila</span></div>
-    <div class="sb-item" onclick="showPanel('latitude',this)" data-panel="latitude" draggable="true"><i data-lucide="globe"></i><span class="sb-tip">Latitude 58°</span></div>
-    <div class="sb-item" onclick="showPanel('realraw',this)" data-panel="realraw" draggable="true"><i data-lucide="mic"></i><span class="sb-tip">Real & Raw</span></div>
-    <div class="sb-item" onclick="showPanel('renacer',this)" data-panel="renacer" draggable="true"><i data-lucide="book-open"></i><span class="sb-tip">RenaSer</span></div>
-    <div class="sb-item" onclick="showPanel('finanzas',this)" data-panel="finanzas" draggable="true"><i data-lucide="bar-chart-2"></i><span class="sb-tip">Finanzas</span></div>
-    <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness" draggable="true"><i data-lucide="heart-pulse"></i><span class="sb-tip">Wellness</span></div>
-    <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos" draggable="true"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
-    <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal" draggable="true"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
-  </div>
+  <div class="sb-item" onclick="showPanel('realestate',this)" data-panel="realestate"><i data-lucide="building-2"></i><span class="sb-tip">Real Estate</span></div>
+  <div class="sb-item" onclick="showPanel('fifty8',this)" data-panel="fifty8"><i data-lucide="hard-hat"></i><span class="sb-tip">Fifty Eight Degrees</span></div>
+  <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot"><i data-lucide="coffee"></i><span class="sb-tip">Coffee or Tequila</span></div>
+  <div class="sb-item" onclick="showPanel('latitude',this)" data-panel="latitude"><i data-lucide="globe"></i><span class="sb-tip">Latitude 58°</span></div>
+  <div class="sb-item" onclick="showPanel('realraw',this)" data-panel="realraw"><i data-lucide="mic"></i><span class="sb-tip">Real & Raw</span></div>
+  <div class="sb-item" onclick="showPanel('renacer',this)" data-panel="renacer"><i data-lucide="book-open"></i><span class="sb-tip">RenaSer</span></div>
+  <div class="sb-sep"></div>
+  <div class="sb-item" onclick="showPanel('finanzas',this)" data-panel="finanzas"><i data-lucide="bar-chart-2"></i><span class="sb-tip">Finanzas</span></div>
+  <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness"><i data-lucide="heart-pulse"></i><span class="sb-tip">Wellness</span></div>
+  <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
+  <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
   <div class="sb-sep"></div>
   <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
 </div>
@@ -1536,54 +1532,6 @@ showPanel = function(name, el){
   _origSP(name, el);
   if(name==='cot'){buildCotCal();renderCotConns();}
 };
-
-// Sidebar drag-to-reorder
-(function(){
-  let sbDragging=null;
-  function initSbDrag(){
-    const container=document.getElementById('sb-draggable');
-    if(!container)return;
-    const items=Array.from(container.querySelectorAll('.sb-item[draggable="true"]'));
-    items.forEach(item=>{
-      item.addEventListener('dragstart',e=>{
-        sbDragging=item;
-        setTimeout(()=>item.classList.add('sb-dragging'),0);
-        e.dataTransfer.effectAllowed='move';
-      });
-      item.addEventListener('dragend',()=>{
-        item.classList.remove('sb-dragging','sb-drag-over');
-        sbDragging=null;
-        // Save order
-        const order=Array.from(container.querySelectorAll('.sb-item')).map(i=>i.dataset.panel);
-        try{localStorage.setItem('jp58-sb-order',JSON.stringify(order));}catch{}
-        if(window.lucide)lucide.createIcons();
-      });
-      item.addEventListener('dragover',e=>{
-        e.preventDefault();e.dataTransfer.dropEffect='move';
-        if(sbDragging&&sbDragging!==item){
-          item.classList.add('sb-drag-over');
-          const r=item.getBoundingClientRect();
-          const mid=r.top+r.height/2;
-          if(e.clientY<mid)container.insertBefore(sbDragging,item);
-          else container.insertBefore(sbDragging,item.nextSibling);
-        }
-      });
-      item.addEventListener('dragleave',()=>item.classList.remove('sb-drag-over'));
-      item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('sb-drag-over');});
-    });
-    // Restore saved order
-    try{
-      const saved=JSON.parse(localStorage.getItem('jp58-sb-order')||'[]');
-      if(saved.length){
-        saved.forEach(panel=>{
-          const el=container.querySelector(`[data-panel="${panel}"]`);
-          if(el)container.appendChild(el);
-        });
-      }
-    }catch{}
-  }
-  document.addEventListener('DOMContentLoaded',initSbDrag);
-})();
 
 window.onload=()=>init();
 </script>
