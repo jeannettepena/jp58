@@ -2,11 +2,6 @@
   functions = "netlify/functions"
 
 [[redirects]]
-  from = "/auth/callback"
-  to = "/.netlify/functions/auth-callback"
-  status = 200
-
-[[redirects]]
   from = "/api/gcal"
   to = "/.netlify/functions/gcal-events"
   status = 200
