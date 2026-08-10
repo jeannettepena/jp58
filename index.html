@@ -762,56 +762,45 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 <!-- GOOGLE CALENDAR -->
 <div id="panel-gcal" class="panel">
   <div style="max-width:700px;">
-    <div class="sec-head">
+    <div class="sec-head" style="margin-bottom:16px;">
       <div class="sec-icon"><i data-lucide="calendar" style="width:22px;height:22px;stroke:var(--champ2);stroke-width:1.5"></i></div>
-      <div><div class="sec-title">Google Calendar</div><div class="sec-desc" id="gcal-status-desc">jcantu.realtor@gmail.com · Houston, TX</div></div>
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
-        <button id="gcal-connect-btn" class="pill pill-solid" style="font-size:11px;" onclick="gcalConnect()">Connect Calendar</button>
-        <button id="gcal-disconnect-btn" class="pill pill-ghost" style="font-size:11px;display:none;" onclick="gcalDisconnect()">Disconnect</button>
-        <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="pill pill-champ" style="text-decoration:none;font-size:11px;">Open Google ↗</a>
-      </div>
+      <div><div class="sec-title">Google Calendar</div><div class="sec-desc">jcantu.realtor@gmail.com · Houston, TX</div></div>
+      <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="pill pill-champ" style="margin-left:auto;text-decoration:none;font-size:11px;">Open Google ↗</a>
     </div>
 
-    <!-- Connected state — live events -->
-    <div id="gcal-connected" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <div class="label">Upcoming Events</div>
-        <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="gcalLoadEvents()">↻ Refresh</button>
-      </div>
-      <div id="gcal-events-list" class="ev-list"></div>
+    <!-- Quick links -->
+    <div class="gcal-grid" style="margin-bottom:16px;">
+      <a href="https://calendar.google.com/calendar/r/day" target="_blank" class="gcal-btn">
+        <div class="gcal-icon">📅</div>
+        <div class="gcal-label">Today</div>
+        <div class="gcal-sub">Day view</div>
+      </a>
+      <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="gcal-btn">
+        <div class="gcal-icon">🗓</div>
+        <div class="gcal-label">This Week</div>
+        <div class="gcal-sub">Week view</div>
+      </a>
+      <a href="https://calendar.google.com/calendar/r/month" target="_blank" class="gcal-btn">
+        <div class="gcal-icon">📆</div>
+        <div class="gcal-label">Month</div>
+        <div class="gcal-sub">Month view</div>
+      </a>
     </div>
 
-    <!-- Disconnected state -->
-    <div id="gcal-disconnected">
-      <div class="gc accent" style="text-align:center;padding:32px;margin-bottom:16px;">
-        <div style="font-size:32px;margin-bottom:12px;">📅</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--ivory);margin-bottom:8px;">Connect your Google Calendar</div>
-        <div style="font-size:12px;color:var(--ivory3);margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.7;">One click — stays connected for months. See your real events here in JP58 without switching apps.</div>
-        <button class="pill pill-solid" style="font-size:12px;padding:8px 24px;" onclick="gcalConnect()">Connect Google Calendar</button>
-      </div>
-      <div class="gcal-grid">
-        <a href="https://calendar.google.com/calendar/r/day" target="_blank" class="gcal-btn">
-          <div class="gcal-icon">📅</div>
-          <div class="gcal-label">Today</div>
-          <div class="gcal-sub">Day view</div>
-        </a>
-        <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="gcal-btn">
-          <div class="gcal-icon">🗓</div>
-          <div class="gcal-label">This Week</div>
-          <div class="gcal-sub">Week view</div>
-        </a>
-        <a href="https://calendar.google.com/calendar/r/month" target="_blank" class="gcal-btn">
-          <div class="gcal-icon">📆</div>
-          <div class="gcal-label">Month</div>
-          <div class="gcal-sub">Month view</div>
-        </a>
-      </div>
-      <div class="gcal-tip" style="margin-top:16px;">
-        <i data-lucide="zap" style="width:16px;height:16px;stroke:var(--champ);stroke-width:1.5;flex-shrink:0;margin-top:2px;"></i>
-        <div class="gcal-tip-text">Tell J·AI: <em>"Add a meeting with Daina Thursday at 10am"</em> and it goes straight to Google Calendar.</div>
-      </div>
+    <!-- Embedded calendar -->
+    <div class="gc" style="padding:0;overflow:hidden;margin-bottom:16px;">
+      <iframe 
+        src="https://calendar.google.com/calendar/embed?src=jcantu.realtor%40gmail.com&ctz=America%2FChicago&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&mode=WEEK&bgcolor=%231B2B3A&color=%23C9A87C"
+        style="width:100%;height:600px;border:none;display:block;"
+        frameborder="0"
+        scrolling="no">
+      </iframe>
     </div>
 
+    <div class="gcal-tip">
+      <i data-lucide="zap" style="width:16px;height:16px;stroke:var(--champ);stroke-width:1.5;flex-shrink:0;margin-top:2px;"></i>
+      <div class="gcal-tip-text">Tell J·AI: <em>"Add a meeting with Daina Thursday at 10am — Real Estate"</em> and it goes straight to Google Calendar and JP58.</div>
+    </div>
   </div>
 </div>
 
