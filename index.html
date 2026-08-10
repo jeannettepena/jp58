@@ -94,7 +94,9 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .pill-ghost:hover{border-color:var(--border2);color:var(--champ2);}
 
 /* HOME GRID */
-.home-grid{display:grid;grid-template-columns:1fr 300px;gap:20px;height:100%;}
+.home-grid{display:grid;grid-template-columns:1fr 268px;gap:12px;height:100%;overflow:hidden;}
+.home-left{display:flex;flex-direction:column;gap:10px;overflow-y:auto;height:100%;padding-bottom:20px;}
+.home-right{overflow-y:auto;height:100%;}
 
 /* WEEK STRIP */
 .week-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;}
@@ -370,8 +372,8 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 <!-- HOME -->
 <div id="panel-home" class="panel active">
-  <div class="home-grid" style="grid-template-columns:1fr 280px;align-items:start;gap:16px;">
-    <div style="display:flex;flex-direction:column;gap:14px;">
+  <div class="home-grid">
+    <div class="home-left">
       <!-- Greeting & intention -->
       <div class="gc accent">
         <div class="label" style="margin-bottom:8px;">Today's Intention</div>
@@ -417,8 +419,8 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
       </div>
     </div>
 
-    <!-- RIGHT SIDEBAR — single glass panel -->
-    <div class="gc" style="padding:0;overflow:hidden;position:sticky;top:0;">
+    <!-- RIGHT SIDEBAR —  single glass panel -->
+    <div class="home-right"><div class="gc" style="padding:0;overflow:hidden;">
       <!-- Stats strip -->
       <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
         <div style="padding:12px 14px;border-right:1px solid var(--border);">
@@ -465,7 +467,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
         <div class="label" style="font-size:9px;margin-bottom:8px;">By Area</div>
         <div id="area-counts"></div>
       </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
