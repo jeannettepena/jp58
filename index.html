@@ -53,6 +53,10 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .sb-item:hover{color:var(--champ2);background:var(--champ3);}
 .sb-item.on{color:var(--champ);background:var(--champ3);border-color:var(--border2);}
 .sb-item svg{width:18px;height:18px;}
+.sb-item[draggable="true"]{cursor:grab;}
+.sb-item[draggable="true"]:active{cursor:grabbing;}
+.sb-item.sb-drag-over{background:var(--champ3);border:1px dashed var(--border2);}
+.sb-item.sb-dragging{opacity:.3;}
 .sb-tip{position:absolute;left:48px;background:rgba(27,43,58,0.95);border:1px solid var(--border);color:var(--ivory);font-size:11px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;backdrop-filter:blur(10px);z-index:100;}
 .sb-item:hover .sb-tip{opacity:1;}
 .sb-sep{width:24px;height:1px;background:var(--border);margin:6px 0;}
@@ -342,21 +346,21 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 <div class="body-wrap">
 <!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sb-item on" onclick="showPanel('home',this)" data-panel="home"><i data-lucide="layout-dashboard"></i><span class="sb-tip">Dashboard</span></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-item on" onclick="showPanel('home',this)" data-panel="home" draggable="false"><i data-lucide="layout-dashboard"></i><span class="sb-tip">Dashboard</span></div>
   <div class="sb-sep"></div>
-  <div class="sb-item" onclick="showPanel('realestate',this)" data-panel="realestate"><i data-lucide="building-2"></i><span class="sb-tip">Real Estate</span></div>
-  <div class="sb-item" onclick="showPanel('fifty8',this)" data-panel="fifty8"><i data-lucide="hard-hat"></i><span class="sb-tip">Fifty Eight Degrees</span></div>
-  <div class="sb-item" onclick="showPanel('latitude',this)" data-panel="latitude"><i data-lucide="globe"></i><span class="sb-tip">Latitude 58°</span></div>
-  <div class="sb-item" onclick="showPanel('realraw',this)" data-panel="realraw"><i data-lucide="mic"></i><span class="sb-tip">Real & Raw</span></div>
-  <div class="sb-item" onclick="showPanel('renacer',this)" data-panel="renacer"><i data-lucide="book-open"></i><span class="sb-tip">RenaSer</span></div>
-  <div class="sb-sep"></div>
-  <div class="sb-item" onclick="showPanel('finanzas',this)" data-panel="finanzas"><i data-lucide="bar-chart-2"></i><span class="sb-tip">Finanzas</span></div>
-  <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness"><i data-lucide="heart-pulse"></i><span class="sb-tip">Wellness</span></div>
-  <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
-  <div class="sb-sep"></div>
-  <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
-  <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot"><i data-lucide="coffee"></i><span class="sb-tip">Coffee or Tequila</span></div>
+  <div id="sb-draggable" style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;">
+    <div class="sb-item" onclick="showPanel('realestate',this)" data-panel="realestate" draggable="true"><i data-lucide="building-2"></i><span class="sb-tip">Real Estate</span></div>
+    <div class="sb-item" onclick="showPanel('fifty8',this)" data-panel="fifty8" draggable="true"><i data-lucide="hard-hat"></i><span class="sb-tip">Fifty Eight Degrees</span></div>
+    <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot" draggable="true"><i data-lucide="coffee"></i><span class="sb-tip">Coffee or Tequila</span></div>
+    <div class="sb-item" onclick="showPanel('latitude',this)" data-panel="latitude" draggable="true"><i data-lucide="globe"></i><span class="sb-tip">Latitude 58°</span></div>
+    <div class="sb-item" onclick="showPanel('realraw',this)" data-panel="realraw" draggable="true"><i data-lucide="mic"></i><span class="sb-tip">Real & Raw</span></div>
+    <div class="sb-item" onclick="showPanel('renacer',this)" data-panel="renacer" draggable="true"><i data-lucide="book-open"></i><span class="sb-tip">RenaSer</span></div>
+    <div class="sb-item" onclick="showPanel('finanzas',this)" data-panel="finanzas" draggable="true"><i data-lucide="bar-chart-2"></i><span class="sb-tip">Finanzas</span></div>
+    <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness" draggable="true"><i data-lucide="heart-pulse"></i><span class="sb-tip">Wellness</span></div>
+    <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos" draggable="true"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
+    <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal" draggable="true"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
+  </div>
   <div class="sb-sep"></div>
   <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
 </div>
@@ -639,33 +643,35 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 
 <!-- COFFEE OR TEQUILA -->
-<div id="panel-cot" class="panel">
-  <div style="display:grid;grid-template-columns:1fr 268px;gap:16px;height:100%;overflow:hidden;">
-    <!-- Calendar side -->
-    <div style="min-width:0;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ivory);">Coffee <em style="font-style:italic;color:var(--champ);">or</em> Tequila</div>
-          <div class="label" style="margin-top:4px;">Week of Aug 10 – 15 · Connection System</div>
-        </div>
-        <button class="pill pill-solid" style="font-size:11px;" onclick="openCotAdd()">+ Add event</button>
+<div id="panel-cot" class="panel" style="padding:0;display:flex;flex-direction:column;height:100%;">
+  <!-- Header -->
+  <div style="padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ivory);">Coffee <em style="font-style:italic;color:var(--champ);">or</em> Tequila</div>
+      <div class="label" style="margin-top:4px;">Week of Aug 10 – 16 · Connection System</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--champ)"></div>Coffee</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:#C47A5A"></div>Tequila</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal2)"></div>Real Estate</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--mist)"></div>Business</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:#70C080"></div>Prospecting</div>
       </div>
-      <div class="gc" style="flex:1;overflow:hidden;padding:0;min-height:0;">
-        <div class="cot-grid" id="cot-grid" style="height:100%;min-height:460px;overflow-y:auto;"></div>
-      </div>
-      <!-- Legend -->
-      <div style="display:flex;gap:14px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--champ)"></div>Coffee</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:#C47A5A"></div>Tequila</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--teal2)"></div>Real Estate</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--mist)"></div>Business</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:#70C080"></div>Prospecting</div>
-      </div>
+      <button class="pill pill-solid" style="font-size:11px;" onclick="openCotAdd()">+ Add event</button>
+    </div>
+  </div>
+  <!-- Main body -->
+  <div style="display:grid;grid-template-columns:1fr 256px;gap:0;flex:1;overflow:hidden;margin-top:12px;">
+    <!-- Calendar -->
+    <div style="overflow:hidden;border-right:1px solid var(--border);">
+      <div class="cot-grid" id="cot-grid" style="height:100%;overflow-y:auto;overflow-x:auto;"></div>
+    </div>
     </div>
 
     <!-- Connections sidebar -->
-    <div style="display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;">
-      <div class="gc" style="padding:14px;">
+    <div style="display:flex;flex-direction:column;gap:0;height:100%;overflow-y:auto;background:rgba(27,43,58,0.5);">
+      <div style="padding:16px;">
         <div class="label" style="margin-bottom:10px;">Connections</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:12px;">
           <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--champ);" id="cot-sn-t">10</div><div class="label" style="font-size:8px;">Total</div></div>
@@ -683,7 +689,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
         <div id="cot-conn-list" style="display:flex;flex-direction:column;gap:6px;"></div>
       </div>
       <!-- Add connection -->
-      <div class="gc" style="padding:14px;">
+      <div style="padding:16px;border-top:1px solid var(--border);">
         <div class="label" style="margin-bottom:8px;">+ Add Connection</div>
         <input class="qa-in" id="cot-cn" placeholder="Name" style="margin-bottom:6px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
@@ -1511,6 +1517,54 @@ showPanel = function(name, el){
   _origSP(name, el);
   if(name==='cot'){buildCotCal();renderCotConns();}
 };
+
+// Sidebar drag-to-reorder
+(function(){
+  let sbDragging=null;
+  function initSbDrag(){
+    const container=document.getElementById('sb-draggable');
+    if(!container)return;
+    const items=Array.from(container.querySelectorAll('.sb-item[draggable="true"]'));
+    items.forEach(item=>{
+      item.addEventListener('dragstart',e=>{
+        sbDragging=item;
+        setTimeout(()=>item.classList.add('sb-dragging'),0);
+        e.dataTransfer.effectAllowed='move';
+      });
+      item.addEventListener('dragend',()=>{
+        item.classList.remove('sb-dragging','sb-drag-over');
+        sbDragging=null;
+        // Save order
+        const order=Array.from(container.querySelectorAll('.sb-item')).map(i=>i.dataset.panel);
+        try{localStorage.setItem('jp58-sb-order',JSON.stringify(order));}catch{}
+        if(window.lucide)lucide.createIcons();
+      });
+      item.addEventListener('dragover',e=>{
+        e.preventDefault();e.dataTransfer.dropEffect='move';
+        if(sbDragging&&sbDragging!==item){
+          item.classList.add('sb-drag-over');
+          const r=item.getBoundingClientRect();
+          const mid=r.top+r.height/2;
+          if(e.clientY<mid)container.insertBefore(sbDragging,item);
+          else container.insertBefore(sbDragging,item.nextSibling);
+        }
+      });
+      item.addEventListener('dragleave',()=>item.classList.remove('sb-drag-over'));
+      item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('sb-drag-over');});
+    });
+    // Restore saved order
+    try{
+      const saved=JSON.parse(localStorage.getItem('jp58-sb-order')||'[]');
+      if(saved.length){
+        saved.forEach(panel=>{
+          const el=container.querySelector(`[data-panel="${panel}"]`);
+          if(el)container.appendChild(el);
+        });
+      }
+    }catch{}
+  }
+  document.addEventListener('DOMContentLoaded',initSbDrag);
+})();
 
 window.onload=()=>init();
 </script>
