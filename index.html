@@ -659,12 +659,65 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
   <div class="sec-panel">
     <div class="sec-head">
       <div class="sec-icon"><i data-lucide="heart-pulse" style="width:22px;height:22px;stroke:#70C080;stroke-width:1.5"></i></div>
-      <div><div class="sec-title">Wellness</div><div class="sec-desc">Health · movement · energy · appointments</div></div>
+      <div><div class="sec-title">Wellness</div><div class="sec-desc">Health · movement · energy · daily log</div></div>
     </div>
-    <div id="sec-wellness"></div>
-    <div class="qa" style="margin-top:12px;">
-      <input class="qa-in" placeholder="Add wellness note..." id="qt-wel" onkeydown="if(event.key==='Enter')sectionAdd('wellness','qt-wel')">
-      <button class="qa-go" onclick="sectionAdd('wellness','qt-wel')">Add</button>
+
+    <!-- Daily Log Entry -->
+    <div class="gc" style="margin-bottom:16px;padding:18px;">
+      <div class="label" style="margin-bottom:14px;">Daily Log</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Energy (1-10)</div>
+          <input id="wl-energy" type="number" min="1" max="10" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="8">
+        </div>
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Sleep (hrs)</div>
+          <input id="wl-sleep" type="number" min="0" max="12" step="0.5" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="7">
+        </div>
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Movement</div>
+          <select id="wl-move" class="qa-in" style="width:100%;padding:6px 8px;">
+            <option value="">—</option>
+            <option>Walk</option><option>Gym</option><option>Yoga</option>
+            <option>Pool</option><option>Dance</option><option>Rest</option>
+          </select>
+        </div>
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Mood</div>
+          <select id="wl-mood" class="qa-in" style="width:100%;padding:6px 8px;">
+            <option value="">—</option>
+            <option>✨ Energized</option><option>😊 Good</option>
+            <option>😐 Neutral</option><option>😔 Low</option><option>🌪 Stressed</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Shots / Treatments</div>
+          <input id="wl-shots" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="OZ shot, NAD, HerKare...">
+        </div>
+        <div>
+          <div class="label" style="font-size:9px;margin-bottom:5px;">Note</div>
+          <input id="wl-note" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="How do you feel today?">
+        </div>
+      </div>
+      <button class="pill pill-solid" style="font-size:11px;" onclick="addWellnessLog()">Save today's log</button>
+    </div>
+
+    <!-- Log history -->
+    <div class="gc" style="margin-bottom:16px;">
+      <div class="label" style="margin-bottom:12px;">Recent Log</div>
+      <div id="wellness-log-list"></div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="gc">
+      <div class="label" style="margin-bottom:10px;">Wellness Tasks</div>
+      <div id="sec-wellness"></div>
+      <div class="qa" style="margin-top:10px;">
+        <input class="qa-in" placeholder="Add wellness task..." id="qt-wel" onkeydown="if(event.key==='Enter')sectionAdd('wellness','qt-wel')">
+        <button class="qa-go" onclick="sectionAdd('wellness','qt-wel')">Add</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1733,8 +1786,65 @@ const _origSP = showPanel;
 showPanel = function(name, el){
   _origSP(name, el);
   if(name==='cot'){buildCotCal();renderCotConns();}
+  if(name==='wellness'){renderWellnessLogs();}
 };
 
+
+
+// ── WELLNESS LOG ──────────────────────────────────────
+let wellnessLogs = JSON.parse(localStorage.getItem('jp58-wellness-logs') || '[]');
+
+function addWellnessLog(){
+  const today = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const entry = {
+    id: Date.now(),
+    date: today,
+    energy: document.getElementById('wl-energy').value || '—',
+    sleep: document.getElementById('wl-sleep').value || '—',
+    move: document.getElementById('wl-move').value || '—',
+    mood: document.getElementById('wl-mood').value || '—',
+    shots: document.getElementById('wl-shots').value || '',
+    note: document.getElementById('wl-note').value || '',
+  };
+  wellnessLogs.unshift(entry);
+  if(wellnessLogs.length > 30) wellnessLogs = wellnessLogs.slice(0,30);
+  localStorage.setItem('jp58-wellness-logs', JSON.stringify(wellnessLogs));
+  // Clear inputs
+  ['wl-energy','wl-sleep','wl-note','wl-shots'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
+  ['wl-move','wl-mood'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
+  renderWellnessLogs();
+  showToast('Wellness log saved ✓');
+}
+
+function renderWellnessLogs(){
+  const el = document.getElementById('wellness-log-list');
+  if(!el) return;
+  if(!wellnessLogs.length){
+    el.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No logs yet — start tracking today</div>';
+    return;
+  }
+  el.innerHTML = wellnessLogs.slice(0,10).map(e => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;">
+      <div style="min-width:80px;font-size:11px;color:var(--ivory3);">${e.date}</div>
+      <div style="flex:1;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px;">
+          ${e.energy!=='—'?`<span style="font-size:11px;color:var(--champ2)">⚡ ${e.energy}/10</span>`:''}
+          ${e.sleep!=='—'?`<span style="font-size:11px;color:var(--teal2)">💤 ${e.sleep}h</span>`:''}
+          ${e.move!=='—'?`<span style="font-size:11px;color:#70C080">🏃 ${e.move}</span>`:''}
+          ${e.mood?`<span style="font-size:11px;color:var(--ivory2)">${e.mood}</span>`:''}
+        </div>
+        ${e.shots?`<div style="font-size:11px;color:var(--champ2);margin-bottom:2px;">💉 ${e.shots}</div>`:''}
+        ${e.note?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;">${e.note}</div>`:''}
+      </div>
+      <button onclick="removeWellnessLog(${e.id})" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+    </div>`).join('');
+}
+
+function removeWellnessLog(id){
+  wellnessLogs = wellnessLogs.filter(e=>e.id!==id);
+  localStorage.setItem('jp58-wellness-logs', JSON.stringify(wellnessLogs));
+  renderWellnessLogs();
+}
 
 // ── GOALS & BUSINESS PLAN ─────────────────────────────
 let goalsData = {
