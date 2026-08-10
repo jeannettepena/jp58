@@ -787,14 +787,13 @@ select optgroup{background:#1F3245;color:#C9A87C;}
       </a>
     </div>
 
-    <!-- Embedded calendar -->
-    <div class="gc" style="padding:0;overflow:hidden;margin-bottom:16px;">
-      <iframe 
-        src="https://calendar.google.com/calendar/embed?src=jcantu.realtor%40gmail.com&ctz=America%2FChicago&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&mode=WEEK&bgcolor=%231B2B3A&color=%23C9A87C"
-        style="width:100%;height:600px;border:none;display:block;"
-        frameborder="0"
-        scrolling="no">
-      </iframe>
+    <!-- Live events from Google Calendar iCal -->
+    <div class="gc" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div class="label">Upcoming — Next 30 Days</div>
+        <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="icalLoadEvents()">↻ Refresh</button>
+      </div>
+      <div id="ical-events-list"><div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div></div>
     </div>
 
     <div class="gcal-tip">
@@ -2245,6 +2244,70 @@ showPanel = function(name, el){
   _sp3(name, el);
   if(name === 'gcal'){ gcalUpdateUI(); if(gcalTokens) gcalLoadEvents(); }
 };
+
+
+// ── GOOGLE CALENDAR iCal ─────────────────────────────
+async function icalLoadEvents(){
+  const el = document.getElementById('ical-events-list');
+  if(!el) return;
+  el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div>';
+  try{
+    const res = await fetch('/api/ical');
+    const events = await res.json();
+    if(!events.length){
+      el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
+      return;
+    }
+    el.innerHTML = events.slice(0,20).map(ev => {
+      const d = new Date(ev.start);
+      const isAllDay = ev.allDay;
+      const timeStr = isAllDay
+        ? d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'America/Chicago'})
+        : d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'America/Chicago'}) + ' · ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Chicago'});
+      return `<div class="ev-row ev-business" style="margin-bottom:7px;">
+        <div class="ev-time" style="min-width:120px;">${timeStr}</div>
+        <div class="ev-body">
+          <div class="ev-name">${ev.title}</div>
+          ${ev.location ? `<div class="ev-meta">${ev.location}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Also update home panel ev-list with today's events
+    updateHomeFromICal(events);
+  }catch(e){
+    if(el) el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Could not load — check calendar sharing settings</div>';
+  }
+}
+
+function updateHomeFromICal(events){
+  const today = new Date().toLocaleDateString('en-US',{timeZone:'America/Chicago'});
+  const todayEvs = events.filter(ev => {
+    const d = new Date(ev.start).toLocaleDateString('en-US',{timeZone:'America/Chicago'});
+    return d === today;
+  });
+  // Merge with existing JP58 events on home
+  const homeList = document.getElementById('ev-list');
+  if(!homeList || !todayEvs.length) return;
+  const existing = homeList.innerHTML;
+  const gcalHtml = todayEvs.map(ev => {
+    const d = new Date(ev.start);
+    const timeStr = ev.allDay ? 'All day' : d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Chicago'});
+    return `<div class="ev-row" style="border-left-color:var(--champ2);margin-bottom:7px;">
+      <div class="ev-time">${timeStr}</div>
+      <div class="ev-body"><div class="ev-name">${ev.title}</div></div>
+    </div>`;
+  }).join('');
+  if(!homeList.querySelector('.gcal-injected')){
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gcal-injected';
+    wrapper.innerHTML = gcalHtml;
+    homeList.appendChild(wrapper);
+  }
+}
+
+// Load iCal on init
+setTimeout(icalLoadEvents, 1500);
 
 window.onload=()=>{
   gcalLoadTokens();
