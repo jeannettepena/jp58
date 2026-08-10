@@ -1,6 +1,6 @@
 const CLIENT_ID = process.env.GCAL_CLIENT_ID;
 const CLIENT_SECRET = process.env.GCAL_CLIENT_SECRET;
-const REDIRECT_URI = 'https://jp58.netlify.app/auth/callback';
+const REDIRECT_URI = 'https://jp58.netlify.app';
 
 exports.handler = async (event) => {
   const { code } = event.queryStringParameters || {};
