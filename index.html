@@ -1786,18 +1786,30 @@ const _origSP = showPanel;
 showPanel = function(name, el){
   _origSP(name, el);
   if(name==='cot'){buildCotCal();renderCotConns();}
-  if(name==='wellness'){renderWellnessLogs();}
+  if(name==='wellness'){loadWellnessLogs();}
 };
 
 
 
-// ── WELLNESS LOG ──────────────────────────────────────
-let wellnessLogs = JSON.parse(localStorage.getItem('jp58-wellness-logs') || '[]');
+// ── WELLNESS LOG — Supabase ────────────────────────────
+let wellnessLogs = [];
 
-function addWellnessLog(){
+async function loadWellnessLogs(){
+  try{
+    const r = await fetch(`${SB_URL}/rest/v1/jp58_wellness_logs?order=created_at.desc&limit=30`,{
+      headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+    });
+    if(r.ok){
+      wellnessLogs = await r.json();
+      renderWellnessLogs();
+    }
+  }catch(e){console.log('wellness load err',e);}
+}
+
+async function addWellnessLog(){
   const today = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   const entry = {
-    id: Date.now(),
+    id: 'wl-'+Date.now(),
     date: today,
     energy: document.getElementById('wl-energy').value || '—',
     sleep: document.getElementById('wl-sleep').value || '—',
@@ -1806,9 +1818,16 @@ function addWellnessLog(){
     shots: document.getElementById('wl-shots').value || '',
     note: document.getElementById('wl-note').value || '',
   };
+  // Save to Supabase
+  try{
+    await fetch(`${SB_URL}/rest/v1/jp58_wellness_logs`,{
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+      body: JSON.stringify([entry])
+    });
+  }catch(e){console.log('wellness save err',e);}
+  // Also update local array
   wellnessLogs.unshift(entry);
-  if(wellnessLogs.length > 30) wellnessLogs = wellnessLogs.slice(0,30);
-  localStorage.setItem('jp58-wellness-logs', JSON.stringify(wellnessLogs));
   // Clear inputs
   ['wl-energy','wl-sleep','wl-note','wl-shots'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
   ['wl-move','wl-mood'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
@@ -1820,30 +1839,36 @@ function renderWellnessLogs(){
   const el = document.getElementById('wellness-log-list');
   if(!el) return;
   if(!wellnessLogs.length){
-    el.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No logs yet — start tracking today</div>';
+    el.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No logs yet · start tracking today</div>';
     return;
   }
-  el.innerHTML = wellnessLogs.slice(0,10).map(e => `
+  el.innerHTML = wellnessLogs.slice(0,15).map(e => `
     <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;">
-      <div style="min-width:80px;font-size:11px;color:var(--ivory3);">${e.date}</div>
+      <div style="min-width:88px;font-size:11px;color:var(--ivory3);font-family:'Jost',sans-serif;">${e.date}</div>
       <div style="flex:1;">
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px;">
-          ${e.energy!=='—'?`<span style="font-size:11px;color:var(--champ2)">⚡ ${e.energy}/10</span>`:''}
-          ${e.sleep!=='—'?`<span style="font-size:11px;color:var(--teal2)">💤 ${e.sleep}h</span>`:''}
-          ${e.move!=='—'?`<span style="font-size:11px;color:#70C080">🏃 ${e.move}</span>`:''}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+          ${e.energy&&e.energy!=='—'?`<span style="font-size:11px;color:var(--champ2)">⚡ ${e.energy}/10</span>`:''}
+          ${e.sleep&&e.sleep!=='—'?`<span style="font-size:11px;color:var(--teal2)">💤 ${e.sleep}h</span>`:''}
+          ${e.move&&e.move!=='—'?`<span style="font-size:11px;color:#70C080">🏃 ${e.move}</span>`:''}
           ${e.mood?`<span style="font-size:11px;color:var(--ivory2)">${e.mood}</span>`:''}
         </div>
-        ${e.shots?`<div style="font-size:11px;color:var(--champ2);margin-bottom:2px;">💉 ${e.shots}</div>`:''}
-        ${e.note?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;">${e.note}</div>`:''}
+        ${e.shots?`<div style="font-size:11px;color:var(--champ2);margin-bottom:2px;font-family:'Jost',sans-serif;">💉 ${e.shots}</div>`:''}
+        ${e.note?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:13px;">${e.note}</div>`:''}
       </div>
-      <button onclick="removeWellnessLog(${e.id})" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+      <button onclick="removeWellnessLog('${e.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
     </div>`).join('');
 }
 
-function removeWellnessLog(id){
-  wellnessLogs = wellnessLogs.filter(e=>e.id!==id);
-  localStorage.setItem('jp58-wellness-logs', JSON.stringify(wellnessLogs));
+async function removeWellnessLog(id){
+  try{
+    await fetch(`${SB_URL}/rest/v1/jp58_wellness_logs?id=eq.${id}`,{
+      method:'DELETE',
+      headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+    });
+  }catch(e){}
+  wellnessLogs = wellnessLogs.filter(e=>String(e.id)!==String(id));
   renderWellnessLogs();
+  showToast('Entry removed ✓');
 }
 
 // ── GOALS & BUSINESS PLAN ─────────────────────────────
