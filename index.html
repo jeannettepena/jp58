@@ -1794,13 +1794,32 @@ showPanel = function(name, el){
 // ── WELLNESS LOG — Supabase ────────────────────────────
 let wellnessLogs = [];
 
+const WELLNESS_SEED = [
+  {id:'wl-seed-1',date:'Sat Aug 8',energy:'—',sleep:'—',move:'—',mood:'—',shots:'OZ Shot 48',note:'Última dosis OZ · 48'},
+  {id:'wl-seed-2',date:'Sun Aug 9',energy:'—',sleep:'—',move:'—',mood:'—',shots:'Estrogen Patch',note:'Parche de estrógenos aplicado'},
+];
+
 async function loadWellnessLogs(){
   try{
     const r = await fetch(`${SB_URL}/rest/v1/jp58_wellness_logs?order=created_at.desc&limit=30`,{
       headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
     });
     if(r.ok){
-      wellnessLogs = await r.json();
+      const data = await r.json();
+      if(!data.length){
+        // Seed initial known entries
+        wellnessLogs = WELLNESS_SEED;
+        // Try to save seeds to Supabase
+        try{
+          await fetch(`${SB_URL}/rest/v1/jp58_wellness_logs`,{
+            method:'POST',
+            headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+            body: JSON.stringify(WELLNESS_SEED)
+          });
+        }catch(e){}
+      } else {
+        wellnessLogs = data;
+      }
       renderWellnessLogs();
     }
   }catch(e){console.log('wellness load err',e);}
