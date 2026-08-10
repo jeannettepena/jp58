@@ -6,10 +6,11 @@ exports.handler = async (event) => {
   };
 
   const ICAL_URLS = [
+    { url:'https://calendar.google.com/calendar/ical/jcantu.realtor%40gmail.com/private-f865956c4df8ffb0289c1acd75a13668/basic.ics', name:'Me Time' },
     { url:'https://calendar.google.com/calendar/ical/50m18sp2p36a9526b7btjaui0s%40group.calendar.google.com/private-80e59f455c7b016fb03f0c273da1082f/basic.ics', name:'58 Group' },
     { url:'https://calendar.google.com/calendar/ical/1a0dc40bcd1923094e1df9e636f270e0f5aadebb98deddde19859e93681da557%40group.calendar.google.com/private-02f1786a9ef4bd4bb0b05d2e75e18bf1/basic.ics', name:"Jeannette's Travel" },
     { url:'https://calendar.google.com/calendar/ical/cf2aa5bc1d2ddcaded7192e315ea99532f16ff00c52a076b4b9c3478c308c52f%40group.calendar.google.com/private-30a9c2af4669cfd9b7c2d9ffa3994d8c/basic.ics', name:'Real Estate' },
-    // Pending: Me Time, Family, Fifty Eight Degrees, RenaSer
+    // Pending: Family, Fifty Eight Degrees, RenaSer
   ];
 
   try {
