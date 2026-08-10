@@ -2279,7 +2279,8 @@ async function icalLoadEvents(){
     const res = await fetch('/api/ical');
     const events = await res.json();
     window._icalEvents = events; // store globally for home panel
-    renderEvents(); // refresh home panel
+    renderEvents(); // refresh home with gcal events
+    buildWeek(); // refresh week strip dots
     if(!events.length){
       el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
       return;
