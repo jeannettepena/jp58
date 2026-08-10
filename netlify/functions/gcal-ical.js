@@ -6,7 +6,9 @@ exports.handler = async (event) => {
   };
 
   const ICAL_URLS = [
-    // Calendars will be reconnected when browser is set to jcantu.realtor@gmail.com
+    { url:'https://calendar.google.com/calendar/ical/50m18sp2p36a9526b7btjaui0s%40group.calendar.google.com/private-80e59f455c7b016fb03f0c273da1082f/basic.ics', name:'58 Group' },
+    { url:'https://calendar.google.com/calendar/ical/1a0dc40bcd1923094e1df9e636f270e0f5aadebb98deddde19859e93681da557%40group.calendar.google.com/private-02f1786a9ef4bd4bb0b05d2e75e18bf1/basic.ics', name:"Jeannette's Travel" },
+    // Pending: Me Time, Real Estate, Family, Fifty Eight Degrees, RenaSer
   ];
 
   try {
