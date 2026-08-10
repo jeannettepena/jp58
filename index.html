@@ -664,7 +664,14 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
     <!-- Daily Log Entry -->
     <div class="gc" style="margin-bottom:16px;padding:18px;">
-      <div class="label" style="margin-bottom:14px;">Daily Log</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="label">Log Entry</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="label" style="font-size:9px;">Date</div>
+          <input type="date" id="wl-date" class="qa-in" style="padding:5px 8px;font-size:11px;cursor:pointer;"
+            value="">
+        </div>
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
         <div>
           <div class="label" style="font-size:9px;margin-bottom:5px;">Energy (1-10)</div>
@@ -694,14 +701,25 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
         <div>
           <div class="label" style="font-size:9px;margin-bottom:5px;">Shots / Treatments</div>
-          <input id="wl-shots" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="OZ shot, NAD, HerKare...">
+          <select id="wl-shots-type" class="qa-in" style="width:100%;padding:6px 8px;margin-bottom:5px;">
+            <option value="">— Select treatment —</option>
+            <option>OZ Shot</option>
+            <option>NAD Shot</option>
+            <option>Estrogen Patch</option>
+            <option>HerKare</option>
+            <option>Healy Session</option>
+            <option>Quiropráctico</option>
+            <option>Vitamins / Supplements</option>
+            <option>Other</option>
+          </select>
+          <input id="wl-shots" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="Dosage / detail (e.g. 48mg)">
         </div>
         <div>
           <div class="label" style="font-size:9px;margin-bottom:5px;">Note</div>
-          <input id="wl-note" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="How do you feel today?">
+          <textarea id="wl-note" class="qa-in" style="width:100%;padding:6px 8px;resize:none;height:66px;font-family:'Jost',sans-serif;" placeholder="How do you feel today?"></textarea>
         </div>
       </div>
-      <button class="pill pill-solid" style="font-size:11px;" onclick="addWellnessLog()">Save today's log</button>
+      <button class="pill pill-solid" style="font-size:11px;" onclick="addWellnessLog()">Save log</button>
     </div>
 
     <!-- Log history -->
@@ -1555,6 +1573,7 @@ async function init(){
   renderAllMini();
   if(window.lucide)lucide.createIcons();
   updateSidebarBadges();
+  const wlDate=document.getElementById('wl-date');if(wlDate)wlDate.value=new Date().toISOString().split('T')[0];
 }
 
 
@@ -1826,15 +1845,25 @@ async function loadWellnessLogs(){
 }
 
 async function addWellnessLog(){
-  const today = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const dateInput = document.getElementById('wl-date').value;
+  let dateLabel;
+  if(dateInput){
+    const d = new Date(dateInput+'T12:00:00');
+    dateLabel = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  } else {
+    dateLabel = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  }
+  const shotsType = document.getElementById('wl-shots-type').value;
+  const shotsDetail = document.getElementById('wl-shots').value;
+  const shotsStr = shotsType ? (shotsDetail ? `${shotsType} · ${shotsDetail}` : shotsType) : shotsDetail;
   const entry = {
     id: 'wl-'+Date.now(),
-    date: today,
+    date: dateLabel,
     energy: document.getElementById('wl-energy').value || '—',
     sleep: document.getElementById('wl-sleep').value || '—',
     move: document.getElementById('wl-move').value || '—',
     mood: document.getElementById('wl-mood').value || '—',
-    shots: document.getElementById('wl-shots').value || '',
+    shots: shotsStr || '',
     note: document.getElementById('wl-note').value || '',
   };
   // Save to Supabase
@@ -1849,7 +1878,9 @@ async function addWellnessLog(){
   wellnessLogs.unshift(entry);
   // Clear inputs
   ['wl-energy','wl-sleep','wl-note','wl-shots'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
-  ['wl-move','wl-mood'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
+  ['wl-move','wl-mood','wl-shots-type'].forEach(id => {const el=document.getElementById(id);if(el)el.value='';});
+  // Reset date to today
+  const wd=document.getElementById('wl-date');if(wd)wd.value=new Date().toISOString().split('T')[0];
   renderWellnessLogs();
   showToast('Wellness log saved ✓');
 }
