@@ -640,9 +640,9 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 <!-- COFFEE OR TEQUILA -->
 <div id="panel-cot" class="panel">
-  <div style="display:flex;align-items:flex-start;gap:24px;height:100%;">
+  <div style="display:grid;grid-template-columns:1fr 268px;gap:16px;height:100%;overflow:hidden;">
     <!-- Calendar side -->
-    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;">
+    <div style="min-width:0;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <div>
           <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ivory);">Coffee <em style="font-style:italic;color:var(--champ);">or</em> Tequila</div>
@@ -650,8 +650,8 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
         </div>
         <button class="pill pill-solid" style="font-size:11px;" onclick="openCotAdd()">+ Add event</button>
       </div>
-      <div class="gc" style="flex:1;overflow:hidden;padding:0;">
-        <div class="cot-grid" id="cot-grid" style="height:580px;overflow-y:auto;"></div>
+      <div class="gc" style="flex:1;overflow:hidden;padding:0;min-height:0;">
+        <div class="cot-grid" id="cot-grid" style="height:100%;min-height:460px;overflow-y:auto;"></div>
       </div>
       <!-- Legend -->
       <div style="display:flex;gap:14px;flex-wrap:wrap;">
@@ -664,7 +664,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
     </div>
 
     <!-- Connections sidebar -->
-    <div style="width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;">
+    <div style="display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;">
       <div class="gc" style="padding:14px;">
         <div class="label" style="margin-bottom:10px;">Connections</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:12px;">
@@ -1283,8 +1283,8 @@ async function init(){
 
 
 // ── COFFEE OR TEQUILA ─────────────────────────────────
-const COT_DAYS=['Mon','Tue','Wed','Thu','Fri','Sat'];
-const COT_DATES=['10','11','12','13','14','15'];
+const COT_DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const COT_DATES=['10','11','12','13','14','15','16'];
 const COT_TODAY=0;
 const COT_HOURS=Array.from({length:14},(_,i)=>i+7);
 const COT_SH=52;
