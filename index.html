@@ -2172,13 +2172,13 @@ function gcalDisconnect(){
 
 function gcalUpdateUI(){
   const connected = gcalTokens && gcalTokens.refresh_token;
+  const els = ['gcal-connected','gcal-disconnected','gcal-connect-btn','gcal-disconnect-btn','gcal-status-desc'];
+  if(!document.getElementById('gcal-connected')) return;
   document.getElementById('gcal-connected').style.display = connected ? 'block' : 'none';
   document.getElementById('gcal-disconnected').style.display = connected ? 'none' : 'block';
   document.getElementById('gcal-connect-btn').style.display = connected ? 'none' : '';
   document.getElementById('gcal-disconnect-btn').style.display = connected ? '' : 'none';
-  if(connected){
-    document.getElementById('gcal-status-desc').textContent = 'jcantu.realtor@gmail.com · Connected ✓';
-  }
+  if(connected) document.getElementById('gcal-status-desc').textContent = 'jcantu.realtor@gmail.com · Connected ✓';
 }
 
 async function gcalLoadEvents(){
@@ -2260,6 +2260,8 @@ window.onload=()=>{
   gcalLoadTokens();
   gcalHandleCallback();
   init();
+  // Init gcal UI after short delay to ensure DOM ready
+  setTimeout(gcalUpdateUI, 500);
 };
 </script>
 </body>
