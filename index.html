@@ -269,6 +269,47 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .gcal-tip{background:rgba(201,168,124,0.08);border:1px solid var(--border2);border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
 .gcal-tip-text{font-size:12px;color:var(--champ2);line-height:1.6;}
 
+/* COT WEEK VIEW */
+.cot-grid{display:flex;min-width:560px;height:calc(100vh - 200px);}
+.cot-time{width:44px;flex-shrink:0;padding-top:48px;}
+.cot-tslot{height:52px;display:flex;align-items:flex-start;justify-content:flex-end;padding:3px 7px 0 0;border-bottom:1px solid var(--border);}
+.cot-tslot span{font-size:9px;color:var(--ivory3);letter-spacing:.04em;}
+.cot-days-wrap{flex:1;display:flex;flex-direction:column;}
+.cot-head{display:flex;border-bottom:2px solid var(--border);background:rgba(27,43,58,0.8);backdrop-filter:blur(10px);position:sticky;top:0;z-index:5;}
+.cot-dhd{flex:1;text-align:center;padding:6px 4px;border-right:1px solid var(--border);}
+.cot-dhd:last-child{border-right:none;}
+.cot-wd{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--ivory3);}
+.cot-dn{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--ivory);line-height:1;margin-top:1px;}
+.cot-dn.today{color:var(--teal2);}
+.cot-body{display:flex;flex:1;overflow-y:auto;}
+.cot-track{flex:1;position:relative;border-right:1px solid var(--border);}
+.cot-track:last-child{border-right:none;}
+.cot-track.today-col{background:rgba(94,136,126,0.03);}
+.cot-hline{height:52px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.cot-track.drag-over{background:rgba(201,168,124,0.07);outline:1px dashed var(--border2);outline-offset:-2px;}
+.cot-ev{position:absolute;left:2px;right:2px;border-radius:7px;padding:4px 7px;cursor:grab;overflow:hidden;border-left:2px solid;transition:box-shadow .2s,opacity .15s;z-index:3;}
+.cot-ev:hover{box-shadow:0 2px 12px rgba(0,0,0,.3);z-index:10;}
+.cot-ev.dragging{opacity:.3;}
+.cot-et{font-size:9px;opacity:.65;letter-spacing:.03em;line-height:1.3;}
+.cot-en{font-family:"Cormorant Garamond",serif;font-size:13px;color:var(--ivory);line-height:1.3;}
+.cot-es{font-size:10px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cot-coffee{background:rgba(201,168,124,0.12);border-color:var(--champ);}
+.cot-tequila{background:rgba(196,122,90,0.12);border-color:#C47A5A;}
+.cot-business{background:var(--mist3);border-color:var(--mist);}
+.cot-re{background:var(--teal3);border-color:var(--teal2);}
+.cot-family{background:rgba(168,120,216,0.1);border-color:#A878D8;}
+.cot-prospect{background:rgba(112,192,128,0.1);border-color:#70C080;}
+.drag-tip{position:fixed;background:rgba(27,43,58,0.95);border:1px solid var(--border2);color:var(--champ2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;pointer-events:none;z-index:1000;display:none;letter-spacing:.04em;}
+.cot-conn-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 12px;transition:all .2s;cursor:pointer;}
+.cot-conn-card:hover{border-color:var(--border2);background:var(--glass2);}
+.cot-conn-card.sched{border-left:2px solid var(--champ);}
+.cot-cn{font-family:"Cormorant Garamond",serif;font-size:15px;color:var(--ivory);}
+.cot-cnote{font-size:10px;color:var(--ivory3);margin-top:2px;}
+.cot-ctags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.cot-acts{display:flex;gap:4px;margin-top:6px;}
+.cot-act{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--ivory3);cursor:pointer;font-family:"Jost",sans-serif;transition:all .15s;}
+.cot-act:hover{border-color:var(--border2);color:var(--champ2);}
+.cot-act.del:hover{border-color:#E07070;color:#E07070;}
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -315,6 +356,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
   <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users"></i><span class="sb-tip">Family</span></div>
   <div class="sb-sep"></div>
   <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar"></i><span class="sb-tip">Google Calendar</span></div>
+  <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot"><i data-lucide="coffee"></i><span class="sb-tip">Coffee or Tequila</span></div>
   <div class="sb-sep"></div>
   <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
 </div>
@@ -595,6 +637,67 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
   </div>
 </div>
 
+
+<!-- COFFEE OR TEQUILA -->
+<div id="panel-cot" class="panel">
+  <div style="display:flex;align-items:flex-start;gap:24px;height:100%;">
+    <!-- Calendar side -->
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ivory);">Coffee <em style="font-style:italic;color:var(--champ);">or</em> Tequila</div>
+          <div class="label" style="margin-top:4px;">Week of Aug 10 – 15 · Connection System</div>
+        </div>
+        <button class="pill pill-solid" style="font-size:11px;" onclick="openCotAdd()">+ Add event</button>
+      </div>
+      <div class="gc" style="flex:1;overflow:hidden;padding:0;">
+        <div class="cot-grid" id="cot-grid" style="height:580px;overflow-y:auto;"></div>
+      </div>
+      <!-- Legend -->
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--champ)"></div>Coffee</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:#C47A5A"></div>Tequila</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--teal2)"></div>Real Estate</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:var(--mist)"></div>Business</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ivory3);"><div style="width:8px;height:8px;border-radius:50%;background:#70C080"></div>Prospecting</div>
+      </div>
+    </div>
+
+    <!-- Connections sidebar -->
+    <div style="width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;">
+      <div class="gc" style="padding:14px;">
+        <div class="label" style="margin-bottom:10px;">Connections</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:12px;">
+          <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--champ);" id="cot-sn-t">10</div><div class="label" style="font-size:8px;">Total</div></div>
+          <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--teal2);" id="cot-sn-s">3</div><div class="label" style="font-size:8px;">Sched</div></div>
+          <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ivory3);" id="cot-sn-p">7</div><div class="label" style="font-size:8px;">Pending</div></div>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">
+          <div class="pill pill-champ" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('all',this)">All</div>
+          <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('coffee',this)">☕</div>
+          <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('tequila',this)">🥃</div>
+          <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('kingwood',this)">Kingwood</div>
+          <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('heights',this)">Heights</div>
+          <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('ampi',this)">AMPI</div>
+        </div>
+        <div id="cot-conn-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+      <!-- Add connection -->
+      <div class="gc" style="padding:14px;">
+        <div class="label" style="margin-bottom:8px;">+ Add Connection</div>
+        <input class="qa-in" id="cot-cn" placeholder="Name" style="margin-bottom:6px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
+          <select class="qa-in" id="cot-ct" style="padding:6px 8px;"><option value="coffee">☕ Coffee</option><option value="tequila">🥃 Tequila</option></select>
+          <select class="qa-in" id="cot-cz" style="padding:6px 8px;"><option value="kingwood">Kingwood</option><option value="heights">Heights</option><option value="woodlands">Woodlands</option><option value="mexico">México</option><option value="flexible">Flexible</option></select>
+        </div>
+        <select class="qa-in" id="cot-cc" style="margin-bottom:5px;padding:6px 8px;"><option value="sphere">Sphere</option><option value="excliente">Ex Cliente</option><option value="colega">Colega</option><option value="ampi">AMPI</option><option value="prospect">Prospect</option></select>
+        <input class="qa-in" id="cot-cno" placeholder="Note" style="margin-bottom:8px;">
+        <button class="pill pill-solid" style="width:100%;justify-content:center;" onclick="addCotConn()">Add to list</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /panels -->
 </div><!-- /body-wrap -->
 </div><!-- /app -->
@@ -717,6 +820,43 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
   </div>
 </div>
 
+<div class="modal-bg" id="m-cot-ev">
+  <div class="modal">
+    <div class="modal-title" id="cot-m-title">Add Event</div>
+    <input type="hidden" id="cot-ev-id">
+    <div class="field"><label>Title</label><input id="cot-ev-name" placeholder="Event title"></div>
+    <div class="frow">
+      <div class="field"><label>Type</label>
+        <select id="cot-ev-type">
+          <option value="coffee">☕ Coffee</option>
+          <option value="tequila">🥃 Happy Hour</option>
+          <option value="business">Business</option>
+          <option value="re">Real Estate</option>
+          <option value="family">Family</option>
+          <option value="prospect">Prospecting</option>
+        </select>
+      </div>
+      <div class="field"><label>Day</label>
+        <select id="cot-ev-day">
+          <option value="0">Monday</option><option value="1">Tuesday</option>
+          <option value="2">Wednesday</option><option value="3">Thursday</option>
+          <option value="4">Friday</option><option value="5">Saturday</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>Time (e.g. 9:00 AM)</label><input id="cot-ev-time" placeholder="9:00 AM"></div>
+      <div class="field"><label>Duration (e.g. 1h)</label><input id="cot-ev-dur" placeholder="1h"></div>
+    </div>
+    <div class="field"><label>Detail / Location</label><input id="cot-ev-sub" placeholder="Location or note"></div>
+    <div class="mf">
+      <button class="ca" onclick="closeModal('m-cot-ev')">Cancel</button>
+      <button class="ca" id="cot-m-del" onclick="deleteCotEv()" style="color:#E07070;border-color:rgba(224,112,112,.3);">Delete</button>
+      <button class="ca on" onclick="saveCotEv()">Save</button>
+    </div>
+  </div>
+</div>
+<div class="drag-tip" id="drag-tip"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1140,6 +1280,237 @@ async function init(){
   renderAllMini();
   if(window.lucide)lucide.createIcons();
 }
+
+
+// ── COFFEE OR TEQUILA ─────────────────────────────────
+const COT_DAYS=['Mon','Tue','Wed','Thu','Fri','Sat'];
+const COT_DATES=['10','11','12','13','14','15'];
+const COT_TODAY=0;
+const COT_HOURS=Array.from({length:14},(_,i)=>i+7);
+const COT_SH=52;
+
+let cotEvs=[
+  {id:1,day:1,h:9,m:30,dur:90,title:'Prospecting Block',sub:'Base de datos',type:'prospect'},
+  {id:2,day:1,h:11,m:0,dur:60,title:'Tax Consultation',sub:'700 Rockmead Dr',type:'business'},
+  {id:3,day:1,h:16,m:0,dur:60,title:'Showings — Luis & Maria',sub:'77064',type:'re'},
+  {id:4,day:2,h:8,m:0,dur:60,title:'Carlos — First Day of School',sub:'',type:'family'},
+  {id:5,day:3,h:8,m:0,dur:60,title:'Coffee — Monica Ruiz',sub:'Kingwood',type:'coffee'},
+  {id:6,day:3,h:9,m:0,dur:60,title:'Accountability Group',sub:'Capital Title',type:'business'},
+  {id:7,day:3,h:17,m:0,dur:60,title:'Happy Hour — Jen Jaeger',sub:'Kingwood',type:'tequila'},
+  {id:8,day:3,h:19,m:0,dur:120,title:'Texans vs Chargers',sub:'NRG Stadium',type:'re'},
+];
+
+let cotConns=[
+  {id:1,name:'Monica Ruiz',type:'coffee',zone:'kingwood',cat:'sphere',note:'Amiga + ex cliente',sched:true},
+  {id:2,name:'Jen Jaeger',type:'tequila',zone:'kingwood',cat:'colega',note:'Realtor + cliente Puerto Vallarta',sched:true},
+  {id:3,name:'Alex de Parres',type:'tequila',zone:'flexible',cat:'sphere',note:'Texans game · cliente pasado',sched:true},
+  {id:4,name:'Ana Wonche',type:'coffee',zone:'heights',cat:'sphere',note:'Heights area · próxima semana',sched:false},
+  {id:5,name:'Bibi Zambrano',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false},
+  {id:6,name:'Mayda Salgado',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false},
+  {id:7,name:'Annette Shimel',type:'coffee',zone:'flexible',cat:'sphere',note:'Mamá de amiga de Roberta',sched:false},
+  {id:8,name:'Kathy Flory',type:'coffee',zone:'flexible',cat:'sphere',note:'Margarita + caminata',sched:false},
+  {id:9,name:'Gaby Chagoy',type:'coffee',zone:'mexico',cat:'ampi',note:'Futura presidenta AMPI Puebla',sched:false},
+  {id:10,name:'Poncho Dávalos',type:'tequila',zone:'mexico',cat:'ampi',note:'AMPI Puebla · socio PV',sched:false},
+];
+
+let cotActiveF='all', cotDragging=null, cotDragOffY=0, cotEditingId=null, cotAddMode=false;
+
+function cotFmt(h,m){const ap=h>=12?'PM':'AM';const h12=h===0?12:h>12?h-12:h;return `${h12}:${m.toString().padStart(2,'0')} ${ap}`;}
+function cotToY(h,m){return(h-7)*COT_SH+(m/60)*COT_SH;}
+function cotFromY(y){const mins=Math.round(y/COT_SH*60/15)*15;return{h:Math.min(20,Math.max(7,7+Math.floor(mins/60))),m:mins%60};}
+
+const COT_EC={coffee:'cot-coffee',tequila:'cot-tequila',business:'cot-business',re:'cot-re',family:'cot-family',prospect:'cot-prospect'};
+
+function buildCotCal(){
+  const grid=document.getElementById('cot-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  const inner=document.createElement('div');
+  inner.style.cssText='display:flex;min-width:500px;';
+
+  // Time gutter
+  const tg=document.createElement('div');
+  tg.style.cssText='width:44px;flex-shrink:0;padding-top:48px;';
+  tg.innerHTML=COT_HOURS.map(h=>`<div class="cot-tslot"><span>${h===12?'12p':h>12?(h-12)+'p':h+'a'}</span></div>`).join('');
+  inner.appendChild(tg);
+
+  // Days wrap
+  const dw=document.createElement('div');
+  dw.style.cssText='flex:1;display:flex;flex-direction:column;';
+
+  // Header
+  const head=document.createElement('div');
+  head.className='cot-head';
+  head.innerHTML=COT_DAYS.map((d,i)=>`<div class="cot-dhd"><div class="cot-wd">${d}</div><div class="cot-dn${i===COT_TODAY?' today':''}">${COT_DATES[i]}</div></div>`).join('');
+  dw.appendChild(head);
+
+  // Body
+  const body=document.createElement('div');
+  body.style.cssText='display:flex;flex:1;';
+  COT_DAYS.forEach((_,di)=>{
+    const track=document.createElement('div');
+    track.className='cot-track'+(di===COT_TODAY?' today-col':'');
+    track.dataset.day=di;
+    track.style.height=(COT_HOURS.length*COT_SH)+'px';
+    COT_HOURS.forEach(()=>{const l=document.createElement('div');l.className='cot-hline';track.appendChild(l);});
+    track.addEventListener('dragover',e=>{
+      e.preventDefault();track.classList.add('drag-over');
+      if(!cotDragging)return;
+      const r=track.getBoundingClientRect();
+      const {h,m}=cotFromY(Math.max(0,e.clientY-r.top));
+      const tip=document.getElementById('drag-tip');
+      tip.textContent=cotFmt(h,m);tip.style.display='block';
+      tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-22)+'px';
+    });
+    track.addEventListener('dragleave',e=>{if(!track.contains(e.relatedTarget))track.classList.remove('drag-over');});
+    track.addEventListener('drop',e=>{
+      e.preventDefault();track.classList.remove('drag-over');
+      document.getElementById('drag-tip').style.display='none';
+      if(!cotDragging)return;
+      const r=track.getBoundingClientRect();
+      const {h,m}=cotFromY(Math.max(0,e.clientY-r.top-cotDragOffY));
+      cotDragging.day=di;cotDragging.h=h;cotDragging.m=m;
+      cotDragging=null;renderCotEvs();showToast('Moved ✓');
+    });
+    body.appendChild(track);
+  });
+  dw.appendChild(body);
+  inner.appendChild(dw);
+  grid.appendChild(inner);
+  renderCotEvs();
+}
+
+function renderCotEvs(){
+  document.querySelectorAll('.cot-ev').forEach(e=>e.remove());
+  cotEvs.forEach(ev=>{
+    const track=document.querySelector(`.cot-track[data-day="${ev.day}"]`);
+    if(!track)return;
+    const b=document.createElement('div');
+    b.className=`cot-ev ${COT_EC[ev.type]||'cot-business'}`;
+    b.style.top=cotToY(ev.h,ev.m)+'px';
+    b.style.height=Math.max(20,(ev.dur/60)*COT_SH-2)+'px';
+    const eH=ev.h+Math.floor((ev.m+ev.dur)/60),eM=(ev.m+ev.dur)%60;
+    b.innerHTML=`<div class="cot-et">${cotFmt(ev.h,ev.m)}${ev.dur>=30?' – '+cotFmt(eH,eM):''}</div><div class="cot-en">${ev.title}</div>${ev.sub?`<div class="cot-es">${ev.sub}</div>`:''}`;
+    b.draggable=true;
+    b.addEventListener('dragstart',e=>{cotDragging=ev;cotDragOffY=e.offsetY;setTimeout(()=>b.classList.add('dragging'),0);});
+    b.addEventListener('dragend',()=>{b.classList.remove('dragging');document.getElementById('drag-tip').style.display='none';});
+    b.addEventListener('click',e=>{e.stopPropagation();openCotEdit(ev.id);});
+    track.appendChild(b);
+  });
+}
+
+function openCotAdd(){
+  cotEditingId=null;cotAddMode=true;
+  document.getElementById('cot-m-title').textContent='Add Event';
+  document.getElementById('cot-m-del').style.display='none';
+  ['cot-ev-name','cot-ev-sub'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cot-ev-type').value='coffee';
+  document.getElementById('cot-ev-day').value='0';
+  document.getElementById('cot-ev-time').value='9:00 AM';
+  document.getElementById('cot-ev-dur').value='1h';
+  document.getElementById('m-cot-ev').classList.add('open');
+}
+
+function openCotEdit(id){
+  const ev=cotEvs.find(e=>e.id===id);if(!ev)return;
+  cotEditingId=id;cotAddMode=false;
+  document.getElementById('cot-m-title').textContent='Edit Event';
+  document.getElementById('cot-m-del').style.display='';
+  document.getElementById('cot-ev-name').value=ev.title;
+  document.getElementById('cot-ev-type').value=ev.type;
+  document.getElementById('cot-ev-day').value=ev.day;
+  document.getElementById('cot-ev-time').value=cotFmt(ev.h,ev.m);
+  document.getElementById('cot-ev-dur').value=ev.dur%60===0?ev.dur/60+'h':ev.dur+'min';
+  document.getElementById('cot-ev-sub').value=ev.sub||'';
+  document.getElementById('m-cot-ev').classList.add('open');
+}
+
+function cotParseTime(s){const r=s.match(/(\d+)(?::(\d+))?\s*(am|pm)?/i);if(!r)return{h:9,m:0};let h=+r[1],m=+(r[2]||0);const ap=(r[3]||'').toLowerCase();if(ap==='pm'&&h<12)h+=12;if(ap==='am'&&h===12)h=0;return{h,m};}
+function cotParseDur(s){const h=s.match(/(\d+\.?\d*)h/i),m=s.match(/(\d+)\s*min/i);return h?Math.round(+h[1]*60):m?+m[1]:60;}
+
+function saveCotEv(){
+  const title=document.getElementById('cot-ev-name').value.trim();
+  if(!title){showToast('Add a title first');return;}
+  const{h,m}=cotParseTime(document.getElementById('cot-ev-time').value);
+  const data={title,type:document.getElementById('cot-ev-type').value,day:+document.getElementById('cot-ev-day').value,h,m,dur:cotParseDur(document.getElementById('cot-ev-dur').value),sub:document.getElementById('cot-ev-sub').value};
+  if(cotAddMode){cotEvs.push({id:Date.now(),...data});showToast(title+' added ✓');}
+  else{const ev=cotEvs.find(e=>e.id===cotEditingId);if(ev)Object.assign(ev,data);showToast(title+' updated ✓');}
+  closeModal('m-cot-ev');renderCotEvs();
+}
+
+function deleteCotEv(){
+  cotEvs=cotEvs.filter(e=>e.id!==cotEditingId);
+  closeModal('m-cot-ev');renderCotEvs();showToast('Event removed ✓');
+}
+
+// COT Connections
+const cotZL={kingwood:'Kingwood',heights:'Heights',woodlands:'Woodlands',mexico:'México',flexible:'Flexible'};
+const cotCatC={sphere:'var(--teal2)',excliente:'var(--mist)',colega:'#D4957A',ampi:'#A878D8',prospect:'#70C080'};
+const cotCatL={sphere:'Sphere',excliente:'Ex Cliente',colega:'Colega',ampi:'AMPI',prospect:'Prospect'};
+
+function filterCot(f,el){
+  cotActiveF=f;
+  document.querySelectorAll('#panel-cot .pill').forEach(b=>{
+    if(b.dataset.filter!==undefined||b.onclick){b.className='pill pill-ghost';b.style.fontSize='10px';b.style.padding='3px 9px';}
+  });
+  el.className='pill pill-champ';el.style.fontSize='10px';el.style.padding='3px 9px';
+  renderCotConns();
+}
+
+function renderCotConns(){
+  const f=cotConns.filter(c=>{
+    if(cotActiveF==='all')return true;
+    if(cotActiveF==='coffee')return c.type==='coffee';
+    if(cotActiveF==='tequila')return c.type==='tequila';
+    if(cotActiveF==='kingwood')return c.zone==='kingwood';
+    if(cotActiveF==='heights')return c.zone==='heights';
+    if(cotActiveF==='ampi')return c.cat==='ampi';
+    return true;
+  });
+  const el=document.getElementById('cot-conn-list');
+  if(!el)return;
+  el.innerHTML=f.map(c=>`
+    <div class="cot-conn-card${c.sched?' sched':''}">
+      <div class="cot-cn">${c.sched?'✦ ':''}${c.name}</div>
+      <div class="cot-cnote">${c.note}</div>
+      <div class="cot-ctags">
+        <span class="pill ${c.type==='coffee'?'pill-champ':'pill-ghost'}" style="font-size:9px;padding:2px 8px;background:${c.type==='coffee'?'rgba(201,168,124,0.15)':'rgba(196,122,90,0.12)'};border-color:${c.type==='coffee'?'var(--border2)':'rgba(196,122,90,0.3)'};color:${c.type==='coffee'?'var(--champ2)':'#D4957A'}">${c.type==='coffee'?'☕':'🥃'}</span>
+        <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:var(--ivory3)">${cotZL[c.zone]}</span>
+        <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:${cotCatC[c.cat]}">${cotCatL[c.cat]}</span>
+      </div>
+      <div class="cot-acts">
+        <button class="cot-act" onclick="cotToggleSched(${c.id})">${c.sched?'✓ Sched':'+ Sched'}</button>
+        <button class="cot-act del" onclick="cotDelConn(${c.id})">✕</button>
+      </div>
+    </div>`).join('');
+  const s=cotConns.filter(c=>c.sched).length;
+  const tn=document.getElementById('cot-sn-t');if(tn)tn.textContent=cotConns.length;
+  const ts=document.getElementById('cot-sn-s');if(ts)ts.textContent=s;
+  const tp=document.getElementById('cot-sn-p');if(tp)tp.textContent=cotConns.length-s;
+}
+
+function cotToggleSched(id){const c=cotConns.find(x=>x.id===id);if(c){c.sched=!c.sched;renderCotConns();showToast(c.name+(c.sched?' scheduled ✓':' unscheduled'));}}
+function cotDelConn(id){cotConns=cotConns.filter(x=>x.id!==id);renderCotConns();showToast('Removed ✓');}
+function addCotConn(){
+  const name=document.getElementById('cot-cn').value.trim();
+  if(!name){showToast('Enter a name');return;}
+  cotConns.push({id:Date.now(),name,type:document.getElementById('cot-ct').value,zone:document.getElementById('cot-cz').value,cat:document.getElementById('cot-cc').value,note:document.getElementById('cot-cno').value||'',sched:false});
+  document.getElementById('cot-cn').value='';document.getElementById('cot-cno').value='';
+  renderCotConns();showToast(name+' added ✓');
+}
+
+document.addEventListener('dragend',()=>{
+  const tip=document.getElementById('drag-tip');if(tip)tip.style.display='none';
+  document.querySelectorAll('.cot-track').forEach(t=>t.classList.remove('drag-over'));
+});
+
+
+// extend showPanel to init COT
+const _origSP = showPanel;
+showPanel = function(name, el){
+  _origSP(name, el);
+  if(name==='cot'){buildCotCal();renderCotConns();}
+};
 
 window.onload=()=>init();
 </script>
