@@ -2160,6 +2160,7 @@ function gcalConnect(){
     scope: GCAL_SCOPE,
     access_type: 'offline',
     prompt: 'consent',
+    login_hint: 'jcantu.realtor@gmail.com',
   });
   window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 }
