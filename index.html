@@ -2268,6 +2268,7 @@ async function icalLoadEvents(){
         <div class="ev-time" style="min-width:120px;">${timeStr}</div>
         <div class="ev-body">
           <div class="ev-name">${ev.title}</div>
+          ${ev.calendar ? `<div class="ev-meta" style="color:var(--champ2);font-size:10px;letter-spacing:.06em;">${ev.calendar}</div>` : ''}
           ${ev.location ? `<div class="ev-meta">${ev.location}</div>` : ''}
         </div>
       </div>`;

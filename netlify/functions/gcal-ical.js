@@ -6,23 +6,24 @@ exports.handler = async (event) => {
   };
 
   const ICAL_URLS = [
-    'https://calendar.google.com/calendar/ical/jcantu.realtor%40gmail.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/cf2aa5bc1d2ddcaded7192e315ea99532f16ff00c52a076b4b9c3478c308c52f%40group.calendar.google.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/50m18sp2p36a9526b7btjaui0s%40group.calendar.google.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/55dbffe828b72daee60d64c1c701d335e2dceaf3c1d5bb352d84a817f20e492b%40group.calendar.google.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/1k58e0tkmdh03qbdij4dtsqtl0%40group.calendar.google.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/1a0dc40bcd1923094e1df9e636f270e0f5aadebb98deddde19859e93681da557%40group.calendar.google.com/public/basic.ics',
-    'https://calendar.google.com/calendar/ical/1b4ae7aaa5385e1168d0ec8bbe1e9aaf4971a96f09558980e308d842c7651edf%40group.calendar.google.com/public/basic.ics',
+    { url:'https://calendar.google.com/calendar/ical/jcantu.realtor%40gmail.com/public/basic.ics', name:'Me Time' },
+    { url:'https://calendar.google.com/calendar/ical/cf2aa5bc1d2ddcaded7192e315ea99532f16ff00c52a076b4b9c3478c308c52f%40group.calendar.google.com/public/basic.ics', name:'Real Estate' },
+    { url:'https://calendar.google.com/calendar/ical/50m18sp2p36a9526b7btjaui0s%40group.calendar.google.com/public/basic.ics', name:'58 Group' },
+    { url:'https://calendar.google.com/calendar/ical/55dbffe828b72daee60d64c1c701d335e2dceaf3c1d5bb352d84a817f20e492b%40group.calendar.google.com/public/basic.ics', name:'Family' },
+    { url:'https://calendar.google.com/calendar/ical/1k58e0tkmdh03qbdij4dtsqtl0%40group.calendar.google.com/public/basic.ics', name:'Fifty Eight Degrees' },
+    { url:'https://calendar.google.com/calendar/ical/1a0dc40bcd1923094e1df9e636f270e0f5aadebb98deddde19859e93681da557%40group.calendar.google.com/public/basic.ics', name:'Marketing 58' },
+    { url:'https://calendar.google.com/calendar/ical/1b4ae7aaa5385e1168d0ec8bbe1e9aaf4971a96f09558980e308d842c7651edf%40group.calendar.google.com/public/basic.ics', name:'RenaSer' },
   ];
 
   try {
     const allEvents = [];
 
-    for (const url of ICAL_URLS) {
-      const res = await fetch(url);
+    for (const cal of ICAL_URLS) {
+      const res = await fetch(cal.url);
       if (!res.ok) continue;
       const text = await res.text();
       const events = parseICal(text);
+      events.forEach(e => e.calendar = cal.name);
       allEvents.push(...events);
     }
 
