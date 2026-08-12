@@ -57,15 +57,15 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .sb-tip{position:absolute;left:44px;background:rgba(27,43,58,0.95);border:1px solid var(--border);color:var(--ivory);font-size:11px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;backdrop-filter:blur(10px);z-index:100;font-family:'Jost',sans-serif;font-weight:300;letter-spacing:.04em;}
 .sb-item:hover .sb-tip{opacity:1;}
 .sb-sep{width:24px;height:1px;background:var(--border);margin:6px 0;}
-.sb-jai{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;background:var(--champ3);border:1px solid var(--border2);transition:all .25s;text-decoration:none;}
-.sb-jai:hover{background:rgba(201,168,124,0.25);}
-.sb-jai-lbl{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:500;color:var(--champ);letter-spacing:.02em;}
+.sidebar [draggable="true"]{cursor:grab;}
+.sidebar .dragging{opacity:.3;}
+.sidebar .drag-over-line{box-shadow:0 -2px 0 0 var(--champ);}
 
 /* PANELS */
 .panels{flex:1;overflow:hidden;position:relative;}
 .panel{display:none;height:100%;overflow-y:auto;padding:28px 28px 40px;}
 .panel.active{display:block;}
-#panel-cot.active{display:flex;}
+#panel-cot.active{display:flex;overflow-y:hidden;}
 
 /* GLASS CARD */
 .gc{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .3s;}
@@ -93,8 +93,8 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 
 /* HOME GRID */
 .home-grid{display:grid;grid-template-columns:1fr 268px;gap:12px;height:100%;overflow:hidden;}
-.home-left{display:flex;flex-direction:column;gap:10px;overflow-y:auto;height:100%;padding-bottom:20px;}
-.home-right{overflow-y:auto;height:100%;}
+.home-left{display:flex;flex-direction:column;gap:10px;overflow-y:auto;height:100%;min-height:0;padding-bottom:20px;}
+.home-right{overflow-y:auto;height:100%;min-height:0;}
 
 /* WEEK STRIP */
 .week-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;}
@@ -202,14 +202,6 @@ select option{background:#1F3245;color:#F5F0E8;}
 .int-in:focus{border-color:var(--border2);}
 .int-in::placeholder{color:var(--ivory3);font-style:italic;}
 
-/* GOOGLE CALENDAR LINKS */
-.gcal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;}
-.gcal-btn{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;text-decoration:none;transition:all .25s;display:block;}
-.gcal-btn:hover{border-color:var(--border2);background:var(--glass2);transform:translateY(-2px);}
-.gcal-icon{font-size:22px;margin-bottom:8px;}
-.gcal-label{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ivory);}
-.gcal-sub{font-size:10px;color:var(--ivory3);margin-top:2px;}
-
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:rgba(27,43,58,0.95);border:1px solid var(--border2);color:var(--champ2);padding:10px 20px;border-radius:30px;font-size:12px;font-weight:400;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:300;letter-spacing:.04em;backdrop-filter:blur(20px);}
 .toast.show{opacity:1;transform:translateY(0);}
@@ -270,51 +262,56 @@ select option{background:#1F3245;color:#F5F0E8;}
 .fu-agent{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:var(--ivory3);}
 .fu-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
 
-/* GCAL PANEL */
-.gcal-tip{background:rgba(201,168,124,0.08);border:1px solid var(--border2);border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
-.gcal-tip-text{font-size:12px;color:var(--champ2);line-height:1.6;}
-
-/* COT WEEK VIEW */
-.cot-grid{display:flex;min-width:560px;height:calc(100vh - 200px);}
-.cot-time{width:44px;flex-shrink:0;padding-top:48px;}
-.cot-tslot{height:52px;display:flex;align-items:flex-start;justify-content:flex-end;padding:3px 7px 0 0;border-bottom:1px solid var(--border);}
-.cot-tslot span{font-size:9px;color:var(--ivory3);letter-spacing:.04em;}
-.cot-days-wrap{flex:1;display:flex;flex-direction:column;}
-.cot-head{display:flex;border-bottom:2px solid var(--border);background:rgba(27,43,58,0.8);backdrop-filter:blur(10px);position:sticky;top:0;z-index:5;}
-.cot-dhd{flex:1;text-align:center;padding:6px 4px;border-right:1px solid var(--border);}
-.cot-dhd:last-child{border-right:none;}
-.cot-wd{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--ivory3);}
-.cot-dn{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--ivory);line-height:1;margin-top:1px;}
-.cot-dn.today{color:var(--teal2);}
-.cot-body{display:flex;flex:1;overflow-y:auto;}
-.cot-track{flex:1;position:relative;border-right:1px solid var(--border);}
-.cot-track:last-child{border-right:none;}
-.cot-track.today-col{background:rgba(94,136,126,0.03);}
-.cot-hline{height:52px;border-bottom:1px solid rgba(255,255,255,0.04);}
-.cot-track.drag-over{background:rgba(201,168,124,0.07);outline:1px dashed var(--border2);outline-offset:-2px;}
-.cot-ev{position:absolute;left:2px;right:2px;border-radius:7px;padding:4px 7px;cursor:grab;overflow:hidden;border-left:2px solid;transition:box-shadow .2s,opacity .15s;z-index:3;}
-.cot-ev:hover{box-shadow:0 2px 12px rgba(0,0,0,.3);z-index:10;}
-.cot-ev.dragging{opacity:.3;}
-.cot-et{font-size:9px;opacity:.65;letter-spacing:.03em;line-height:1.3;}
-.cot-en{font-family:"Cormorant Garamond",serif;font-size:13px;color:var(--ivory);line-height:1.3;}
-.cot-es{font-size:10px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cot-coffee{background:rgba(201,168,124,0.12);border-color:var(--champ);}
-.cot-tequila{background:rgba(196,122,90,0.12);border-color:#C47A5A;}
-.cot-business{background:var(--mist3);border-color:var(--mist);}
-.cot-re{background:var(--teal3);border-color:var(--teal2);}
-.cot-family{background:rgba(168,120,216,0.1);border-color:#A878D8;}
-.cot-prospect{background:rgba(112,192,128,0.1);border-color:#70C080;}
-.drag-tip{position:fixed;background:rgba(27,43,58,0.95);border:1px solid var(--border2);color:var(--champ2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;pointer-events:none;z-index:1000;display:none;letter-spacing:.04em;}
-.cot-conn-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 12px;transition:all .2s;cursor:pointer;}
+/* COT CONNECTIONS — card grid */
+/* CSS Grid with align-items:start: each card keeps its own height (doesn't
+   stretch to match the tallest card in its row), but — unlike a CSS multi-column
+   masonry layout — cards stay in strict reading-order rows/columns. That matters
+   because multi-column reflows and re-balances EVERY card across columns whenever
+   one card's height or span changes (e.g. opening the edit form), which is what
+   made the whole grid visibly reshuffle/"descuadrar" on open. Grid only affects
+   the row the changed card is in. */
+.cot-conn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start;}
+@media(max-width:1400px){.cot-conn-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:1000px){.cot-conn-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.cot-conn-grid{grid-template-columns:1fr;}}
+.cot-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.cot-stat{text-align:center;background:var(--glass2);border-radius:10px;padding:16px 8px;}
+.cot-stat .n{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:var(--champ);line-height:1;}
+.cot-stat .l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory3);margin-top:4px;}
+.cot-suggested-wrap-inner{position:relative;padding:0 24px;}
+.cot-suggested-row{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 8px;scrollbar-width:none;-ms-overflow-style:none;}
+.cot-suggested-row::-webkit-scrollbar{display:none;height:0;}
+.cot-sug-nav{position:absolute;top:38%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--navy3);border:1px solid var(--border2);color:var(--champ2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;z-index:2;padding:0;}
+.cot-sug-nav:hover{background:var(--glass2);}
+.cot-sug-nav.prev{left:0;}
+.cot-sug-nav.next{right:0;}
+.cot-sug-card{position:relative;flex:0 0 auto;width:168px;background:var(--glass);border:1px solid var(--border);border-radius:8px;padding:8px 9px 7px;}
+.cot-sug-name{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:14px;}
+.cot-sug-sub{font-size:8px;color:var(--ivory3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:1px 0 6px;}
+.cot-sug-x{position:absolute;top:5px;right:6px;background:none;border:none;color:var(--ivory3);font-size:12px;line-height:1;cursor:pointer;padding:2px;}
+.cot-sug-x:hover{color:var(--champ2);}
+.cot-sug-acts{display:flex;gap:4px;margin-bottom:5px;}
+.cot-sug-ic{flex:1;display:flex;align-items:center;justify-content:center;padding:5px 0;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--champ2);cursor:pointer;line-height:1;}
+.cot-sug-ic:hover{background:var(--glass2);}
+.cot-sug-foot{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
+.cot-sug-crm{font-size:8px;color:var(--ivory3);text-decoration:none;flex-shrink:0;white-space:nowrap;}
+.cot-sug-crm:hover{color:var(--champ2);}
+.cot-conn-empty{grid-column:1/-1;padding:26px 10px;text-align:center;font-size:12px;color:var(--ivory3);font-style:italic;background:var(--glass);border:1px dashed var(--border);border-radius:10px;}
+.cot-conn-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:all .2s;cursor:pointer;}
 .cot-conn-card:hover{border-color:var(--border2);background:var(--glass2);}
 .cot-conn-card.sched{border-left:2px solid var(--champ);}
-.cot-cn{font-family:"Cormorant Garamond",serif;font-size:15px;color:var(--ivory);}
-.cot-cnote{font-size:10px;color:var(--ivory3);margin-top:2px;}
-.cot-ctags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
-.cot-acts{display:flex;gap:4px;margin-top:6px;}
+.cot-conn-card.editing{cursor:default;border-color:var(--champ);background:var(--glass2);grid-column:1/-1;}
+.cot-cn{font-family:"Cormorant Garamond",serif;font-size:17px;color:var(--ivory);}
+.cot-cnote{font-size:11px;color:var(--ivory3);margin-top:3px;}
+.cot-ctags{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+.cot-acts{display:flex;gap:4px;margin-top:10px;}
 .cot-act{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--ivory3);cursor:pointer;font-family:"Jost",sans-serif;transition:all .15s;}
 .cot-act:hover{border-color:var(--border2);color:var(--champ2);}
 .cot-act.del:hover{border-color:#E07070;color:#E07070;}
+.cot-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.cot-edit-field{display:flex;flex-direction:column;gap:3px;}
+.cot-edit-field.full{grid-column:1/-1;}
+.cot-edit-field label{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory3);}
 /* GOALS PANEL — light base with JP58 accents */
 .goals-panel-wrap{background:linear-gradient(155deg,#F4F1EC 0%,#EDE9E2 50%,#E8E3DA 100%);min-height:100%;margin:-28px -28px -40px;padding:32px 32px 48px;border-radius:0;}
 .goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -395,22 +392,24 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 <div class="body-wrap">
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
- <div class="sb-item on" onclick="showPanel('home',this)" data-panel="home" draggable="false"><i data-lucide="layout-dashboard"></i><span class="sb-tip">Dashboard</span></div>
- <div class="sb-sep"></div>
+ <div class="sb-item on" onclick="showPanel('home',this)" data-panel="home"><i data-lucide="layout-dashboard"></i><span class="sb-tip">Dashboard</span></div>
+ <div class="sb-sep" data-sbkey="sep1"></div>
  <div class="sb-item" onclick="showPanel('realestate',this)" data-panel="realestate"><i data-lucide="building-2" style="stroke:var(--teal2);"></i><span class="sb-tip">Real Estate</span></div>
  <div class="sb-item" onclick="showPanel('fifty8',this)" data-panel="fifty8"><i data-lucide="hard-hat" style="stroke:var(--champ2);"></i><span class="sb-tip">Fifty Eight Degrees</span></div>
  <div class="sb-item" onclick="showPanel('cot',this)" data-panel="cot"><i data-lucide="coffee" style="stroke:var(--champ);"></i><span class="sb-tip">Coffee or Tequila</span></div>
  <div class="sb-item" onclick="showPanel('latitude',this)" data-panel="latitude"><i data-lucide="globe" style="stroke:var(--teal2);"></i><span class="sb-tip">Latitude 58°</span></div>
  <div class="sb-item" onclick="showPanel('realraw',this)" data-panel="realraw"><i data-lucide="mic" style="stroke:#D4957A;"></i><span class="sb-tip">Real & Raw</span></div>
  <div class="sb-item" onclick="showPanel('renacer',this)" data-panel="renacer"><i data-lucide="book-open" style="stroke:#A878D8;"></i><span class="sb-tip">RenaSer</span></div>
- <div class="sb-sep"></div>
+ <div class="sb-sep" data-sbkey="sep2"></div>
  <div class="sb-item" onclick="showPanel('finanzas',this)" data-panel="finanzas"><i data-lucide="bar-chart-2" style="stroke:#D4A840;"></i><span class="sb-tip">Finanzas</span></div>
  <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness"><i data-lucide="heart-pulse" style="stroke:#70C080;"></i><span class="sb-tip">Wellness</span></div>
  <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users" style="stroke:#A878D8;"></i><span class="sb-tip">Family</span></div>
- <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar" style="stroke:var(--mist);"></i><span class="sb-tip">Google Calendar</span></div>
- <a href="https://jeannettepenaeos.netlify.app" target="_blank" class="sb-item" style="text-decoration:none;"><i data-lucide="target" style="width:20px;height:20px;stroke:var(--champ);"></i><span class="sb-tip">Goals & Business Plan ↗</span></a>
- <div class="sb-sep"></div>
- <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
+ <div class="sb-item" onclick="showPanel('household',this)" data-panel="household"><i data-lucide="home" style="stroke:#C97B5F;"></i><span class="sb-tip">Household</span></div>
+ <div class="sb-item" onclick="showPanel('cars',this)" data-panel="cars"><i data-lucide="car" style="stroke:#6E93B8;"></i><span class="sb-tip">Cars</span></div>
+ <div class="sb-sep" data-sbkey="sep4"></div>
+ <a href="https://jeannettepenaeos.netlify.app" target="_blank" class="sb-item" style="text-decoration:none;" data-sbkey="ext-goals"><i data-lucide="target" style="width:20px;height:20px;stroke:var(--champ);"></i><span class="sb-tip">Goals & Business Plan ↗</span></a>
+ <a href="https://58hub.netlify.app" target="_blank" class="sb-item" style="text-decoration:none;" data-sbkey="ext-hub"><i data-lucide="layout-grid" style="width:20px;height:20px;stroke:var(--teal2);"></i><span class="sb-tip">58 HUB ↗</span></a>
+ <a href="https://58clientsandproperties.netlify.app" target="_blank" class="sb-item" style="text-decoration:none;" data-sbkey="ext-clients"><i data-lucide="contact-round" style="width:20px;height:20px;stroke:var(--mist);"></i><span class="sb-tip">Clients & Properties ↗</span></a>
 </div>
 
 <!-- PANELS -->
@@ -518,7 +517,10 @@ select optgroup{background:#1F3245;color:#C9A87C;}
   <div class="sec-head">
    <div class="sec-icon"><i data-lucide="building-2" style="width:22px;height:22px;stroke:var(--teal2);stroke-width:1.5"></i></div>
    <div><div class="sec-title">Real Estate</div><div class="sec-desc">Live from 58 HUB · Updated by Rebecca</div></div>
-   <button class="pill pill-teal" onclick="loadREData()" style="margin-left:auto;">↻ Refresh</button>
+   <div style="display:flex;gap:8px;margin-left:auto;">
+    <a href="https://58hub.netlify.app" target="_blank" class="pill pill-ghost" style="text-decoration:none;">Open 58 HUB ↗</a>
+    <button class="pill pill-teal" id="re-refresh-btn" onclick="loadREData(true)">↻ Refresh</button>
+   </div>
   </div>
   <div class="gc" style="margin-bottom:16px;">
    <div class="label" style="margin-bottom:12px;">Listings</div>
@@ -719,46 +721,188 @@ select optgroup{background:#1F3245;color:#C9A87C;}
  </div>
 </div>
 
-<!-- GOOGLE CALENDAR -->
-<div id="panel-gcal" class="panel">
- <div style="max-width:700px;">
-  <div class="sec-head" style="margin-bottom:16px;">
-   <div class="sec-icon"><i data-lucide="calendar" style="width:22px;height:22px;stroke:var(--champ2);stroke-width:1.5"></i></div>
-   <div><div class="sec-title">Google Calendar</div><div class="sec-desc">jcantu.realtor@gmail.com · Houston, TX</div></div>
-   <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="pill pill-champ" style="margin-left:auto;text-decoration:none;font-size:11px;">Open Google ↗</a>
+<!-- HOUSEHOLD -->
+<div id="panel-household" class="panel">
+ <div class="sec-panel">
+  <div class="sec-head">
+   <div class="sec-icon"><i data-lucide="home" style="width:22px;height:22px;stroke:#C97B5F;stroke-width:1.5"></i></div>
+   <div><div class="sec-title">Household</div><div class="sec-desc">Repairs · maintenance · payments · home log</div></div>
   </div>
 
-  <!-- Quick links -->
-  <div class="gcal-grid" style="margin-bottom:16px;">
-   <a href="https://calendar.google.com/calendar/r/day" target="_blank" class="gcal-btn">
-    <div class="gcal-icon"></div>
-    <div class="gcal-label">Today</div>
-    <div class="gcal-sub">Day view</div>
-   </a>
-   <a href="https://calendar.google.com/calendar/r/week" target="_blank" class="gcal-btn">
-    <div class="gcal-icon"></div>
-    <div class="gcal-label">This Week</div>
-    <div class="gcal-sub">Week view</div>
-   </a>
-   <a href="https://calendar.google.com/calendar/r/month" target="_blank" class="gcal-btn">
-    <div class="gcal-icon"></div>
-    <div class="gcal-label">Month</div>
-    <div class="gcal-sub">Month view</div>
-   </a>
-  </div>
-
-  <!-- Live events from Google Calendar iCal -->
-  <div class="gc" style="margin-bottom:16px;">
-   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-    <div class="label">Upcoming — Next 30 Days</div>
-    <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="icalLoadEvents()">↻ Refresh</button>
+  <!-- Log Entry -->
+  <div class="gc" style="margin-bottom:16px;padding:18px;">
+   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div class="label">Log Entry</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+     <div class="label" style="font-size:9px;">Date</div>
+     <input type="date" id="hh-date" class="qa-in" style="padding:5px 8px;font-size:11px;cursor:pointer;" value="">
+    </div>
    </div>
-   <div id="ical-events-list"><div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div></div>
+   <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Category</div>
+     <select id="hh-cat" class="qa-in" style="width:100%;padding:6px 8px;">
+      <option value="Repair">Repair</option>
+      <option value="Maintenance">Maintenance</option>
+      <option value="Payment">Payment</option>
+      <option value="Warranty">Warranty</option>
+      <option value="Insurance">Insurance</option>
+      <option value="Other">Other</option>
+     </select>
+    </div>
+    <div style="grid-column:span 2;">
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Item / Service</div>
+     <input id="hh-item" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="e.g. AC unit, Pool service, Mortgage">
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Amount</div>
+     <input id="hh-amount" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="$">
+    </div>
+   </div>
+   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Vendor</div>
+     <input id="hh-vendor" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="Company / person">
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Contact</div>
+     <input id="hh-contact" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="Phone / email">
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Status</div>
+     <select id="hh-status" class="qa-in" style="width:100%;padding:6px 8px;">
+      <option value="Active">Active</option>
+      <option value="Due Soon">Due Soon</option>
+      <option value="Completed">Completed</option>
+      <option value="Paid">Paid</option>
+     </select>
+    </div>
+   </div>
+   <div style="margin-bottom:12px;">
+    <div class="label" style="font-size:9px;margin-bottom:5px;">Note</div>
+    <textarea id="hh-note" class="qa-in" style="width:100%;padding:6px 8px;resize:none;height:56px;font-family:'Jost',sans-serif;" placeholder="Details..."></textarea>
+   </div>
+   <button class="pill pill-solid" style="font-size:11px;" onclick="addHouseholdLog()">Save log</button>
   </div>
 
-  <div class="gcal-tip">
-   <i data-lucide="zap" style="width:16px;height:16px;stroke:var(--champ);stroke-width:1.5;flex-shrink:0;margin-top:2px;"></i>
-   <div class="gcal-tip-text">Tell J·AI: <em>"Add a meeting with Daina Thursday at 10am — Real Estate"</em> and it goes straight to Google Calendar and JP58.</div>
+  <!-- Log history -->
+  <div class="gc" style="margin-bottom:16px;">
+   <div class="label" style="margin-bottom:12px;">Recent Log</div>
+   <div id="household-log-list"></div>
+  </div>
+
+  <!-- Tasks -->
+  <div class="gc">
+   <div class="label" style="margin-bottom:10px;">Pending — Household</div>
+   <div id="sec-household"></div>
+   <div class="qa" style="margin-top:10px;">
+    <input class="qa-in" placeholder="Add household task..." id="qt-hh" onkeydown="if(event.key==='Enter')sectionAdd('household','qt-hh')">
+    <button class="qa-go" onclick="sectionAdd('household','qt-hh')">Add</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- CARS -->
+<div id="panel-cars" class="panel">
+ <div class="sec-panel">
+  <div class="sec-head">
+   <div class="sec-icon"><i data-lucide="car" style="width:22px;height:22px;stroke:#6E93B8;stroke-width:1.5"></i></div>
+   <div><div class="sec-title">Cars</div><div class="sec-desc">Vehicles · insurance · maintenance log</div></div>
+  </div>
+
+  <!-- Vehicles -->
+  <div class="gc" style="margin-bottom:16px;padding:18px;">
+   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div class="label">Vehicles</div>
+    <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="toggleCarAddForm()" id="car-add-toggle-btn">+ Add Vehicle</button>
+   </div>
+   <div id="car-add-wrap" style="display:none;background:var(--glass2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Make</div><input id="car-make" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="e.g. Toyota"></div>
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Model</div><input id="car-model" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="e.g. Highlander"></div>
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Year</div><input id="car-year" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="2024"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">VIN Number</div><input id="car-vin" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="17-character VIN"></div>
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">License Plate</div><input id="car-plate" class="qa-in" style="width:100%;padding:6px 8px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Insurance Company</div><input id="car-ins-co" class="qa-in" style="width:100%;padding:6px 8px;"></div>
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Policy Number</div><input id="car-ins-policy" class="qa-in" style="width:100%;padding:6px 8px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Insurance Expires</div><input type="date" id="car-ins-exp" class="qa-in" style="width:100%;padding:6px 8px;cursor:pointer;"></div>
+     <div><div class="label" style="font-size:9px;margin-bottom:5px;">Registration Expires</div><input type="date" id="car-reg-exp" class="qa-in" style="width:100%;padding:6px 8px;cursor:pointer;"></div>
+    </div>
+    <div style="margin-bottom:10px;"><div class="label" style="font-size:9px;margin-bottom:5px;">Notes</div><input id="car-notes" class="qa-in" style="width:100%;padding:6px 8px;"></div>
+    <div style="display:flex;gap:8px;">
+     <button class="pill pill-solid" style="font-size:11px;" onclick="saveVehicle()">Save Vehicle</button>
+     <button class="pill pill-ghost" style="font-size:11px;" onclick="toggleCarAddForm(false)">Cancel</button>
+    </div>
+   </div>
+   <div id="vehicle-list" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"></div>
+  </div>
+
+  <!-- Maintenance Log Entry -->
+  <div class="gc" style="margin-bottom:16px;padding:18px;">
+   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div class="label">Maintenance Log Entry</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+     <div class="label" style="font-size:9px;">Date</div>
+     <input type="date" id="cm-date" class="qa-in" style="padding:5px 8px;font-size:11px;cursor:pointer;" value="">
+    </div>
+   </div>
+   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Vehicle</div>
+     <select id="cm-vehicle" class="qa-in" style="width:100%;padding:6px 8px;"></select>
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Service</div>
+     <select id="cm-service" class="qa-in" style="width:100%;padding:6px 8px;">
+      <option>Oil Change</option><option>Tires</option><option>Brakes</option>
+      <option>Inspection</option><option>Battery</option><option>Registration Renewal</option>
+      <option>Insurance Renewal</option><option>Repair</option><option>Car Wash / Detail</option>
+      <option>Other</option>
+     </select>
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Mileage</div>
+     <input id="cm-mileage" type="number" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="e.g. 42000">
+    </div>
+   </div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Cost</div>
+     <input id="cm-cost" class="qa-in" style="width:100%;padding:6px 8px;" placeholder="$">
+    </div>
+    <div>
+     <div class="label" style="font-size:9px;margin-bottom:5px;">Vendor / Shop</div>
+     <input id="cm-vendor" class="qa-in" style="width:100%;padding:6px 8px;">
+    </div>
+   </div>
+   <div style="margin-bottom:12px;">
+    <div class="label" style="font-size:9px;margin-bottom:5px;">Note</div>
+    <textarea id="cm-note" class="qa-in" style="width:100%;padding:6px 8px;resize:none;height:56px;font-family:'Jost',sans-serif;" placeholder="Details..."></textarea>
+   </div>
+   <button class="pill pill-solid" style="font-size:11px;" onclick="addCarMaintenance()">Save log</button>
+  </div>
+
+  <!-- Maintenance history -->
+  <div class="gc" style="margin-bottom:16px;">
+   <div class="label" style="margin-bottom:12px;">Maintenance History</div>
+   <div id="car-maint-list"></div>
+  </div>
+
+  <!-- Tasks -->
+  <div class="gc">
+   <div class="label" style="margin-bottom:10px;">Pending — Cars</div>
+   <div id="sec-cars"></div>
+   <div class="qa" style="margin-top:10px;">
+    <input class="qa-in" placeholder="Add car task..." id="qt-cars" onkeydown="if(event.key==='Enter')sectionAdd('cars','qt-cars')">
+    <button class="qa-go" onclick="sectionAdd('cars','qt-cars')">Add</button>
+   </div>
   </div>
  </div>
 </div>
@@ -767,63 +911,69 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 <!-- COFFEE OR TEQUILA -->
 <div id="panel-cot" class="panel" style="padding:0;flex-direction:column;height:100%;">
  <!-- Header -->
- <div style="padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+ <div style="padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:10px;">
   <div>
    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ivory);">Coffee <em style="font-style:italic;color:var(--champ);">or</em> Tequila</div>
-   <div class="label" style="margin-top:4px;">Week of Aug 10 – 16 · Connection System</div>
+   <div class="label" style="margin-top:4px;">Connection System</div>
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
-   <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--champ)"></div>Coffee</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:#C47A5A"></div>Tequila</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal2)"></div>Real Estate</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:var(--mist)"></div>Business</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ivory3);"><div style="width:7px;height:7px;border-radius:50%;background:#70C080"></div>Prospecting</div>
-   </div>
-   <button class="pill pill-solid" style="font-size:11px;" onclick="openCotAdd()">+ Add event</button>
+   <a href="https://58clientsandproperties.netlify.app" target="_blank" class="pill pill-ghost" style="font-size:11px;text-decoration:none;">Clients &amp; Properties ↗</a>
+   <button class="pill pill-solid" style="font-size:11px;" onclick="toggleCotAddForm()" id="cot-add-toggle-btn">+ Add Connection</button>
   </div>
  </div>
  <!-- Main body -->
- <div style="display:grid;grid-template-columns:1fr 256px;gap:0;flex:1;overflow:hidden;margin-top:12px;">
-  <!-- Calendar -->
-  <div style="overflow:hidden;border-right:1px solid var(--border);">
-   <div class="cot-grid" id="cot-grid" style="height:100%;overflow-y:auto;overflow-x:auto;"></div>
-  </div>
+ <div style="flex:1;min-height:0;overflow-y:auto;padding:16px 24px 28px;margin-top:8px;">
+
+  <div class="cot-stat-row">
+   <div class="cot-stat"><div class="n" id="cot-sn-t">10</div><div class="l">Total</div></div>
+   <div class="cot-stat"><div class="n" id="cot-sn-s">3</div><div class="l">Scheduled</div></div>
+   <div class="cot-stat"><div class="n" id="cot-sn-p">7</div><div class="l">Pending</div></div>
+   <div class="cot-stat"><div class="n" id="cot-sn-sug">0</div><div class="l">Suggested</div></div>
   </div>
 
-  <!-- Connections sidebar -->
-  <div style="display:flex;flex-direction:column;gap:0;height:100%;overflow-y:auto;background:rgba(27,43,58,0.5);">
-   <div style="padding:16px;">
-    <div class="label" style="margin-bottom:10px;">Connections</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:12px;">
-     <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--champ);" id="cot-sn-t">10</div><div class="label" style="font-size:8px;">Total</div></div>
-     <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--teal2);" id="cot-sn-s">3</div><div class="label" style="font-size:8px;">Sched</div></div>
-     <div style="text-align:center;background:var(--glass2);border-radius:8px;padding:8px 4px;"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ivory3);" id="cot-sn-p">7</div><div class="label" style="font-size:8px;">Pending</div></div>
-    </div>
-    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">
-     <div class="pill pill-champ" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('all',this)">All</div>
-     <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('coffee',this)">☕</div>
-     <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('tequila',this)">🥃</div>
-     <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('kingwood',this)">Kingwood</div>
-     <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('heights',this)">Heights</div>
-     <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('ampi',this)">AMPI</div>
-    </div>
-    <div id="cot-conn-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+  <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;">
+   <div class="pill pill-champ" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('all',this)">All</div>
+   <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('coffee',this)">☕</div>
+   <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('tequila',this)">🥃</div>
+   <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('kingwood',this)">Kingwood</div>
+   <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('heights',this)">Houston</div>
+   <div class="pill pill-ghost" style="font-size:10px;padding:3px 9px;cursor:pointer;" onclick="filterCot('ampi',this)">AMPI</div>
+  </div>
+
+  <!-- Add connection (collapsible) -->
+  <div id="cot-add-wrap" style="display:none;background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;">
+   <div class="label" style="margin-bottom:10px;">New Connection</div>
+   <div style="position:relative;margin-bottom:8px;max-width:360px;">
+    <input class="qa-in" id="cot-cn" placeholder="Search Past Clients or type a new name…" autocomplete="off" oninput="cotAutocomplete(this)" style="width:100%;">
+    <input type="hidden" id="cot-cn-mls" value="">
+    <div id="cot-cn-suggestions" style="position:absolute;top:100%;left:0;right:0;background:var(--navy3);border:1px solid var(--border2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35);z-index:999;display:none;max-height:200px;overflow-y:auto;margin-top:4px;"></div>
    </div>
-   <!-- Add connection -->
-   <div style="padding:16px;border-top:1px solid var(--border);">
-    <div class="label" style="margin-bottom:8px;">+ Add Connection</div>
-    <input class="qa-in" id="cot-cn" placeholder="Name" style="margin-bottom:6px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
-     <select class="qa-in" id="cot-ct" style="padding:6px 8px;"><option value="coffee">☕ Coffee</option><option value="tequila">🥃 Tequila</option></select>
-     <select class="qa-in" id="cot-cz" style="padding:6px 8px;"><option value="kingwood">Kingwood</option><option value="heights">Heights</option><option value="woodlands">Woodlands</option><option value="mexico">México</option><option value="flexible">Flexible</option></select>
-    </div>
-    <select class="qa-in" id="cot-cc" style="margin-bottom:5px;padding:6px 8px;"><option value="sphere">Sphere</option><option value="excliente">Ex Cliente</option><option value="colega">Colega</option><option value="ampi">AMPI</option><option value="prospect">Prospect</option></select>
-    <input class="qa-in" id="cot-cno" placeholder="Note" style="margin-bottom:8px;">
-    <button class="pill pill-solid" style="width:100%;justify-content:center;" onclick="addCotConn()">Add to list</button>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:8px;max-width:760px;">
+    <select class="qa-in" id="cot-ct" style="padding:6px 8px;"><option value="coffee">☕ Coffee</option><option value="tequila">🥃 Tequila</option></select>
+    <select class="qa-in" id="cot-cz" style="padding:6px 8px;"><option value="kingwood">Kingwood</option><option value="heights">Houston</option><option value="woodlands">Woodlands</option><option value="mexico">México</option><option value="flexible">Flexible</option></select>
+    <select class="qa-in" id="cot-cc" style="padding:6px 8px;" onchange="cotToggleOtherInput('cot-cc','cot-cc-other')"><option value="sphere">Sphere</option><option value="excliente" selected>Ex Cliente</option><option value="colega">Colega</option><option value="ampi">AMPI</option><option value="prospect">Prospect</option><option value="other">Other…</option></select>
+    <input class="qa-in" id="cot-cc-other" placeholder="Custom type" style="padding:6px 8px;display:none;">
+   </div>
+   <input class="qa-in" id="cot-cno" placeholder="Note" style="margin-bottom:10px;max-width:760px;width:100%;">
+   <div style="display:flex;gap:8px;">
+    <button class="pill pill-solid" onclick="addCotConn()">Add to list</button>
+    <button class="pill pill-ghost" onclick="toggleCotAddForm(false)">Cancel</button>
    </div>
   </div>
+
+  <!-- Suggested — Past Clients with no touch yet -->
+  <div id="cot-suggested-wrap" style="display:none;margin-bottom:14px;">
+   <div class="label" style="margin-bottom:6px;">Suggested · Past Clients With No Recent Touch</div>
+   <div class="cot-suggested-wrap-inner">
+    <button class="cot-sug-nav prev" onclick="cotScrollSuggested(-1)" aria-label="Scroll left">‹</button>
+    <div id="cot-suggested-list" class="cot-suggested-row"></div>
+    <button class="cot-sug-nav next" onclick="cotScrollSuggested(1)" aria-label="Scroll right">›</button>
+   </div>
+  </div>
+
+  <div id="cot-conn-list" class="cot-conn-grid"></div>
  </div>
+</div>
 </div>
 
 
@@ -1064,43 +1214,6 @@ select optgroup{background:#1F3245;color:#C9A87C;}
  </div>
 </div>
 
-<div class="modal-bg" id="m-cot-ev">
- <div class="modal">
-  <div class="modal-title" id="cot-m-title">Add Event</div>
-  <input type="hidden" id="cot-ev-id">
-  <div class="field"><label>Title</label><input id="cot-ev-name" placeholder="Event title"></div>
-  <div class="frow">
-   <div class="field"><label>Type</label>
-    <select id="cot-ev-type">
-     <option value="coffee">☕ Coffee</option>
-     <option value="tequila">🥃 Happy Hour</option>
-     <option value="business">Business</option>
-     <option value="re">Real Estate</option>
-     <option value="family">Family</option>
-     <option value="prospect">Prospecting</option>
-    </select>
-   </div>
-   <div class="field"><label>Day</label>
-    <select id="cot-ev-day">
-     <option value="0">Monday</option><option value="1">Tuesday</option>
-     <option value="2">Wednesday</option><option value="3">Thursday</option>
-     <option value="4">Friday</option><option value="5">Saturday</option>
-    </select>
-   </div>
-  </div>
-  <div class="frow">
-   <div class="field"><label>Time (e.g. 9:00 AM)</label><input id="cot-ev-time" placeholder="9:00 AM"></div>
-   <div class="field"><label>Duration (e.g. 1h)</label><input id="cot-ev-dur" placeholder="1h"></div>
-  </div>
-  <div class="field"><label>Detail / Location</label><input id="cot-ev-sub" placeholder="Location or note"></div>
-  <div class="mf">
-   <button class="ca" onclick="closeModal('m-cot-ev')">Cancel</button>
-   <button class="ca" id="cot-m-del" onclick="deleteCotEv()" style="color:#E07070;border-color:rgba(224,112,112,.3);">Delete</button>
-   <button class="ca on" onclick="saveCotEv()">Save</button>
-  </div>
- </div>
-</div>
-<div class="drag-tip" id="drag-tip"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1173,6 +1286,8 @@ const SECTIONS={
  finanzas:{label:'Finanzas',lucide:'bar-chart-2',color:'#D4A840'},
  wellness:{label:'Wellness',lucide:'heart-pulse',color:'#70C080'},
  hijos:{label:'Family',lucide:'users',color:'#A878D8'},
+ household:{label:'Household',lucide:'home',color:'#C97B5F'},
+ cars:{label:'Cars',lucide:'car',color:'#6E93B8'},
  personal:{label:'Personal',lucide:'circle',color:'var(--ivory3)'},
 };
 
@@ -1235,9 +1350,16 @@ function buildWeek(){
   const isToday=iso===TODAY_ISO;
   const isSel=iso===selDay;
   const dayEvs=events.filter(e=>e.date===iso);
+  // Also count synced Google Calendar events for this day, so the dot
+  // reflects real activity even when nothing was added manually in JP58.
+  const gcalDayCount=(window._icalEvents||[]).filter(ev=>{
+   const evDate=new Date(ev.start).toLocaleDateString('en-CA',{timeZone:'America/Chicago'});
+   return evDate===iso;
+  }).length;
+  const totalCount=dayEvs.length+gcalDayCount;
   const div=document.createElement('div');
   div.className='wday'+(isToday?' tod':'')+(isSel?' sel':'');
-  div.innerHTML=`<div class="wd-name">${d.toLocaleDateString('en-US',{weekday:'short'})}</div><div class="wd-date">${d.getDate()}</div><div class="wd-ico">${dayEvs.length?'·'.repeat(Math.min(dayEvs.length,3)):''}</div>`;
+  div.innerHTML=`<div class="wd-name">${d.toLocaleDateString('en-US',{weekday:'short'})}</div><div class="wd-date">${d.getDate()}</div><div class="wd-ico">${totalCount?'·'.repeat(Math.min(totalCount,3)):''}</div>`;
   div.onclick=()=>{selDay=iso;buildWeek();renderEvents();};
   strip.appendChild(div);
  }
@@ -1334,6 +1456,7 @@ function renderSectionTodos(){
   }).join('');
   if(window.lucide)lucide.createIcons();
  }
+ updateSidebarBadges();
 }
 
 function toggleTodo(id){const t=todos.find(x=>String(x.id)===String(id));if(t){t.done=!t.done;renderTodos();renderSectionTodos();saveData();}}
@@ -1517,8 +1640,17 @@ function addContent(){
 }
 
 // ── RE LIVE DATA ──────────────────────────────────────
-async function loadREData(){
- const get=async(t,q)=>{try{const r=await fetch(SB_URL+'/rest/v1/'+t+(q||'?order=created_at.asc'),{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});return r.ok?await r.json():[];}catch{return[];}};
+async function loadREData(manual){
+ const btn=document.getElementById('re-refresh-btn');
+ if(manual&&btn){btn.disabled=true;btn.style.opacity='0.6';btn.textContent='Refreshing…';}
+ let hadError=false;
+ const get=async(t,q)=>{
+  try{
+   const r=await fetch(SB_URL+'/rest/v1/'+t+(q||'?order=created_at.asc'),{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+   if(!r.ok){hadError=true;return[];}
+   return await r.json();
+  }catch{hadError=true;return[];}
+ };
  const[opsRows,crmRows]=await Promise.all([
   get('ops_state','?id=eq.main&select=data'),
   get('jp58_production_transactions','?order=updated_at.desc')
@@ -1552,6 +1684,11 @@ async function loadREData(){
   if(!hubTasks.length){tt.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No tasks · Add in 58 HUB</div>';}
   else{tt.innerHTML=hubTasks.map(t=>`<div class="todo-row"><div class="todo-pri pri-${t.priority==='high'?'h':t.priority==='low'?'l':'m'}"></div><div style="flex:1"><div class="todo-text">${t.text}</div></div><span style="font-size:10px;color:var(--ivory3)">${t.assigned?t.assigned[0].toUpperCase()+t.assigned.slice(1):''}</span></div>`).join('');}
  }
+ if(manual&&btn){
+  btn.disabled=false;btn.style.opacity='';btn.textContent='↻ Refresh';
+  if(hadError)showToast('Couldn\'t reach 58 HUB — check your connection and try again');
+  else showToast('Real Estate updated ✓');
+ }
 }
 
 // ── MODAL ─────────────────────────────────────────────
@@ -1584,7 +1721,8 @@ function showPanel(name,triggerEl){
  if(window.lucide)lucide.createIcons();
  renderAllMini();
  if(name==='realestate')loadREData();
- if(name==='gcal'){}
+ if(name==='household'){loadHouseholdLogs();}
+ if(name==='cars'){loadCars();}
 }
 
 // ── TOAST ─────────────────────────────────────────────
@@ -1636,174 +1774,255 @@ async function init(){
  if(window.lucide)lucide.createIcons();
  updateSidebarBadges();
  const wlDate=document.getElementById('wl-date');if(wlDate)wlDate.value=new Date().toISOString().split('T')[0];
+ const hhDate=document.getElementById('hh-date');if(hhDate)hhDate.value=new Date().toISOString().split('T')[0];
+ const cmDate=document.getElementById('cm-date');if(cmDate)cmDate.value=new Date().toISOString().split('T')[0];
+ initSidebarDragReorder();
 }
 
 
 // ── COFFEE OR TEQUILA ─────────────────────────────────
-const COT_DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const COT_DATES=['10','11','12','13','14','15','16'];
-const COT_TODAY=0;
-const COT_HOURS=Array.from({length:14},(_,i)=>i+7);
-const COT_SH=52;
-
-let cotEvs=[
- {id:1,day:1,h:9,m:30,dur:90,title:'Prospecting Block',sub:'Base de datos',type:'prospect'},
- {id:2,day:1,h:11,m:0,dur:60,title:'Tax Consultation',sub:'700 Rockmead Dr',type:'business'},
- {id:3,day:1,h:16,m:0,dur:60,title:'Showings — Luis & Maria',sub:'77064',type:'re'},
- {id:4,day:2,h:8,m:0,dur:60,title:'Carlos — First Day of School',sub:'',type:'family'},
- {id:5,day:3,h:8,m:0,dur:60,title:'Coffee — Monica Ruiz',sub:'Kingwood',type:'coffee'},
- {id:6,day:3,h:9,m:0,dur:60,title:'Accountability Group',sub:'Capital Title',type:'business'},
- {id:7,day:3,h:17,m:0,dur:60,title:'Happy Hour — Jen Jaeger',sub:'Kingwood',type:'tequila'},
- {id:8,day:3,h:19,m:0,dur:120,title:'Texans vs Chargers',sub:'NRG Stadium',type:'re'},
+const COT_SEED=[
+ {id:'cot-seed-1',name:'Monica Ruiz',type:'coffee',zone:'kingwood',cat:'sphere',note:'Amiga + ex cliente',sched:true,mls_number:null},
+ {id:'cot-seed-2',name:'Jen Jaeger',type:'tequila',zone:'kingwood',cat:'colega',note:'Realtor + cliente Puerto Vallarta',sched:true,mls_number:null},
+ {id:'cot-seed-3',name:'Alex de Parres',type:'tequila',zone:'flexible',cat:'sphere',note:'Texans game · cliente pasado',sched:true,mls_number:null},
+ {id:'cot-seed-4',name:'Ana Wonche',type:'coffee',zone:'heights',cat:'sphere',note:'Heights area · próxima semana',sched:false,mls_number:null},
+ {id:'cot-seed-5',name:'Bibi Zambrano',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false,mls_number:null},
+ {id:'cot-seed-6',name:'Mayda Salgado',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false,mls_number:null},
+ {id:'cot-seed-7',name:'Annette Shimel',type:'coffee',zone:'flexible',cat:'sphere',note:'Mamá de amiga de Roberta',sched:false,mls_number:null},
+ {id:'cot-seed-8',name:'Kathy Flory',type:'coffee',zone:'flexible',cat:'sphere',note:'Margarita + caminata',sched:false,mls_number:null},
+ {id:'cot-seed-9',name:'Gaby Chagoy',type:'coffee',zone:'mexico',cat:'ampi',note:'Futura presidenta AMPI Puebla',sched:false,mls_number:null},
+ {id:'cot-seed-10',name:'Poncho Dávalos',type:'tequila',zone:'mexico',cat:'ampi',note:'AMPI Puebla · socio PV',sched:false,mls_number:null},
 ];
+let cotConns=[];
+let _pastClientsCache=null;
+let cotConnsLoaded=false;
 
-let cotConns=[
- {id:1,name:'Monica Ruiz',type:'coffee',zone:'kingwood',cat:'sphere',note:'Amiga + ex cliente',sched:true},
- {id:2,name:'Jen Jaeger',type:'tequila',zone:'kingwood',cat:'colega',note:'Realtor + cliente Puerto Vallarta',sched:true},
- {id:3,name:'Alex de Parres',type:'tequila',zone:'flexible',cat:'sphere',note:'Texans game · cliente pasado',sched:true},
- {id:4,name:'Ana Wonche',type:'coffee',zone:'heights',cat:'sphere',note:'Heights area · próxima semana',sched:false},
- {id:5,name:'Bibi Zambrano',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false},
- {id:6,name:'Mayda Salgado',type:'coffee',zone:'flexible',cat:'excliente',note:'Amiga · reconectó el sábado',sched:false},
- {id:7,name:'Annette Shimel',type:'coffee',zone:'flexible',cat:'sphere',note:'Mamá de amiga de Roberta',sched:false},
- {id:8,name:'Kathy Flory',type:'coffee',zone:'flexible',cat:'sphere',note:'Margarita + caminata',sched:false},
- {id:9,name:'Gaby Chagoy',type:'coffee',zone:'mexico',cat:'ampi',note:'Futura presidenta AMPI Puebla',sched:false},
- {id:10,name:'Poncho Dávalos',type:'tequila',zone:'mexico',cat:'ampi',note:'AMPI Puebla · socio PV',sched:false},
-];
-
-let cotActiveF='all', cotDragging=null, cotDragOffY=0, cotEditingId=null, cotAddMode=false;
-
-function cotFmt(h,m){const ap=h>=12?'PM':'AM';const h12=h===0?12:h>12?h-12:h;return `${h12}:${m.toString().padStart(2,'0')} ${ap}`;}
-function cotToY(h,m){return(h-7)*COT_SH+(m/60)*COT_SH;}
-function cotFromY(y){const mins=Math.round(y/COT_SH*60/15)*15;return{h:Math.min(20,Math.max(7,7+Math.floor(mins/60))),m:mins%60};}
-
-const COT_EC={coffee:'cot-coffee',tequila:'cot-tequila',business:'cot-business',re:'cot-re',family:'cot-family',prospect:'cot-prospect'};
-
-function buildCotCal(){
- const grid=document.getElementById('cot-grid');
- if(!grid)return;
- grid.innerHTML='';
- const inner=document.createElement('div');
- inner.style.cssText='display:flex;min-width:500px;';
-
- // Time gutter
- const tg=document.createElement('div');
- tg.style.cssText='width:44px;flex-shrink:0;padding-top:48px;';
- tg.innerHTML=COT_HOURS.map(h=>`<div class="cot-tslot"><span>${h===12?'12p':h>12?(h-12)+'p':h+'a'}</span></div>`).join('');
- inner.appendChild(tg);
-
- // Days wrap
- const dw=document.createElement('div');
- dw.style.cssText='flex:1;display:flex;flex-direction:column;';
-
- // Header
- const head=document.createElement('div');
- head.className='cot-head';
- head.innerHTML=COT_DAYS.map((d,i)=>`<div class="cot-dhd"><div class="cot-wd">${d}</div><div class="cot-dn${i===COT_TODAY?' today':''}">${COT_DATES[i]}</div></div>`).join('');
- dw.appendChild(head);
-
- // Body
- const body=document.createElement('div');
- body.style.cssText='display:flex;flex:1;';
- COT_DAYS.forEach((_,di)=>{
-  const track=document.createElement('div');
-  track.className='cot-track'+(di===COT_TODAY?' today-col':'');
-  track.dataset.day=di;
-  track.style.height=(COT_HOURS.length*COT_SH)+'px';
-  COT_HOURS.forEach(()=>{const l=document.createElement('div');l.className='cot-hline';track.appendChild(l);});
-  track.addEventListener('dragover',e=>{
-   e.preventDefault();track.classList.add('drag-over');
-   if(!cotDragging)return;
-   const r=track.getBoundingClientRect();
-   const {h,m}=cotFromY(Math.max(0,e.clientY-r.top));
-   const tip=document.getElementById('drag-tip');
-   tip.textContent=cotFmt(h,m);tip.style.display='block';
-   tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-22)+'px';
+async function loadPastClients(){
+ if(_pastClientsCache) return _pastClientsCache;
+ try{
+  const r=await fetch(`${SB_URL}/rest/v1/jp58_production_transactions?relationship_status=eq.Past%20Client&select=mls_number,owner1_name,owner1_email,owner2_name,owner2_email,city,last_contact_date&order=owner1_name.asc`,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+  const rows=r.ok?await r.json():[];
+  // Each row is one property/transaction — the same person can appear on several.
+  // Flatten Client 1 + Client 2 into individual people, then collapse to one
+  // master card per unique name (keeping the record with the most recent contact).
+  const people=[];
+  rows.forEach(row=>{
+   if(row.owner1_name&&row.owner1_name.trim())people.push({owner1_name:row.owner1_name.trim(),owner1_email:row.owner1_email||'',mls_number:row.mls_number,city:row.city||'',last_contact_date:row.last_contact_date||''});
+   if(row.owner2_name&&row.owner2_name.trim())people.push({owner1_name:row.owner2_name.trim(),owner1_email:row.owner2_email||'',mls_number:row.mls_number,city:row.city||'',last_contact_date:row.last_contact_date||''});
   });
-  track.addEventListener('dragleave',e=>{if(!track.contains(e.relatedTarget))track.classList.remove('drag-over');});
-  track.addEventListener('drop',e=>{
-   e.preventDefault();track.classList.remove('drag-over');
-   document.getElementById('drag-tip').style.display='none';
-   if(!cotDragging)return;
-   const r=track.getBoundingClientRect();
-   const {h,m}=cotFromY(Math.max(0,e.clientY-r.top-cotDragOffY));
-   cotDragging.day=di;cotDragging.h=h;cotDragging.m=m;
-   cotDragging=null;renderCotEvs();showToast('Moved ✓');
+  const byName=new Map();
+  people.forEach(p=>{
+   const key=p.owner1_name.toLowerCase().trim();
+   const existing=byName.get(key);
+   if(!existing||(p.last_contact_date||'')>(existing.last_contact_date||''))byName.set(key,p);
   });
-  body.appendChild(track);
- });
- dw.appendChild(body);
- inner.appendChild(dw);
- grid.appendChild(inner);
- renderCotEvs();
+  _pastClientsCache=[...byName.values()].sort((a,b)=>a.owner1_name.localeCompare(b.owner1_name));
+ }catch(e){_pastClientsCache=[];}
+ return _pastClientsCache;
 }
 
-function renderCotEvs(){
- document.querySelectorAll('.cot-ev').forEach(e=>e.remove());
- cotEvs.forEach(ev=>{
-  const track=document.querySelector(`.cot-track[data-day="${ev.day}"]`);
-  if(!track)return;
-  const b=document.createElement('div');
-  b.className=`cot-ev ${COT_EC[ev.type]||'cot-business'}`;
-  b.style.top=cotToY(ev.h,ev.m)+'px';
-  b.style.height=Math.max(20,(ev.dur/60)*COT_SH-2)+'px';
-  const eH=ev.h+Math.floor((ev.m+ev.dur)/60),eM=(ev.m+ev.dur)%60;
-  b.innerHTML=`<div class="cot-et">${cotFmt(ev.h,ev.m)}${ev.dur>=30?' – '+cotFmt(eH,eM):''}</div><div class="cot-en">${ev.title}</div>${ev.sub?`<div class="cot-es">${ev.sub}</div>`:''}`;
-  b.draggable=true;
-  b.addEventListener('dragstart',e=>{cotDragging=ev;cotDragOffY=e.offsetY;setTimeout(()=>b.classList.add('dragging'),0);});
-  b.addEventListener('dragend',()=>{b.classList.remove('dragging');document.getElementById('drag-tip').style.display='none';});
-  b.addEventListener('click',e=>{e.stopPropagation();openCotEdit(ev.id);});
-  track.appendChild(b);
- });
+async function loadCotConns(){
+ try{
+  const r=await fetch(`${SB_URL}/rest/v1/jp58_cot_connections?order=created_at.asc`,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+  if(r.ok){
+   const data=await r.json();
+   if(!data.length){
+    cotConns=COT_SEED.map(c=>({...c}));
+    try{
+     await fetch(`${SB_URL}/rest/v1/jp58_cot_connections`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(cotConns)});
+    }catch(e){}
+   }else{
+    cotConns=data.map(c=>({...c,id:String(c.id)}));
+   }
+  }
+ }catch(e){console.log('cot load err',e);}
+ cotConnsLoaded=true;
+ renderCotConns();
+ renderCotSuggested();
 }
 
-function openCotAdd(){
- cotEditingId=null;cotAddMode=true;
- document.getElementById('cot-m-title').textContent='Add Event';
- document.getElementById('cot-m-del').style.display='none';
- ['cot-ev-name','cot-ev-sub'].forEach(id=>document.getElementById(id).value='');
- document.getElementById('cot-ev-type').value='coffee';
- document.getElementById('cot-ev-day').value='0';
- document.getElementById('cot-ev-time').value='9:00 AM';
- document.getElementById('cot-ev-dur').value='1h';
- document.getElementById('m-cot-ev').classList.add('open');
+async function cotSaveConn(entry){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_cot_connections`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([entry])});
+ }catch(e){console.log('cot save err',e);}
+}
+async function cotDeleteConn(id){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_cot_connections?id=eq.${encodeURIComponent(id)}`,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+ }catch(e){}
+}
+async function cotPatchConn(id,data){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_cot_connections?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+ }catch(e){}
 }
 
-function openCotEdit(id){
- const ev=cotEvs.find(e=>e.id===id);if(!ev)return;
- cotEditingId=id;cotAddMode=false;
- document.getElementById('cot-m-title').textContent='Edit Event';
- document.getElementById('cot-m-del').style.display='';
- document.getElementById('cot-ev-name').value=ev.title;
- document.getElementById('cot-ev-type').value=ev.type;
- document.getElementById('cot-ev-day').value=ev.day;
- document.getElementById('cot-ev-time').value=cotFmt(ev.h,ev.m);
- document.getElementById('cot-ev-dur').value=ev.dur%60===0?ev.dur/60+'h':ev.dur+'min';
- document.getElementById('cot-ev-sub').value=ev.sub||'';
- document.getElementById('m-cot-ev').classList.add('open');
+async function cotAutocomplete(input){
+ const box=document.getElementById('cot-cn-suggestions');
+ const mlsField=document.getElementById('cot-cn-mls');
+ if(mlsField)mlsField.value='';
+ if(!box)return;
+ const q=input.value.trim().toLowerCase();
+ if(q.length<2){box.style.display='none';return;}
+ const clients=await loadPastClients();
+ const addedMls=new Set(cotConns.filter(c=>c.mls_number).map(c=>String(c.mls_number)));
+ const matches=clients.filter(c=>c.owner1_name&&c.owner1_name.toLowerCase().includes(q)).slice(0,8);
+ if(!matches.length){box.style.display='none';return;}
+ box.innerHTML=matches.map(c=>`
+  <div onclick="cotPickClient('${String(c.owner1_name).replace(/'/g,"\\'")}','${String(c.mls_number||'').replace(/'/g,"\\'")}')" style="padding:9px 12px;cursor:pointer;font-family:'Jost',sans-serif;font-size:12px;border-bottom:1px solid var(--border);" onmouseover="this.style.background='var(--glass2)'" onmouseout="this.style.background=''">
+   <div style="color:var(--ivory);">${c.owner1_name}${addedMls.has(String(c.mls_number))?' <span style=\'color:var(--champ2);font-size:10px;\'>· already added</span>':''}</div>
+   ${c.city?`<div style="font-size:10px;color:var(--ivory3);">${c.city}</div>`:''}
+  </div>`).join('');
+ box.style.display='block';
+}
+function cotPickClient(name,mls){
+ const nameInput=document.getElementById('cot-cn');
+ const mlsField=document.getElementById('cot-cn-mls');
+ if(nameInput)nameInput.value=name;
+ if(mlsField)mlsField.value=mls||'';
+ const box=document.getElementById('cot-cn-suggestions');
+ if(box)box.style.display='none';
+}
+document.addEventListener('click',(e)=>{
+ if(!e.target.closest('#cot-cn')&&!e.target.closest('#cot-cn-suggestions')){
+  const box=document.getElementById('cot-cn-suggestions');
+  if(box)box.style.display='none';
+ }
+});
+
+function cotSugKey(c){return c.mls_number?('mls:'+c.mls_number):('name:'+String(c.owner1_name||'').toLowerCase().trim());}
+function cotGetDismissed(){try{return new Set(JSON.parse(localStorage.getItem('jp58_cot_dismissed_sug')||'[]'));}catch(e){return new Set();}}
+function cotAddDismissed(key){
+ const set=cotGetDismissed();
+ set.add(key);
+ localStorage.setItem('jp58_cot_dismissed_sug',JSON.stringify([...set]));
+ renderCotSuggested();
+}
+function cotDismissSuggestion(key){
+ cotAddDismissed(key);
+ showToast('Suggestion dismissed');
+}
+function cotScrollSuggested(dir){
+ const el=document.getElementById('cot-suggested-list');
+ if(el)el.scrollBy({left:dir*300,behavior:'smooth'});
+}
+async function renderCotSuggested(){
+ const wrap=document.getElementById('cot-suggested-wrap');
+ const list=document.getElementById('cot-suggested-list');
+ if(!wrap||!list)return;
+ const clients=await loadPastClients();
+ const addedMls=new Set(cotConns.filter(c=>c.mls_number).map(c=>String(c.mls_number)));
+ const addedNames=new Set(cotConns.map(c=>(c.name||'').toLowerCase().trim()));
+ const dismissed=cotGetDismissed();
+ const suggestedAll=clients.filter(c=>c.owner1_name&&!addedMls.has(String(c.mls_number))&&!addedNames.has(c.owner1_name.toLowerCase().trim())&&!dismissed.has(cotSugKey(c)))
+  .sort((a,b)=>(a.last_contact_date||'0000').localeCompare(b.last_contact_date||'0000'));
+ const sug=document.getElementById('cot-sn-sug');if(sug)sug.textContent=suggestedAll.length;
+ const suggested=suggestedAll.slice(0,10);
+ if(!suggested.length){wrap.style.display='none';return;}
+ wrap.style.display='block';
+ list.innerHTML=suggested.map(c=>{
+  const key=cotSugKey(c).replace(/'/g,"\\'");
+  const nm=String(c.owner1_name).replace(/'/g,"\\'");
+  const mlsEsc=String(c.mls_number||'').replace(/'/g,"\\'");
+  return `
+  <div class="cot-sug-card">
+   <button class="cot-sug-x" title="Dismiss suggestion" onclick="cotDismissSuggestion('${key}')">×</button>
+   <div class="cot-sug-name" title="${c.owner1_name}">${c.owner1_name}</div>
+   <div class="cot-sug-sub">${c.last_contact_date?'Last contact '+c.last_contact_date:'No contact date'}</div>
+   <div class="cot-sug-acts">
+    <button class="cot-sug-ic" title="Add as Coffee" onclick="cotPrefillAdd('${nm}','${mlsEsc}','coffee')"><i data-lucide="coffee" style="width:13px;height:13px;stroke:currentColor;stroke-width:1.5;vertical-align:middle;"></i></button>
+    <button class="cot-sug-ic" title="Add as Tequila" onclick="cotPrefillAdd('${nm}','${mlsEsc}','tequila')"><i data-lucide="martini" style="width:13px;height:13px;stroke:currentColor;stroke-width:1.5;vertical-align:middle;"></i></button>
+    <button class="cot-sug-ic" title="Log a call or text — no Coffee/Tequila connection" onclick="cotSkipToCrm('${nm}','${mlsEsc}',this)"><i data-lucide="phone" style="width:13px;height:13px;stroke:currentColor;stroke-width:1.5;vertical-align:middle;"></i></button>
+   </div>
+   <div class="cot-sug-foot">
+    ${c.mls_number?`<a class="cot-sug-crm" href="https://58clientsandproperties.netlify.app?open=${encodeURIComponent(c.mls_number)}" target="_blank">Open in CRM ↗</a>`:''}
+   </div>
+  </div>`;
+ }).join('');
+ if(window.lucide)lucide.createIcons();
+}
+// Opens the New Connection form pre-filled with a suggested past client so the
+// details (type, zone, category, note) can be reviewed/completed before saving —
+// rather than adding the connection blind.
+function cotPrefillAdd(name,mls,type){
+ toggleCotAddForm(true);
+ const nameInput=document.getElementById('cot-cn');
+ const mlsField=document.getElementById('cot-cn-mls');
+ const typeSel=document.getElementById('cot-ct');
+ if(nameInput)nameInput.value=name;
+ if(mlsField)mlsField.value=mls||'';
+ if(typeSel&&type)typeSel.value=type;
+ const wrap=document.getElementById('cot-add-wrap');
+ if(wrap)wrap.scrollIntoView({behavior:'smooth',block:'center'});
+ if(nameInput)nameInput.focus();
+}
+async function cotQuickAdd(name,mls){
+ const entry={id:'cot-'+Date.now(),name,type:'coffee',zone:'flexible',cat:'excliente',note:'Past client · no recent touch',sched:false,mls_number:mls||null};
+ cotConns.push(entry);
+ cotSaveConn(entry);
+ renderCotConns();renderCotSuggested();
+ showToast(name+' added ✓');
+}
+// Skips the Coffee/Tequila social step entirely — instead marks the client as
+// contacted directly on their Clients & Properties record (a call or text
+// follow-up), so the actual outreach lives in the CRM, not as a social connection.
+async function cotSkipToCrm(name,mls,btn){
+ if(!mls){showToast('No CRM record linked for '+name);return;}
+ const today=new Date();
+ const stamp=String(today.getMonth()+1).padStart(2,'0')+'/'+String(today.getDate()).padStart(2,'0')+'/'+today.getFullYear();
+ if(btn){btn.disabled=true;btn.style.opacity='0.5';}
+ try{
+  const r=await fetch(`${SB_URL}/rest/v1/jp58_production_transactions?mls_number=eq.${encodeURIComponent(mls)}`,{
+   method:'PATCH',
+   headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+   body:JSON.stringify({last_contact_date:stamp,follow_up_reason:'Call or text — logged from Coffee or Tequila'})
+  });
+  if(!r.ok){
+   console.error('cotSkipToCrm: PATCH failed',r.status,await r.text().catch(()=>''));
+   showToast('Could not update the CRM record — try again');
+   if(btn){btn.disabled=false;btn.style.opacity='';}
+   return;
+  }
+  const updated=await r.json().catch(()=>[]);
+  if(!updated.length){
+   console.error('cotSkipToCrm: no CRM record matched mls_number',mls);
+   showToast('Could not find that record in the CRM — nothing was logged');
+   if(btn){btn.disabled=false;btn.style.opacity='';}
+   return;
+  }
+  cotAddDismissed(cotSugKey({owner1_name:name,mls_number:mls}));
+  showToast(name+' logged as contacted — opening their CRM record ✓');
+  // Take her straight to the master card so she can see/complete it, rather than
+  // just logging silently in the background.
+  window.open(`https://58clientsandproperties.netlify.app?open=${encodeURIComponent(mls)}`,'_blank');
+ }catch(e){
+  showToast('Could not reach the CRM — try again');
+  if(btn){btn.disabled=false;btn.style.opacity='';}
+ }
 }
 
-function cotParseTime(s){const r=s.match(/(\d+)(?::(\d+))?\s*(am|pm)?/i);if(!r)return{h:9,m:0};let h=+r[1],m=+(r[2]||0);const ap=(r[3]||'').toLowerCase();if(ap==='pm'&&h<12)h+=12;if(ap==='am'&&h===12)h=0;return{h,m};}
-function cotParseDur(s){const h=s.match(/(\d+\.?\d*)h/i),m=s.match(/(\d+)\s*min/i);return h?Math.round(+h[1]*60):m?+m[1]:60;}
+let cotActiveF='all', cotConnEditingId=null;
 
-function saveCotEv(){
- const title=document.getElementById('cot-ev-name').value.trim();
- if(!title){showToast('Add a title first');return;}
- const{h,m}=cotParseTime(document.getElementById('cot-ev-time').value);
- const data={title,type:document.getElementById('cot-ev-type').value,day:+document.getElementById('cot-ev-day').value,h,m,dur:cotParseDur(document.getElementById('cot-ev-dur').value),sub:document.getElementById('cot-ev-sub').value};
- if(cotAddMode){cotEvs.push({id:Date.now(),...data});showToast(title+' added ✓');}
- else{const ev=cotEvs.find(e=>e.id===cotEditingId);if(ev)Object.assign(ev,data);showToast(title+' updated ✓');}
- closeModal('m-cot-ev');renderCotEvs();
+function toggleCotAddForm(force){
+ const wrap=document.getElementById('cot-add-wrap');
+ if(!wrap)return;
+ const show=typeof force==='boolean'?force:wrap.style.display==='none';
+ wrap.style.display=show?'block':'none';
 }
 
-function deleteCotEv(){
- cotEvs=cotEvs.filter(e=>e.id!==cotEditingId);
- closeModal('m-cot-ev');renderCotEvs();showToast('Event removed ✓');
+function cotToggleOtherInput(selectId,inputId){
+ const sel=document.getElementById(selectId),inp=document.getElementById(inputId);
+ if(!sel||!inp)return;
+ inp.style.display=sel.value==='other'?'block':'none';
+ if(sel.value==='other')inp.focus();
 }
 
 // COT Connections
-const cotZL={kingwood:'Kingwood',heights:'Heights',woodlands:'Woodlands',mexico:'México',flexible:'Flexible'};
+const cotZL={kingwood:'Kingwood',heights:'Houston',woodlands:'Woodlands',mexico:'México',flexible:'Flexible'};
 const cotCatC={sphere:'var(--teal2)',excliente:'var(--mist)',colega:'#D4957A',ampi:'#A878D8',prospect:'#70C080'};
 const cotCatL={sphere:'Sphere',excliente:'Ex Cliente',colega:'Colega',ampi:'AMPI',prospect:'Prospect'};
+function cotCatLabel(cat){return cotCatL[cat]||cat;}
+function cotCatColor(cat){return cotCatC[cat]||'var(--ivory3)';}
 
 function filterCot(f,el){
  cotActiveF=f;
@@ -1826,47 +2045,96 @@ function renderCotConns(){
  });
  const el=document.getElementById('cot-conn-list');
  if(!el)return;
- el.innerHTML=f.map(c=>`
-  <div class="cot-conn-card${c.sched?' sched':''}">
-   <div class="cot-cn">${c.sched?'✦ ':''}${c.name}</div>
-   <div class="cot-cnote">${c.note}</div>
-   <div class="cot-ctags">
-    <span class="pill ${c.type==='coffee'?'pill-champ':'pill-ghost'}" style="font-size:9px;padding:2px 8px;background:${c.type==='coffee'?'rgba(201,168,124,0.15)':'rgba(196,122,90,0.12)'};border-color:${c.type==='coffee'?'var(--border2)':'rgba(196,122,90,0.3)'};color:${c.type==='coffee'?'var(--champ2)':'#D4957A'}">${c.type==='coffee'?'☕':'🥃'}</span>
-    <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:var(--ivory3)">${cotZL[c.zone]}</span>
-    <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:${cotCatC[c.cat]}">${cotCatL[c.cat]}</span>
-   </div>
-   <div class="cot-acts">
-    <button class="cot-act" onclick="cotToggleSched(${c.id})">${c.sched?'✓ Sched':'+ Sched'}</button>
-    <button class="cot-act del" onclick="cotDelConn(${c.id})">✕</button>
-   </div>
-  </div>`).join('');
+ el.innerHTML=f.length?f.map(c=>c.id===cotConnEditingId?cotConnEditCardHtml(c):cotConnCardHtml(c)).join('')
+  :'<div class="cot-conn-empty">No connections in this filter yet.</div>';
  const s=cotConns.filter(c=>c.sched).length;
  const tn=document.getElementById('cot-sn-t');if(tn)tn.textContent=cotConns.length;
  const ts=document.getElementById('cot-sn-s');if(ts)ts.textContent=s;
  const tp=document.getElementById('cot-sn-p');if(tp)tp.textContent=cotConns.length-s;
 }
 
-function cotToggleSched(id){const c=cotConns.find(x=>x.id===id);if(c){c.sched=!c.sched;renderCotConns();showToast(c.name+(c.sched?' scheduled ✓':' unscheduled'));}}
-function cotDelConn(id){cotConns=cotConns.filter(x=>x.id!==id);renderCotConns();showToast('Removed ✓');}
+function cotConnCardHtml(c){
+ return `
+  <div class="cot-conn-card${c.sched?' sched':''}" onclick="cotOpenConnEdit('${c.id}')">
+   <div class="cot-cn">${c.sched?'✦ ':''}${c.name}</div>
+   ${c.mls_number?`<a href="https://58clientsandproperties.netlify.app?open=${encodeURIComponent(c.mls_number)}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;font-size:9px;color:var(--teal2);margin-top:2px;text-decoration:none;">Open in CRM ↗</a>`:''}
+   <div class="cot-cnote">${c.note||''}</div>
+   <div class="cot-ctags">
+    <span class="pill ${c.type==='coffee'?'pill-champ':'pill-ghost'}" style="font-size:9px;padding:2px 8px;background:${c.type==='coffee'?'rgba(201,168,124,0.15)':'rgba(196,122,90,0.12)'};border-color:${c.type==='coffee'?'var(--border2)':'rgba(196,122,90,0.3)'};color:${c.type==='coffee'?'var(--champ2)':'#D4957A'}">${c.type==='coffee'?'☕':'🥃'}</span>
+    <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:var(--ivory3)">${cotZL[c.zone]||c.zone}</span>
+    <span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:${cotCatColor(c.cat)}">${cotCatLabel(c.cat)}</span>
+   </div>
+   <div class="cot-acts">
+    <button class="cot-act" onclick="event.stopPropagation();cotToggleSched('${c.id}')">${c.sched?'✓ Sched':'+ Sched'}</button>
+    <button class="cot-act del" onclick="event.stopPropagation();cotDelConn('${c.id}')">✕</button>
+   </div>
+  </div>`;
+}
+
+function cotConnEditCardHtml(c){
+ const zoneOpts=Object.entries(cotZL).map(([v,l])=>`<option value="${v}" ${c.zone===v?'selected':''}>${l}</option>`).join('');
+ const catKnown=['sphere','excliente','colega','ampi','prospect'];
+ const isOther=!catKnown.includes(c.cat);
+ const catOpts=`<option value="sphere" ${c.cat==='sphere'?'selected':''}>Sphere</option><option value="excliente" ${c.cat==='excliente'?'selected':''}>Ex Cliente</option><option value="colega" ${c.cat==='colega'?'selected':''}>Colega</option><option value="ampi" ${c.cat==='ampi'?'selected':''}>AMPI</option><option value="prospect" ${c.cat==='prospect'?'selected':''}>Prospect</option><option value="other" ${isOther?'selected':''}>Other…</option>`;
+ return `
+  <div class="cot-conn-card editing" onclick="event.stopPropagation()">
+   <div class="cot-edit-field full"><label>Name</label><input class="qa-in" id="cot-e-name-${c.id}" value="${c.name}"></div>
+   <div class="cot-edit-grid">
+    <div class="cot-edit-field"><label>Type</label><select class="qa-in" id="cot-e-type-${c.id}"><option value="coffee" ${c.type==='coffee'?'selected':''}>☕ Coffee</option><option value="tequila" ${c.type==='tequila'?'selected':''}>🥃 Tequila</option></select></div>
+    <div class="cot-edit-field"><label>Zone</label><select class="qa-in" id="cot-e-zone-${c.id}">${zoneOpts}</select></div>
+    <div class="cot-edit-field"><label>Category</label><select class="qa-in" id="cot-e-cat-${c.id}" onchange="cotToggleOtherInput('cot-e-cat-${c.id}','cot-e-cat-other-${c.id}')">${catOpts}</select></div>
+    <div class="cot-edit-field"><label>Custom type</label><input class="qa-in" id="cot-e-cat-other-${c.id}" value="${isOther?c.cat:''}" placeholder="e.g. Family" style="display:${isOther?'block':'none'};"></div>
+    <div class="cot-edit-field full"><label>Note</label><input class="qa-in" id="cot-e-note-${c.id}" value="${c.note||''}"></div>
+   </div>
+   ${c.mls_number?'<div class="cot-cnote" style="margin-top:8px;">Linked to a Clients &amp; Properties record — editing here only updates this connection card.</div>':''}
+   <div class="cot-acts">
+    <button class="cot-act" onclick="cotSaveConnEdit('${c.id}')">Save</button>
+    <button class="cot-act" onclick="cotCancelConnEdit()">Cancel</button>
+    <button class="cot-act del" onclick="cotDelConn('${c.id}')">Delete</button>
+   </div>
+  </div>`;
+}
+
+function cotOpenConnEdit(id){cotConnEditingId=id;renderCotConns();}
+function cotCancelConnEdit(){cotConnEditingId=null;renderCotConns();}
+function cotSaveConnEdit(id){
+ const c=cotConns.find(x=>String(x.id)===String(id));
+ if(!c)return;
+ const name=document.getElementById(`cot-e-name-${id}`).value.trim();
+ if(!name){showToast('Enter a name');return;}
+ const catSel=document.getElementById(`cot-e-cat-${id}`).value;
+ const catOther=document.getElementById(`cot-e-cat-other-${id}`).value.trim();
+ const cat=catSel==='other'?(catOther||'Other'):catSel;
+ const updates={name,type:document.getElementById(`cot-e-type-${id}`).value,zone:document.getElementById(`cot-e-zone-${id}`).value,cat,note:document.getElementById(`cot-e-note-${id}`).value||''};
+ Object.assign(c,updates);
+ cotPatchConn(id,updates);
+ cotConnEditingId=null;
+ renderCotConns();
+ showToast(name+' updated ✓');
+}
+
+function cotToggleSched(id){const c=cotConns.find(x=>String(x.id)===String(id));if(c){c.sched=!c.sched;renderCotConns();cotPatchConn(c.id,{sched:c.sched});showToast(c.name+(c.sched?' scheduled ✓':' unscheduled'));}}
+function cotDelConn(id){cotConns=cotConns.filter(x=>String(x.id)!==String(id));if(cotConnEditingId===id)cotConnEditingId=null;renderCotConns();renderCotSuggested();cotDeleteConn(id);showToast('Removed ✓');}
 function addCotConn(){
  const name=document.getElementById('cot-cn').value.trim();
  if(!name){showToast('Enter a name');return;}
- cotConns.push({id:Date.now(),name,type:document.getElementById('cot-ct').value,zone:document.getElementById('cot-cz').value,cat:document.getElementById('cot-cc').value,note:document.getElementById('cot-cno').value||'',sched:false});
- document.getElementById('cot-cn').value='';document.getElementById('cot-cno').value='';
- renderCotConns();showToast(name+' added ✓');
+ const mls=document.getElementById('cot-cn-mls').value||null;
+ const catSel=document.getElementById('cot-cc').value;
+ const catOther=document.getElementById('cot-cc-other').value.trim();
+ const cat=catSel==='other'?(catOther||'Other'):catSel;
+ const entry={id:'cot-'+Date.now(),name,type:document.getElementById('cot-ct').value,zone:document.getElementById('cot-cz').value,cat,note:document.getElementById('cot-cno').value||'',sched:false,mls_number:mls};
+ cotConns.push(entry);
+ cotSaveConn(entry);
+ document.getElementById('cot-cn').value='';document.getElementById('cot-cno').value='';document.getElementById('cot-cn-mls').value='';document.getElementById('cot-cc-other').value='';
+ toggleCotAddForm(false);
+ renderCotConns();renderCotSuggested();showToast(name+' added ✓');
 }
-
-document.addEventListener('dragend',()=>{
- const tip=document.getElementById('drag-tip');if(tip)tip.style.display='none';
- document.querySelectorAll('.cot-track').forEach(t=>t.classList.remove('drag-over'));
-});
-
 
 // extend showPanel to init COT
 const _origSP = showPanel;
 showPanel = function(name, el){
  _origSP(name, el);
- if(name==='cot'){buildCotCal();renderCotConns();}
+ if(name==='cot'){if(cotConnsLoaded){renderCotConns();renderCotSuggested();}else{loadCotConns();}}
  if(name==='wellness'){loadWellnessLogs();}
 };
 
@@ -1981,6 +2249,309 @@ async function removeWellnessLog(id){
  wellnessLogs = wellnessLogs.filter(e=>String(e.id)!==String(id));
  renderWellnessLogs();
  showToast('Entry removed ✓');
+}
+
+// ── HOUSEHOLD LOG — Supabase (table: jp58_home) ───────
+let householdLogs = [];
+
+async function loadHouseholdLogs(){
+ try{
+  const r = await fetch(`${SB_URL}/rest/v1/jp58_home?order=created_at.desc&limit=50`,{
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+  });
+  if(r.ok){
+   householdLogs = await r.json();
+   renderHouseholdLogs();
+  }
+ }catch(e){console.log('household load err',e);}
+}
+
+async function addHouseholdLog(){
+ const item = document.getElementById('hh-item').value.trim();
+ if(!item){showToast('Add an item or service name');return;}
+ const dateInput = document.getElementById('hh-date').value;
+ const entry = {
+  id: 'h_'+Date.now().toString(36),
+  item,
+  category: document.getElementById('hh-cat').value,
+  amount: document.getElementById('hh-amount').value || '',
+  vendor: document.getElementById('hh-vendor').value || '',
+  contact: document.getElementById('hh-contact').value || '',
+  status: document.getElementById('hh-status').value,
+  due_date: dateInput || '',
+  notes: document.getElementById('hh-note').value || '',
+  link: '',
+ };
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_home`,{
+   method:'POST',
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+   body: JSON.stringify([entry])
+  });
+ }catch(e){console.log('household save err',e);}
+ householdLogs.unshift(entry);
+ ['hh-item','hh-amount','hh-vendor','hh-contact','hh-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+ const hd=document.getElementById('hh-date');if(hd)hd.value=new Date().toISOString().split('T')[0];
+ renderHouseholdLogs();
+ showToast('Household log saved ✓');
+}
+
+function renderHouseholdLogs(){
+ const el = document.getElementById('household-log-list');
+ if(!el) return;
+ if(!householdLogs.length){
+  el.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No logs yet · start tracking repairs, maintenance and payments</div>';
+  return;
+ }
+ const catColor = {Repair:'#D4957A',Maintenance:'#70C080',Payment:'#D4A840',Warranty:'var(--teal2)',Insurance:'#A878D8',Other:'var(--ivory3)'};
+ el.innerHTML = householdLogs.slice(0,25).map(e => `
+  <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;">
+   <div style="min-width:88px;font-size:11px;color:var(--ivory3);font-family:'Jost',sans-serif;">${e.due_date||''}</div>
+   <div style="flex:1;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px;">
+     <span style="font-size:11px;color:${catColor[e.category]||'var(--ivory3)'}">${e.category||'—'}</span>
+     <span style="font-size:13px;color:var(--ivory);font-family:'Cormorant Garamond',serif;">${e.item||''}</span>
+     ${e.amount?`<span style="font-size:11px;color:var(--champ2)">${e.amount}</span>`:''}
+     ${e.status?`<span style="font-size:9px;padding:2px 8px;border-radius:20px;background:var(--glass2);color:var(--ivory3)">${e.status}</span>`:''}
+    </div>
+    ${e.vendor?`<div style="font-size:11px;color:var(--ivory3);font-family:'Jost',sans-serif;">${e.vendor}${e.contact?' · '+e.contact:''}</div>`:''}
+    ${e.notes?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:13px;">${e.notes}</div>`:''}
+   </div>
+   <button onclick="removeHouseholdLog('${e.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+  </div>`).join('');
+}
+
+async function removeHouseholdLog(id){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_home?id=eq.${id}`,{
+   method:'DELETE',
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+  });
+ }catch(e){}
+ householdLogs = householdLogs.filter(e=>String(e.id)!==String(id));
+ renderHouseholdLogs();
+ showToast('Entry removed ✓');
+}
+
+// ── CARS — Vehicles + Maintenance Log (Supabase) ──────
+let vehicles = [];
+let vehicleMaintenance = [];
+
+async function loadCars(){
+ try{
+  const [vr,mr] = await Promise.all([
+   fetch(`${SB_URL}/rest/v1/jp58_vehicles?order=created_at.asc`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}}),
+   fetch(`${SB_URL}/rest/v1/jp58_vehicle_maintenance?order=created_at.desc&limit=50`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}}),
+  ]);
+  vehicles = vr.ok ? await vr.json() : [];
+  vehicleMaintenance = mr.ok ? await mr.json() : [];
+  renderVehicles();
+  renderCarMaintenance();
+ }catch(e){console.log('cars load err',e);}
+}
+
+function toggleCarAddForm(show){
+ const wrap = document.getElementById('car-add-wrap');
+ if(!wrap) return;
+ const willShow = show===undefined ? wrap.style.display==='none' : show;
+ wrap.style.display = willShow ? 'block' : 'none';
+ if(!willShow){
+  ['car-make','car-model','car-year','car-vin','car-plate','car-ins-co','car-ins-policy','car-ins-exp','car-reg-exp','car-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+ }
+}
+
+async function saveVehicle(){
+ const make = document.getElementById('car-make').value.trim();
+ const model = document.getElementById('car-model').value.trim();
+ if(!make && !model){showToast('Add at least a make or model');return;}
+ const entry = {
+  id: 'v_'+Date.now().toString(36),
+  make, model,
+  year: document.getElementById('car-year').value || '',
+  vin: document.getElementById('car-vin').value || '',
+  plate: document.getElementById('car-plate').value || '',
+  color: '',
+  insurance_company: document.getElementById('car-ins-co').value || '',
+  policy_number: document.getElementById('car-ins-policy').value || '',
+  insurance_expiration: document.getElementById('car-ins-exp').value || '',
+  registration_expiration: document.getElementById('car-reg-exp').value || '',
+  notes: document.getElementById('car-notes').value || '',
+ };
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_vehicles`,{
+   method:'POST',
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+   body: JSON.stringify([entry])
+  });
+ }catch(e){console.log('vehicle save err',e);}
+ vehicles.push(entry);
+ toggleCarAddForm(false);
+ renderVehicles();
+ showToast('Vehicle saved ✓');
+}
+
+async function deleteVehicle(id){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_vehicles?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}});
+ }catch(e){}
+ vehicles = vehicles.filter(v=>String(v.id)!==String(id));
+ renderVehicles();
+ showToast('Vehicle removed ✓');
+}
+
+function renderVehicles(){
+ const el = document.getElementById('vehicle-list');
+ const sel = document.getElementById('cm-vehicle');
+ if(sel){
+  sel.innerHTML = vehicles.length
+   ? vehicles.map(v=>`<option value="${v.id}">${[v.year,v.make,v.model].filter(Boolean).join(' ')||'Vehicle'}</option>`).join('')
+   : '<option value="">Add a vehicle first</option>';
+ }
+ if(!el) return;
+ if(!vehicles.length){
+  el.innerHTML='<div style="grid-column:1/-1;font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No vehicles yet · add one above</div>';
+  return;
+ }
+ el.innerHTML = vehicles.map(v => `
+  <div class="gc" style="padding:14px 16px;">
+   <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ivory);">${[v.year,v.make,v.model].filter(Boolean).join(' ')||'Vehicle'}</div>
+    <button onclick="deleteVehicle('${v.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+   </div>
+   ${v.plate?`<div style="font-size:11px;color:var(--ivory3);margin-top:2px;">Plate: ${v.plate}</div>`:''}
+   ${v.vin?`<div style="font-size:11px;color:var(--ivory3);margin-top:2px;">VIN: ${v.vin}</div>`:''}
+   ${v.insurance_company?`<div style="font-size:11px;color:var(--teal2);margin-top:6px;">${v.insurance_company}${v.policy_number?' · '+v.policy_number:''}</div>`:''}
+   ${v.insurance_expiration?`<div style="font-size:11px;color:var(--ivory3);">Insurance exp: ${v.insurance_expiration}</div>`:''}
+   ${v.registration_expiration?`<div style="font-size:11px;color:var(--ivory3);">Registration exp: ${v.registration_expiration}</div>`:''}
+   ${v.notes?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;margin-top:6px;">${v.notes}</div>`:''}
+  </div>`).join('');
+}
+
+async function addCarMaintenance(){
+ const vehicleId = document.getElementById('cm-vehicle').value;
+ if(!vehicleId){showToast('Add a vehicle first');return;}
+ const dateInput = document.getElementById('cm-date').value;
+ const entry = {
+  id: 'cm_'+Date.now().toString(36),
+  vehicle_id: vehicleId,
+  date: dateInput || '',
+  service: document.getElementById('cm-service').value,
+  mileage: document.getElementById('cm-mileage').value || '',
+  cost: document.getElementById('cm-cost').value || '',
+  vendor: document.getElementById('cm-vendor').value || '',
+  notes: document.getElementById('cm-note').value || '',
+ };
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_vehicle_maintenance`,{
+   method:'POST',
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+   body: JSON.stringify([entry])
+  });
+ }catch(e){console.log('car maintenance save err',e);}
+ vehicleMaintenance.unshift(entry);
+ ['cm-mileage','cm-cost','cm-vendor','cm-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+ const cd=document.getElementById('cm-date');if(cd)cd.value=new Date().toISOString().split('T')[0];
+ renderCarMaintenance();
+ showToast('Maintenance log saved ✓');
+}
+
+function renderCarMaintenance(){
+ const el = document.getElementById('car-maint-list');
+ if(!el) return;
+ if(!vehicleMaintenance.length){
+  el.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No maintenance logged yet</div>';
+  return;
+ }
+ el.innerHTML = vehicleMaintenance.slice(0,25).map(e => {
+  const v = vehicles.find(x=>String(x.id)===String(e.vehicle_id));
+  const vLabel = v ? [v.year,v.make,v.model].filter(Boolean).join(' ') : 'Vehicle';
+  return `
+  <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;">
+   <div style="min-width:88px;font-size:11px;color:var(--ivory3);font-family:'Jost',sans-serif;">${e.date||''}</div>
+   <div style="flex:1;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px;">
+     <span style="font-size:11px;color:var(--teal2)">${vLabel}</span>
+     <span style="font-size:13px;color:var(--ivory);font-family:'Cormorant Garamond',serif;">${e.service||''}</span>
+     ${e.mileage?`<span style="font-size:11px;color:var(--ivory3)">${e.mileage} mi</span>`:''}
+     ${e.cost?`<span style="font-size:11px;color:var(--champ2)">${e.cost}</span>`:''}
+    </div>
+    ${e.vendor?`<div style="font-size:11px;color:var(--ivory3);font-family:'Jost',sans-serif;">${e.vendor}</div>`:''}
+    ${e.notes?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:13px;">${e.notes}</div>`:''}
+   </div>
+   <button onclick="removeCarMaintenance('${e.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+  </div>`;
+ }).join('');
+}
+
+async function removeCarMaintenance(id){
+ try{
+  await fetch(`${SB_URL}/rest/v1/jp58_vehicle_maintenance?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}});
+ }catch(e){}
+ vehicleMaintenance = vehicleMaintenance.filter(e=>String(e.id)!==String(id));
+ renderCarMaintenance();
+ showToast('Entry removed ✓');
+}
+
+// ── SIDEBAR DRAG REORDER ───────────────────────────────
+// Lets Jeannette drag any sidebar icon (or divider) into any order she wants.
+// Order is saved to localStorage and re-applied on every load — the J·AI
+// button always stays pinned last.
+function sidebarKey(el){
+ if(el.dataset.panel) return 'panel:'+el.dataset.panel;
+ if(el.dataset.sbkey) return 'key:'+el.dataset.sbkey;
+ return null;
+}
+function getDragAfterElement(container,y){
+ const els=[...container.children].filter(el=>!el.classList.contains('dragging') && !el.classList.contains('sb-jai'));
+ return els.reduce((closest,child)=>{
+  const box=child.getBoundingClientRect();
+  const offset=y-box.top-box.height/2;
+  if(offset<0 && offset>closest.offset) return {offset,element:child};
+  return closest;
+ },{offset:-Infinity,element:null}).element;
+}
+function saveSidebarOrder(){
+ const sidebar=document.getElementById('sidebar');
+ if(!sidebar)return;
+ const order=[...sidebar.children].map(sidebarKey).filter(Boolean);
+ localStorage.setItem('jp58-sidebar-order',JSON.stringify(order));
+}
+function restoreSidebarOrder(){
+ const sidebar=document.getElementById('sidebar');
+ if(!sidebar)return;
+ let saved;
+ try{ saved=JSON.parse(localStorage.getItem('jp58-sidebar-order')||'null'); }catch(e){ saved=null; }
+ if(!saved||!Array.isArray(saved))return;
+ const byKey=new Map();
+ [...sidebar.children].forEach(el=>{const k=sidebarKey(el);if(k)byKey.set(k,el);});
+ saved.forEach(k=>{
+  const el=byKey.get(k);
+  if(el){sidebar.appendChild(el);byKey.delete(k);}
+ });
+ // Anything not in the saved order (e.g. a newly-added icon) — leave it where it is,
+ // then make sure J·AI is pushed back to the very end.
+ const jai=sidebar.querySelector('.sb-jai');
+ if(jai)sidebar.appendChild(jai);
+}
+function initSidebarDragReorder(){
+ const sidebar=document.getElementById('sidebar');
+ if(!sidebar)return;
+ restoreSidebarOrder();
+ [...sidebar.children].forEach(el=>{
+  if(el.classList.contains('sb-jai'))return; // J·AI stays pinned, not draggable
+  el.setAttribute('draggable','true');
+  el.addEventListener('dragstart',()=>{el.classList.add('dragging');});
+  el.addEventListener('dragend',()=>{el.classList.remove('dragging');saveSidebarOrder();});
+ });
+ sidebar.addEventListener('dragover',e=>{
+  e.preventDefault();
+  const dragging=sidebar.querySelector('.dragging');
+  if(!dragging)return;
+  const after=getDragAfterElement(sidebar,e.clientY);
+  const jai=sidebar.querySelector('.sb-jai');
+  if(after==null) sidebar.insertBefore(dragging, jai||null);
+  else sidebar.insertBefore(dragging,after);
+ });
 }
 
 // ── GOALS & BUSINESS PLAN ─────────────────────────────
@@ -2186,147 +2757,26 @@ showPanel=function(name,el){
  _sp2(name,el);
  if(name==='goals'){loadGoals();renderAllGoals();loadHubGoals();}
 };
-// ── GOOGLE CALENDAR OAUTH ─────────────────────────────
-const GCAL_CLIENT_ID = '406326659472-niblfki5aqpln6fr6hl1cagtio0e355u.apps.googleusercontent.com'; // public client ID
-const GCAL_REDIRECT = 'https://jp58.netlify.app';
-const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
-
-let gcalTokens = null;
-
-function gcalLoadTokens(){
- try{
-  const raw = localStorage.getItem('jp58-gcal-tokens');
-  if(raw) gcalTokens = JSON.parse(raw);
- }catch(e){}
-}
-
-function gcalSaveTokens(tokens){
- gcalTokens = tokens;
- localStorage.setItem('jp58-gcal-tokens', JSON.stringify(tokens));
-}
-
-function gcalClearTokens(){
- gcalTokens = null;
- localStorage.removeItem('jp58-gcal-tokens');
-}
-
-function gcalConnect(){
- const params = new URLSearchParams({
-  client_id: GCAL_CLIENT_ID,
-  redirect_uri: GCAL_REDIRECT,
-  response_type: 'code',
-  scope: GCAL_SCOPE,
-  access_type: 'offline',
-  prompt: 'consent',
-  login_hint: 'jcantu.realtor@gmail.com',
- });
- window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
-}
-
-function gcalDisconnect(){
- gcalClearTokens();
- gcalUpdateUI();
- showToast('Calendar disconnected');
-}
-
-function gcalUpdateUI(){
- const connected = gcalTokens && gcalTokens.refresh_token;
- const els = ['gcal-connected','gcal-disconnected','gcal-connect-btn','gcal-disconnect-btn','gcal-status-desc'];
- if(!document.getElementById('gcal-connected')) return;
- document.getElementById('gcal-connected').style.display = connected ? 'block' : 'none';
- document.getElementById('gcal-disconnected').style.display = connected ? 'none' : 'block';
- document.getElementById('gcal-connect-btn').style.display = connected ? 'none' : '';
- document.getElementById('gcal-disconnect-btn').style.display = connected ? '' : 'none';
- if(connected) document.getElementById('gcal-status-desc').textContent = 'jcantu.realtor@gmail.com · Connected ✓';
-}
-
-async function gcalLoadEvents(){
- if(!gcalTokens) return;
- const el = document.getElementById('gcal-events-list');
- el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div>';
-
- const now = new Date();
- const tMin = now.toISOString();
- const tMax = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
-
- const params = new URLSearchParams({
-  refresh_token: gcalTokens.refresh_token,
-  access_token: gcalTokens.access_token || '',
-  timeMin: tMin,
-  timeMax: tMax,
- });
-
- try{
-  const res = await fetch('/api/gcal?' + params.toString());
-  if(res.status === 401){
-   gcalClearTokens();
-   gcalUpdateUI();
-   showToast('Calendar session expired — please reconnect');
-   return;
-  }
-  const data = await res.json();
-  const items = data.items || [];
-  if(!items.length){
-   el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
-   return;
-  }
-  el.innerHTML = items.map(ev => {
-   const start = ev.start.dateTime || ev.start.date;
-   const d = new Date(start);
-   const isAllDay = !ev.start.dateTime;
-   const timeStr = isAllDay
-    ? d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
-    : d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-   return `<div class="ev-row ev-business" style="margin-bottom:7px;">
-    <div class="ev-time">${timeStr}</div>
-    <div class="ev-body">
-     <div class="ev-name">${ev.summary || 'No title'}</div>
-     ${ev.location ? `<div class="ev-meta">${ev.location}</div>` : ''}
-    </div>
-   </div>`;
-  }).join('');
- }catch(e){
-  el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Could not load events</div>';
- }
-}
-
-// Handle OAuth callback — tokens arrive in hash
-function gcalHandleCallback(){
- const hash = window.location.hash.slice(1);
- if(!hash) return;
- const params = new URLSearchParams(hash);
- const access_token = params.get('access_token');
- const refresh_token = params.get('refresh_token');
- const expires_in = params.get('expires_in');
- if(access_token && refresh_token){
-  gcalSaveTokens({ access_token, refresh_token, expires_in, saved_at: Date.now() });
-  // Clean URL
-  history.replaceState(null, '', window.location.pathname);
-  showToast('Google Calendar connected ✓');
-  gcalUpdateUI();
-  gcalLoadEvents();
- }
-}
-
-// Extend showPanel for gcal
-const _sp3 = showPanel;
-showPanel = function(name, el){
- _sp3(name, el);
- if(name === 'gcal'){ gcalUpdateUI(); if(gcalTokens) gcalLoadEvents(); }
-};
-
-
 // ── GOOGLE CALENDAR iCal ─────────────────────────────
-async function icalLoadEvents(){
+// (The separate OAuth-based Google Calendar panel was removed — it was never
+// wired to any visible connect/disconnect UI, so it could never actually
+// connect. The dashboard's own calendar, below, uses a simpler public iCal
+// feed and is the one Jeannette actually sees and uses.)
+async function icalLoadEvents(retry){
+ // Note: this always fetches and refreshes the main Dashboard's calendar
+ // (window._icalEvents / renderEvents / buildWeek), whether or not the
+ // optional #ical-events-list detail element is present on screen.
  const el = document.getElementById('ical-events-list');
- if(!el) return;
- el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div>';
+ if(el) el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Loading...</div>';
  try{
   const res = await fetch('/api/ical');
+  if(!res.ok) throw new Error('ical fetch failed: '+res.status);
   const events = await res.json();
   window._icalEvents = events; // store globally for home panel
   renderEvents(); // refresh home with gcal events
   buildWeek(); // refresh week strip dots
+  updateHomeFromICal(events); // inject today's events into the home panel ev-list
+  if(!el) return;
   if(!events.length){
    el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No upcoming events</div>';
    return;
@@ -2346,10 +2796,11 @@ async function icalLoadEvents(){
     </div>
    </div>`;
   }).join('');
-
-  // Also update home panel ev-list with today's events
-  updateHomeFromICal(events);
  }catch(e){
+  // One silent retry after a short pause — covers a transient network hiccup
+  // or a slow calendar fetch on the server, so a single bad load doesn't
+  // leave the Dashboard looking empty for the rest of the visit.
+  if(!retry){ setTimeout(()=>icalLoadEvents(true), 4000); return; }
   if(el) el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Could not load — check calendar sharing settings</div>';
  }
 }
@@ -2384,11 +2835,7 @@ function updateHomeFromICal(events){
 setTimeout(icalLoadEvents, 1500);
 
 window.onload=()=>{
- gcalLoadTokens();
- gcalHandleCallback();
  init();
- // Init gcal UI after short delay to ensure DOM ready
- setTimeout(gcalUpdateUI, 500);
 };
 </script>
 </body>
