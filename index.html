@@ -65,6 +65,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .panels{flex:1;overflow:hidden;position:relative;}
 .panel{display:none;height:100%;overflow-y:auto;padding:28px 28px 40px;}
 .panel.active{display:block;}
+#panel-cot.active{display:flex;}
 
 /* GLASS CARD */
 .gc{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .3s;}
@@ -358,47 +359,6 @@ select option{background:#1F3245;color:#F5F0E8;}
 .horizon-quote{font-family:"Cormorant Garamond",serif;font-size:16px;font-style:italic;font-weight:300;color:#4A4740;line-height:1.7;padding:16px 20px;border-left:2px solid #C9A87C;margin-bottom:14px;background:rgba(201,168,124,.06);border-radius:0 10px 10px 0;}
 .goals-section-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#A8A49C;margin-bottom:10px;font-family:"Jost",sans-serif;}
 .goals-gc{background:rgba(255,255,255,.75);border:1px solid rgba(44,43,40,.08);border-radius:14px;padding:18px;backdrop-filter:blur(8px);}
-/* GOALS PANEL — light base with JP58 accents */
-.goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.goals-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.goal-card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .25s;}
-.goal-card:hover{border-color:rgba(201,168,124,.2);background:var(--glass2);}
-.goal-card.accent{border-color:var(--border2);background:rgba(201,168,124,.06);}
-.goal-card.teal{border-color:rgba(94,136,126,.3);background:rgba(94,136,126,.06);}
-.goal-card.lav{border-color:rgba(150,120,200,.25);background:rgba(150,120,200,.06);}
-.goal-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:400;color:var(--ivory);letter-spacing:.01em;margin-bottom:4px;}
-.goal-title em{font-style:italic;color:var(--champ);}
-.goal-sub{font-size:11px;color:var(--ivory3);line-height:1.6;margin-bottom:12px;}
-.goal-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);}
-.goal-item:last-child{border-bottom:none;}
-.goal-cb{width:15px;height:15px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
-.goal-cb.done{background:var(--champ);border-color:var(--champ);}
-.goal-cb.done::after{content:"✓";font-size:9px;color:var(--navy);font-weight:700;}
-.goal-text{font-size:12px;color:var(--ivory2);flex:1;line-height:1.4;}
-.goal-text.done{opacity:.4;text-decoration:line-through;}
-.goal-add{display:flex;gap:6px;margin-top:10px;}
-.goal-add input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--ivory);font-family:"Jost",sans-serif;font-size:11px;outline:none;}
-.goal-add input:focus{border-color:var(--border2);}
-.goal-add button{background:var(--champ3);border:1px solid var(--border2);border-radius:7px;padding:6px 12px;color:var(--champ2);font-family:"Jost",sans-serif;font-size:11px;cursor:pointer;}
-.goal-add button:hover{background:rgba(201,168,124,.25);}
-.catalyst-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;}
-.catalyst-col{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;}
-.catalyst-col.current{border-color:rgba(201,168,124,.3);}
-.catalyst-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ivory3);margin-bottom:8px;}
-.catalyst-col.current .catalyst-label{color:var(--champ);}
-.catalyst-item{font-size:11px;color:var(--ivory2);padding:5px 8px;border-radius:7px;margin-bottom:4px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
-.catalyst-item:hover{background:var(--glass2);}
-.cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.cat-red{background:#E07070;}
-.cat-yellow{background:#D4A840;}
-.cat-green{background:#70C080;}
-.income-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.income-stat{padding:12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);text-align:center;}
-.income-n{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;color:var(--champ);line-height:1;}
-.income-l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory3);margin-top:3px;}
-.progress-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:10px;overflow:hidden;}
-.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--teal),var(--champ));transition:width .5s ease;}
-.horizon-quote{font-family:"Cormorant Garamond",serif;font-size:16px;font-style:italic;font-weight:300;color:var(--champ2);line-height:1.7;padding:18px 20px;border-left:2px solid var(--border2);margin-bottom:14px;opacity:.9;}
 /* SELECT OPTIONS — dark background */
 select option{background:#1F3245 !important;color:#F5F0E8 !important;}
 select optgroup{background:#1F3245;color:#C9A87C;}
@@ -448,7 +408,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
  <div class="sb-item" onclick="showPanel('wellness',this)" data-panel="wellness"><i data-lucide="heart-pulse" style="stroke:#70C080;"></i><span class="sb-tip">Wellness</span></div>
  <div class="sb-item" onclick="showPanel('hijos',this)" data-panel="hijos"><i data-lucide="users" style="stroke:#A878D8;"></i><span class="sb-tip">Family</span></div>
  <div class="sb-item" onclick="showPanel('gcal',this)" data-panel="gcal"><i data-lucide="calendar" style="stroke:var(--mist);"></i><span class="sb-tip">Google Calendar</span></div>
- <div class="sb-item" onclick="showPanel('goals',this)" data-panel="goals"><i data-lucide="target" style="stroke:var(--champ);"></i><span class="sb-tip">Goals & Business Plan</span></div>
+ <a href="https://jeannettepenaeos.netlify.app" target="_blank" class="sb-item" style="text-decoration:none;"><i data-lucide="target" style="width:20px;height:20px;stroke:var(--champ);"></i><span class="sb-tip">Goals & Business Plan ↗</span></a>
  <div class="sb-sep"></div>
  <a href="https://claude.ai" target="_blank" class="sb-jai"><span class="sb-jai-lbl">J·AI</span></a>
 </div>
@@ -511,8 +471,8 @@ select optgroup{background:#1F3245;color:#C9A87C;}
    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
     <div style="padding:12px 14px;border-right:1px solid var(--border);">
      <div class="label" style="font-size:9px;">Next closing</div>
-     <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--champ);line-height:1;margin-top:2px;">Jun 18</div>
-     <div style="font-size:9px;color:var(--ivory3);margin-top:1px;">Tims Harbor</div>
+     <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--champ);line-height:1;margin-top:2px;" id="next-closing-date">—</div>
+     <div style="font-size:9px;color:var(--ivory3);margin-top:1px;" id="next-closing-prop">No upcoming closing</div>
     </div>
     <div style="padding:12px 14px;">
      <div class="label" style="font-size:9px;">Open tasks</div>
@@ -525,7 +485,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
    <div style="padding:10px 14px;border-bottom:1px solid var(--border);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
      <div class="label" style="font-size:9px;">Pipeline</div>
-     <button class="pill pill-ghost" style="font-size:9px;padding:2px 8px;" onclick="openModal('m-pipeline')">+ Add</button>
+     <button class="pill pill-ghost" style="font-size:9px;padding:2px 8px;" onclick="loadHubPipeline()" title="Live from 58 HUB">↻ Refresh</button>
     </div>
     <div id="pipeline-list"></div>
    </div>
@@ -805,7 +765,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 
 
 <!-- COFFEE OR TEQUILA -->
-<div id="panel-cot" class="panel" style="padding:0;display:flex;flex-direction:column;height:100%;">
+<div id="panel-cot" class="panel" style="padding:0;flex-direction:column;height:100%;">
  <!-- Header -->
  <div style="padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
   <div>
@@ -932,7 +892,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
   <div class="goals-gc" style="margin-bottom:20px;">
    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
     <div class="goal-title" style="font-size:16px;color:#1B2B3A;">Closed <em>Sales</em> &amp; Pipeline</div>
-    <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="openGoalSaleModal()">+ Add closing</button>
+    <button class="pill pill-ghost" style="font-size:10px;padding:3px 12px;" onclick="loadHubGoals()" title="Live from Goals Workspace">↻ Refresh</button>
    </div>
    <div style="overflow-x:auto;">
     <table class="data-table" id="sales-table">
@@ -943,7 +903,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
    <div style="display:flex;gap:20px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
     <div><div class="label" style="font-size:9px;">GCI Closed</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--champ);" id="gci-closed">$0</div></div>
     <div><div class="label" style="font-size:9px;">In Pipeline</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--teal2);" id="gci-pipeline">$0</div></div>
-    <div><div class="label" style="font-size:9px;">Goal</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ivory2);">$180,000</div></div>
+    <div><div class="label" style="font-size:9px;">Goal</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ivory2);" id="gci-goal-label">$180,000</div></div>
    </div>
   </div>
 
@@ -1448,9 +1408,9 @@ const PIPELINE_STATUSES=['Lead','Listing Active','Under Contract','Closing Soon'
 const CONTENT_STATUSES=['Draft','Scheduled','In Progress','Published','Idea'];
 const STATUS_COLORS={'Active':'var(--champ)','Estimate':'var(--mist)','Coming Soon':'var(--mist)','Delivered':'var(--teal2)','On Hold':'var(--ivory3)','Complete':'var(--teal2)','Lead':'var(--mist)','Listing Active':'var(--teal2)','Under Contract':'var(--amber)','Closing Soon':'var(--rose)','Closed':'var(--ivory3)','Follow Up':'var(--mist)','Draft':'var(--ivory3)','Scheduled':'var(--amber)','In Progress':'#D4957A','Published':'var(--teal2)','Idea':'var(--lav)'};
 
-function renderMiniList(elId,arr){
+function renderMiniList(elId,arr,emptyMsg){
  const el=document.getElementById(elId);if(!el)return;
- if(!arr.length){el.innerHTML='<div style="font-size:11px;color:var(--ivory3);padding:6px 0;font-style:italic;">None yet · click + Add</div>';return;}
+ if(!arr.length){el.innerHTML=`<div style="font-size:11px;color:var(--ivory3);padding:6px 0;font-style:italic;">${emptyMsg||'None yet · click + Add'}</div>`;return;}
  el.innerHTML=arr.map(item=>`
   <div class="mini-row" id="mr-${item.id}">
    <div class="mini-dot" style="background:${item.color}"></div>
@@ -1458,8 +1418,8 @@ function renderMiniList(elId,arr){
     <div class="mini-name">${item.name}</div>
     <div class="mini-sub">${item.sub||''}</div>
    </div>
-   <span class="mini-badge" style="color:${item.color}" onclick="editStatus('${elId}',${item.id})" title="Edit status">${item.status} ✎</span>
-   <button class="mini-del" onclick="removeMini('${elId}',${item.id})">×</button>
+   <span class="mini-badge" style="color:${item.color}"${item._hub?'':` onclick="editStatus('${elId}',${item.id})" title="Edit status"`}>${item.status}${item._hub?'':' ✎'}</span>
+   ${item._hub?'':`<button class="mini-del" onclick="removeMini('${elId}',${item.id})">×</button>`}
   </div>`).join('');
 }
 
@@ -1492,9 +1452,49 @@ function removeMini(elId,id){
 }
 
 function renderAllMini(){
- renderMiniList('pipeline-list',pipeline);
+ renderMiniList('pipeline-list',pipeline,'No active listings · Add in 58 HUB');
  renderMiniList('projects-list',projects);
  renderMiniList('content-list',contentItems);
+}
+
+// ── LIVE PIPELINE FROM 58 HUB ──────────────────────────
+const HUB_STATUS_LABEL={'coming-soon':'Coming Soon','active':'Active','under-contract':'Under Contract','sold':'Closed','leased':'Closed','pocket':'Pocket'};
+const HUB_STATUS_COLOR={'coming-soon':'var(--amber)','active':'var(--teal2)','under-contract':'var(--amber)','sold':'rgba(255,255,255,0.3)','leased':'rgba(255,255,255,0.3)','pocket':'var(--mist)'};
+async function loadHubPipeline(){
+ try{
+  const r=await fetch(SB_URL+'/rest/v1/ops_state?id=eq.main&select=data',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+  if(!r.ok)return;
+  const rows=await r.json();
+  const props=(rows[0]&&rows[0].data&&rows[0].data.properties)||[];
+  const live=props.filter(p=>p.status!=='sold'&&p.status!=='leased')
+   .sort((a,b)=>String(a.keyDate||'9999').localeCompare(String(b.keyDate||'9999')));
+  pipeline.splice(0,pipeline.length,...live.map(p=>({
+   id:p.id,
+   name:p.address||p.owner||'Untitled',
+   sub:[p.owner,p.keyDate].filter(Boolean).join(' · '),
+   status:HUB_STATUS_LABEL[p.status]||p.status,
+   color:HUB_STATUS_COLOR[p.status]||'var(--mist)',
+   _hub:true
+  })));
+  renderAllMini();
+
+  // Next closing — earliest upcoming keyDate among under-contract properties
+  const todayISO=TODAY_ISO||new Date().toISOString().split('T')[0];
+  const upcoming=props.filter(p=>p.status==='under-contract'&&p.keyDate&&p.keyDate>=todayISO)
+   .sort((a,b)=>a.keyDate.localeCompare(b.keyDate));
+  const dEl=document.getElementById('next-closing-date'),pEl=document.getElementById('next-closing-prop');
+  if(dEl&&pEl){
+   if(upcoming.length){
+    const p=upcoming[0];
+    const dt=new Date(p.keyDate+'T00:00:00');
+    dEl.textContent=dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    pEl.textContent=p.address||p.owner||'';
+   }else{
+    dEl.textContent='—';
+    pEl.textContent='No upcoming closing';
+   }
+  }
+ }catch(e){console.log('hub pipeline err',e);}
 }
 
 function addPipeline(){
@@ -1518,14 +1518,40 @@ function addContent(){
 
 // ── RE LIVE DATA ──────────────────────────────────────
 async function loadREData(){
- const get=async(t)=>{try{const r=await fetch(SB_URL+'/rest/v1/'+t+'?order=created_at.asc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});return r.ok?await r.json():[];}catch{return[];}};
- const[listings,clients,taskData]=await Promise.all([get('jp58_listings'),get('jp58_clients'),get('jp58_tasks')]);
+ const get=async(t,q)=>{try{const r=await fetch(SB_URL+'/rest/v1/'+t+(q||'?order=created_at.asc'),{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});return r.ok?await r.json():[];}catch{return[];}};
+ const[opsRows,crmRows]=await Promise.all([
+  get('ops_state','?id=eq.main&select=data'),
+  get('jp58_production_transactions','?order=updated_at.desc')
+ ]);
+ const opsData=(opsRows&&opsRows[0]&&opsRows[0].data)||{};
+ const props=opsData.properties||[];
+ const hubTasks=(opsData.tasks||[]).filter(t=>!t.done);
+ const BADGE={'coming-soon':'b-pending','active':'b-active','under-contract':'b-pending','sold':'b-closed','leased':'b-closed','pocket':'b-team'};
+
  const ll=document.getElementById('re-listings');
- if(ll){if(!listings.length){ll.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No listings · Add in 58 HUB</div>';}else{ll.innerHTML=`<table class="data-table"><thead><tr><th>Address</th><th>Status</th><th>Price</th><th>Client</th><th>Agent</th></tr></thead><tbody>${listings.map(l=>`<tr><td><strong>${l.addr}</strong></td><td><span class="badge b-active">${l.status}</span></td><td>${l.price||'TBD'}</td><td style="color:var(--ivory3)">${l.client||'—'}</td><td><span class="badge b-team">${l.agent||'—'}</span></td></tr>`).join('')}</tbody></table>`;}}
+ if(ll){
+  if(!props.length){ll.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No listings · Add in 58 HUB</div>';}
+  else{
+   const STATUS_ORDER={'coming-soon':0,'pocket':0,'active':1,'under-contract':1,'sold':2,'leased':2};
+   const sorted=[...props].sort((a,b)=>{
+    const oa=STATUS_ORDER[a.status]??3,ob=STATUS_ORDER[b.status]??3;
+    if(oa!==ob)return oa-ob;
+    return String(a.address||'').localeCompare(String(b.address||''));
+   });
+   ll.innerHTML=`<table class="data-table"><thead><tr><th>Address</th><th>Status</th><th>Price</th><th>Client</th><th>Agent</th></tr></thead><tbody>${sorted.map(p=>`<tr><td><strong>${p.address||'—'}</strong></td><td><span class="badge ${BADGE[p.status]||'b-team'}">${HUB_STATUS_LABEL[p.status]||p.status}</span></td><td>${p.price?'$'+Number(p.price).toLocaleString():'TBD'}</td><td style="color:var(--ivory3)">${p.owner||'—'}</td><td><span class="badge b-team">${p.assigned?p.assigned[0].toUpperCase()+p.assigned.slice(1):'—'}</span></td></tr>`).join('')}</tbody></table>`;
+  }
+ }
  const cc=document.getElementById('re-clients');
- if(cc){if(!clients.length){cc.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No clients · Add in 58 HUB</div>';}else{cc.innerHTML=clients.map(c=>`<div class="fu-card"><div class="fu-avatar" style="background:rgba(94,136,126,0.2);color:var(--teal2)">${c.initials||'?'}</div><div style="flex:1"><div class="fu-name">${c.name}</div><div class="fu-prop">${c.property||''} · ${c.action||''}</div></div><span class="fu-agent">${c.agent||''}</span></div>`).join('');}}
+ if(cc){
+  const followUp=(crmRows||[]).filter(r=>['Warm Lead','Prospect','Active Client'].includes(r.relationship_status));
+  if(!followUp.length){cc.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No active leads · Add in CRM</div>';}
+  else{cc.innerHTML=followUp.map(c=>{const nm=c.owner1_name||'Unnamed';const initials=nm.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();return `<div class="fu-card"><div class="fu-avatar" style="background:rgba(94,136,126,0.2);color:var(--teal2)">${initials||'?'}</div><div style="flex:1"><div class="fu-name">${nm}</div><div class="fu-prop">${c.address||''} · ${c.relationship_status}</div></div></div>`;}).join('');}
+ }
  const tt=document.getElementById('re-tasks');
- if(tt){if(!taskData.length){tt.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No tasks · Add in 58 HUB</div>';}else{tt.innerHTML=taskData.map(t=>`<div class="todo-row"><div class="todo-pri pri-${t.priority==='high'?'h':t.priority==='low'?'l':'m'}"></div><div style="flex:1"><div class="todo-text">${t.text}</div></div><span style="font-size:10px;color:var(--ivory3)">${t.who||''}</span></div>`).join('');}}
+ if(tt){
+  if(!hubTasks.length){tt.innerHTML='<div style="font-size:12px;color:var(--ivory3);padding:8px 0;font-style:italic;">No tasks · Add in 58 HUB</div>';}
+  else{tt.innerHTML=hubTasks.map(t=>`<div class="todo-row"><div class="todo-pri pri-${t.priority==='high'?'h':t.priority==='low'?'l':'m'}"></div><div style="flex:1"><div class="todo-text">${t.text}</div></div><span style="font-size:10px;color:var(--ivory3)">${t.assigned?t.assigned[0].toUpperCase()+t.assigned.slice(1):''}</span></div>`).join('');}
+ }
 }
 
 // ── MODAL ─────────────────────────────────────────────
@@ -1594,6 +1620,7 @@ if(intentionEl){
 // ── INIT ─────────────────────────────────────────────
 async function init(){
  await loadData();
+ await loadHubPipeline();
  const h=new Date().getHours();
  const greet=h<12?'Buenos días, <em>Jeannette</em>':h<17?'Buenas tardes, <em>Jeannette</em>':'Buenas noches, <em>Jeannette</em>';
  document.getElementById('topbar-title').innerHTML=greet;
@@ -2033,24 +2060,43 @@ function renderCatalysts(){
   </div>`).join('');
 }
 
+let liveGciGoal=180000;
 function renderIncomeStats(){
  const el=document.getElementById('income-stats');
  if(!el)return;
- const GCI_GOAL=180000;
+ const GCI_GOAL=liveGciGoal||180000;
  const closed=goalsData.sales.filter(s=>s.status==='Closed').reduce((sum,s)=>sum+s.price*s.comm/100,0);
  const pipe=goalsData.sales.filter(s=>s.status==='Pipeline').reduce((sum,s)=>sum+s.price*s.comm/100,0);
  const pct=Math.min(100,Math.round((closed+pipe)/GCI_GOAL*100));
  document.getElementById('gci-closed').textContent='$'+Math.round(closed).toLocaleString();
  document.getElementById('gci-pipeline').textContent='$'+Math.round(pipe).toLocaleString();
+ const goalLabelEl=document.getElementById('gci-goal-label');
+ if(goalLabelEl)goalLabelEl.textContent='$'+Math.round(GCI_GOAL).toLocaleString();
  const prog=document.getElementById('gci-progress');
  if(prog)prog.style.width=pct+'%';
  const pctEl=document.getElementById('gci-pct');
  if(pctEl)pctEl.textContent=pct+'%';
  el.innerHTML=`
-  <div class="income-stat"><div class="income-n">$180K</div><div class="income-l">GCI Goal</div></div>
+  <div class="income-stat"><div class="income-n">$${Math.round(GCI_GOAL/1000)}K</div><div class="income-l">GCI Goal</div></div>
   <div class="income-stat"><div class="income-n">${goalsData.sales.filter(s=>s.status==='Closed').length}</div><div class="income-l">Closed</div></div>
   <div class="income-stat"><div class="income-n">${goalsData.sales.filter(s=>s.status==='Pipeline').length}</div><div class="income-l">Pipeline</div></div>
   <div class="income-stat"><div class="income-n">${pct}%</div><div class="income-l">Of Goal</div></div>`;
+}
+
+// ── LIVE GOALS FROM GOALS WORKSPACE ────────────────────
+async function loadHubGoals(){
+ const get=async(t,q)=>{try{const r=await fetch(SB_URL+'/rest/v1/'+t+(q||''),{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});return r.ok?await r.json():[];}catch{return[];}};
+ const[sales,pipe,planRows]=await Promise.all([
+  get('goals_2026_sales','?order=date.desc'),
+  get('goals_2026_pipeline','?order=created_at.desc'),
+  get('goals_2026_plan','?id=eq.main&select=data')
+ ]);
+ liveGciGoal=(planRows&&planRows[0]&&planRows[0].data&&planRows[0].data.gciGoal)||180000;
+ const closedRows=(sales||[]).map(s=>({id:'s-'+s.id,prop:s.property||'—',type:s.role||'Sale',price:Number(s.price)||0,comm:Number(s.comm_pct)||0,status:'Closed',date:s.date||''}));
+ const pipeRows=(pipe||[]).map(p=>({id:'p-'+p.id,prop:p.property||'—',type:p.type||'Listing',price:Number(p.price)||0,comm:Number(p.comm_pct)||0,status:'Pipeline',date:p.close_date||''}));
+ goalsData.sales=[...closedRows,...pipeRows];
+ renderIncomeStats();
+ renderSalesTable();
 }
 
 function renderWeeklyFocus(){
@@ -2138,7 +2184,7 @@ function renderAllGoals(){
 const _sp2=showPanel;
 showPanel=function(name,el){
  _sp2(name,el);
- if(name==='goals'){loadGoals();renderAllGoals();}
+ if(name==='goals'){loadGoals();renderAllGoals();loadHubGoals();}
 };
 // ── GOOGLE CALENDAR OAUTH ─────────────────────────────
 const GCAL_CLIENT_ID = '406326659472-niblfki5aqpln6fr6hl1cagtio0e355u.apps.googleusercontent.com'; // public client ID
