@@ -16,16 +16,29 @@ exports.handler = async (event) => {
   ];
 
   try {
-    const allEvents = [];
+    // Fetch all 7 calendars in PARALLEL, not one-by-one. Sequential awaits here
+    // could add up past Netlify's function timeout (each Google iCal fetch can
+    // take a second or two, x7 in a row risks a silent timeout on slow
+    // connections). A per-calendar timeout means one slow/unreachable calendar
+    // can no longer take the whole feed down — it's just skipped.
+    const results = await Promise.allSettled(ICAL_URLS.map(async (cal) => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const res = await fetch(cal.url, { signal: controller.signal });
+        if (!res.ok) return [];
+        const text = await res.text();
+        const events = parseICal(text);
+        events.forEach(e => e.calendar = cal.name);
+        return events;
+      } finally {
+        clearTimeout(timeout);
+      }
+    }));
 
-    for (const cal of ICAL_URLS) {
-      const res = await fetch(cal.url);
-      if (!res.ok) continue;
-      const text = await res.text();
-      const events = parseICal(text);
-      events.forEach(e => e.calendar = cal.name);
-      allEvents.push(...events);
-    }
+    const allEvents = results
+      .filter(r => r.status === 'fulfilled')
+      .flatMap(r => r.value);
 
     // Sort by start date
     allEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
