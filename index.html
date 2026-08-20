@@ -101,11 +101,11 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .home-right{overflow-y:auto;height:100%;min-height:0;}
 
 /* WEEK STRIP */
-.week-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;}
+.week-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;padding-bottom:4px;}
 .week-strip::-webkit-scrollbar{height:3px;}
 .week-strip::-webkit-scrollbar-track{background:transparent;}
 .week-strip::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.wday{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 10px;text-align:center;cursor:pointer;transition:all .2s;min-width:72px;flex-shrink:0;}
+.wday{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:border-color .2s,background-color .2s;min-width:0;}
 .wday:hover{border-color:var(--border2);background:var(--glass2);}
 .wday.sel{border-color:var(--champ);background:rgba(201,168,124,0.1);}
 .wday.tod{border-color:var(--teal);}
@@ -985,7 +985,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
    </div>
   </div>
 
-  <div id="cot-conn-list" class="cot-conn-grid"></div>
+  <div id="cot-conn-list"></div>
  </div>
 </div>
 </div>
@@ -1111,6 +1111,22 @@ select optgroup{background:#1F3245;color:#C9A87C;}
 </div><!-- /app -->
 
 <!-- MODALS -->
+<div class="modal-bg" id="m-cotdate">
+ <div class="modal">
+  <div class="modal-title">When did you connect?</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--champ);margin:-6px 0 14px;" id="cotdate-who"></div>
+  <div class="frow">
+   <div class="field"><label>Date</label><input id="cotdate-date" type="date"></div>
+   <div class="field"><label>Time</label><input id="cotdate-time" placeholder="8:00 AM"></div>
+  </div>
+  <label id="cotdate-evwrap" style="display:flex;align-items:center;gap:8px;margin:4px 0 14px;cursor:pointer;font-size:12px;color:var(--ivory2);">
+   <input type="checkbox" id="cotdate-mkev" checked style="width:14px;height:14px;accent-color:var(--champ);cursor:pointer;">
+   Also add it to my calendar
+  </label>
+  <div class="mf"><button class="ca" onclick="closeModal('m-cotdate')">Cancel</button><button class="ca on" onclick="cotSaveDate()">Save</button></div>
+ </div>
+</div>
+
 <div class="modal-bg" id="m-ev">
  <div class="modal">
   <div class="modal-title">Add Event</div>
@@ -1379,6 +1395,26 @@ function buildWeek(){
  }
 }
 
+// Removes exact duplicate events (same title, day and time). Earlier versions
+// pushed a fresh event on every save, so scheduling the same coffee twice left
+// two identical rows. Runs at startup, independent of which panel is open.
+function dedupeEvents(){
+ if(typeof events==='undefined'||!Array.isArray(events)) return false;
+ const seen=new Set();
+ const keep=[];
+ events.forEach(ev=>{
+  const key=[ev.title||'',ev.date||'',ev.time||''].join('|');
+  if(seen.has(key)) return;
+  seen.add(key);
+  keep.push(ev);
+ });
+ if(keep.length===events.length) return false;
+ events.length=0;
+ keep.forEach(ev=>events.push(ev));
+ saveData();
+ return true;
+}
+
 function renderEvents(){
  const list=document.getElementById('ev-list');
  const lbl=document.getElementById('sel-day-label');
@@ -1531,18 +1567,6 @@ function addEvent(){
  const ev={id:Date.now(),date,time:document.getElementById('ev-time').value||'',title,note:document.getElementById('ev-notes').value,cat:document.getElementById('ev-cat').value};
  events.push(ev);
  closeModal('m-ev');buildWeek();if(date===selDay)renderEvents();saveData();
- if(cotPendingSchedId){
-  const c=cotConns.find(x=>String(x.id)===String(cotPendingSchedId));
-  if(c){
-   c.sched=true;
-   c.sched_date=date;
-   cotPatchConn(c.id,{sched:true});
-   renderCotConns();
-   showToast(c.name+' scheduled ✓');
-  }
-  cotPendingSchedId=null;
-  return;
- }
  showToast('Event saved ✓');
 }
 
@@ -1736,7 +1760,7 @@ function openModal(id){
  if(id==='m-content'){document.getElementById('con-name').value='';document.getElementById('con-status').value='';}
  document.getElementById(id).classList.add('open');
 }
-function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='m-ev')cotClearPendingSched();}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='m-cotdate')cotDateForId=null;}
 
 // ── PANEL NAV ─────────────────────────────────────────
 function showPanel(name,triggerEl){
@@ -1785,6 +1809,7 @@ if(intentionEl){
 // ── INIT ─────────────────────────────────────────────
 async function init(){
  await loadData();
+ dedupeEvents();
  await loadHubPipeline();
  const h=new Date().getHours();
  const greet=h<12?'Buenos días, <em>Jeannette</em>':h<17?'Buenas tardes, <em>Jeannette</em>':'Buenas noches, <em>Jeannette</em>';
@@ -2144,19 +2169,78 @@ function cotDropZone(e,zone){
  e.preventDefault();
  const dragged=cotConns.find(x=>String(x.id)===cotDragId);
  if(!dragged){ cotDragEnd(e); return; }
+ const dragId=cotDragId;
  const shouldSched=(zone==='done');
- if(dragged.sched!==shouldSched){
-  dragged.sched=shouldSched;
-  cotPatchConn(dragged.id,{sched:shouldSched});
-  showToast(dragged.name+(shouldSched?' moved to Already connected':' moved back to pending'));
- }
  const ordered=cotApplyOrder(cotConns).map(c=>String(c.id));
- const from=ordered.indexOf(cotDragId);
+ const from=ordered.indexOf(dragId);
  if(from>-1) ordered.splice(from,1);
- ordered.push(cotDragId);
+ ordered.push(dragId);
  cotSetOrder(ordered);
  cotDragEnd(e);
+ if(dragged.sched!==shouldSched){
+  if(shouldSched){ cotAskDate(dragged.id); return; }
+  dragged.sched=false; dragged.sched_date=null;
+  cotPatchConn(dragged.id,{sched:false});
+  showToast(dragged.name+' moved back to pending');
+ }
  renderCotConns();
+}
+
+// ── Date prompt ───────────────────────────────────────
+// Dragging someone into "Already connected" asks when you saw them, then
+// writes the event onto the JP58 calendar so the two never drift apart.
+let cotDateForId=null;
+function cotAskDate(id,existing){
+ const c=cotConns.find(x=>String(x.id)===String(id));
+ if(!c) return;
+ cotDateForId=String(id);
+ const modal=document.getElementById('m-cotdate');
+ if(!modal) return;
+ document.getElementById('cotdate-who').textContent=c.name;
+ const d=document.getElementById('cotdate-date');
+ d.value=c.sched_date||new Date().toISOString().slice(0,10);
+ const t=document.getElementById('cotdate-time');
+ t.value=c.sched_time||(c.type==='coffee'?'8:00 AM':'5:00 PM');
+ const ev=document.getElementById('cotdate-mkev');
+ ev.checked=!existing;
+ document.getElementById('cotdate-evwrap').style.display=existing?'none':'flex';
+ openModal('m-cotdate');
+ setTimeout(()=>d.focus(),60);
+}
+
+function cotSaveDate(){
+ const c=cotConns.find(x=>String(x.id)===String(cotDateForId));
+ if(!c){ closeModal('m-cotdate'); return; }
+ const date=document.getElementById('cotdate-date').value;
+ if(!date){ showToast('Pick a date'); return; }
+ const time=document.getElementById('cotdate-time').value.trim();
+ const makeEv=document.getElementById('cotdate-mkev').checked;
+ c.sched=true; c.sched_date=date; c.sched_time=time;
+ cotPatchConn(c.id,{sched:true});
+ if(makeEv){
+  const isCoffee=c.type==='coffee';
+  // Reuse the event already tied to this connection instead of pushing a
+  // second one — otherwise scheduling twice (drag, then "+ Sched") left two
+  // identical rows on the same day.
+  const existing=events.find(ev=>ev._cotId&&String(ev._cotId)===String(c.id));
+  if(existing){
+   existing.title=(isCoffee?'Coffee':'Tequila')+' — '+c.name;
+   existing.date=date; existing.time=time;
+   existing.cat=isCoffee?'coffee':'tequila';
+  }else{
+   events.push({
+    id:'e_'+Date.now().toString(36),
+    _cotId:String(c.id),
+    title:(isCoffee?'Coffee':'Tequila')+' — '+c.name,
+    date:date, time:time, cat:isCoffee?'coffee':'tequila',
+    notes:c.note||''
+   });
+  }
+  saveData(); buildWeek(); renderEvents();
+ }
+ closeModal('m-cotdate');
+ renderCotConns();
+ showToast(c.name+' · '+new Date(date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+(makeEv?' · added to calendar':''));
 }
 
 function renderCotConns(){
@@ -2204,7 +2288,7 @@ function cotConnCardHtml(c){
    onclick="cotOpenConnEdit('${c.id}')">
    <div class="cot-cn">${c.sched?'✦ ':''}${c.name}</div>
    ${c.mls_number?`<a href="https://58clientsandproperties.netlify.app?open=${encodeURIComponent(c.mls_number)}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;font-size:9px;color:var(--teal2);margin-top:2px;text-decoration:none;">Open in CRM ↗</a>`:''}
-   ${c.sched&&c.sched_date?`<div style="font-size:9px;color:var(--teal2);margin-top:3px;letter-spacing:.06em;">${new Date(c.sched_date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div>`:''}
+   ${c.sched?`<div onclick="event.stopPropagation();cotAskDate('${c.id}',1)" title="Change date" style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--teal2);margin-top:4px;letter-spacing:.06em;cursor:pointer;border-bottom:1px dotted var(--border2);padding-bottom:1px;">${c.sched_date?new Date(c.sched_date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}):'Set date'}${c.sched_time?' · '+c.sched_time:''}</div>`:''}
    <div class="cot-cnote">${c.note||''}</div>
    <div class="cot-ctags">
     <span class="pill ${c.type==='coffee'?'pill-champ':'pill-ghost'}" style="font-size:9px;padding:2px 8px;background:${c.type==='coffee'?'rgba(201,168,124,0.15)':'rgba(196,122,90,0.12)'};border-color:${c.type==='coffee'?'var(--border2)':'rgba(196,122,90,0.3)'};color:${c.type==='coffee'?'var(--champ2)':'#D4957A'}">${c.type==='coffee'?'☕':'🥃'}</span>
@@ -2263,7 +2347,6 @@ function cotSaveConnEdit(id){
 // Scheduling a connection now opens the Add Event modal pre-filled with the
 // Coffee or Tequila theme and the person's name, so the calendar and the
 // connection list stay in step. Un-scheduling stays a plain toggle.
-let cotPendingSchedId = null;
 function cotToggleSched(id){
  const c=cotConns.find(x=>String(x.id)===String(id));
  if(!c) return;
@@ -2272,23 +2355,9 @@ function cotToggleSched(id){
   showToast(c.name+' moved back to pending');
   return;
  }
- cotPendingSchedId = c.id;
- openModal('m-ev');
- const isCoffee = c.type==='coffee';
- const t=document.getElementById('ev-title');
- if(t) t.value = (isCoffee?'Coffee':'Tequila')+' — '+c.name;
- const cat=document.getElementById('ev-cat');
- if(cat) cat.value = isCoffee?'coffee':'tequila';
- const note=document.getElementById('ev-notes');
- if(note) note.value = c.note || '';
- const time=document.getElementById('ev-time');
- if(time) time.value = isCoffee?'8:00 AM':'5:00 PM';
- const d=document.getElementById('ev-date'); if(d) d.focus();
+ cotAskDate(c.id);
 }
 
-// If the user closes the event modal without saving, drop the pending link
-// so the connection isn't silently marked as scheduled later.
-function cotClearPendingSched(){ cotPendingSchedId = null; }
 function cotDelConn(id){cotConns=cotConns.filter(x=>String(x.id)!==String(id));if(cotConnEditingId===id)cotConnEditingId=null;renderCotConns();renderCotSuggested();cotDeleteConn(id);showToast('Removed ✓');}
 function addCotConn(){
  const name=document.getElementById('cot-cn').value.trim();
