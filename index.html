@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JP58 · Jeannette Peña</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231B2B3A'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' fill='%23C9A87C' text-anchor='middle'%3E58%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -35,7 +36,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;}
 
 /* TOPBAR */
-.topbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(27,43,58,0.6);flex-shrink:0;}
+.topbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(27,43,58,0.6);flex-shrink:0;transform:translateZ(0);}
 .tb-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--champ);letter-spacing:.08em;}
 .tb-logo em{font-style:italic;color:var(--champ2);}
 .tb-center{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;font-style:italic;color:var(--ivory2);letter-spacing:.02em;}
@@ -48,7 +49,7 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 .body-wrap{display:flex;flex:1;overflow:hidden;}
 
 /* SIDEBAR */
-.sidebar{width:52px;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--border);background:rgba(27,43,58,0.4);backdrop-filter:blur(20px);flex-shrink:0;}
+.sidebar{width:52px;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--border);background:rgba(27,43,58,0.4);backdrop-filter:blur(20px);flex-shrink:0;transform:translateZ(0);}
 .sb-item{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;position:relative;transition:all .25s;color:var(--ivory3);border:1px solid transparent;}
 .sb-item:hover{color:var(--champ2);background:var(--champ3);}
 .sb-item.on{color:var(--champ);background:var(--champ3);border-color:var(--border2);}
@@ -68,7 +69,10 @@ body{font-family:'Jost',sans-serif;background:var(--navy);color:var(--ivory);fon
 #panel-cot.active{display:flex;overflow-y:hidden;}
 
 /* GLASS CARD */
-.gc{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .3s;}
+.gc{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:20px;transition:background-color .3s,border-color .3s;transform:translateZ(0);backface-visibility:hidden;}
+/* Nested glass cards inherit the parent's blurred backdrop — blurring twice
+   is what produced the vertical seam that tracked the cursor. */
+.gc .gc{backdrop-filter:none;background:var(--glass2);}
 .gc:hover{background:var(--glass2);border-color:rgba(201,168,124,0.15);}
 .gc.accent{border-color:var(--border2);background:rgba(201,168,124,0.06);}
 .gc.teal{border-color:rgba(94,136,126,0.3);background:rgba(94,136,126,0.07);}
@@ -270,9 +274,18 @@ select option{background:#1F3245;color:#F5F0E8;}
    one card's height or span changes (e.g. opening the edit form), which is what
    made the whole grid visibly reshuffle/"descuadrar" on open. Grid only affects
    the row the changed card is in. */
-.cot-conn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start;}
+.cot-conn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;grid-auto-rows:1fr;}
 @media(max-width:1400px){.cot-conn-grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:1000px){.cot-conn-grid{grid-template-columns:repeat(2,1fr);}}
+.cot-sec-head{display:flex;align-items:baseline;gap:10px;margin:20px 0 8px;}
+.cot-sec-label{font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ivory3);}
+.cot-sec-rule{flex:1;height:1px;background:var(--border);}
+.cot-sec-n{font-size:10px;color:var(--ivory3);}
+.cot-conn-grid.drop-on{outline:1px dashed var(--border2);outline-offset:6px;border-radius:12px;}
+.cot-conn-grid.cot-grid-empty{grid-auto-rows:auto;min-height:74px;}
+.cot-drop-hint{grid-column:1/-1;display:flex;align-items:center;justify-content:center;min-height:74px;border:1px dashed var(--border);border-radius:10px;font-size:11px;color:var(--ivory3);font-style:italic;}
+.cot-conn-card.dragging{opacity:.4;}
+.cot-conn-card.drag-over{border-color:var(--champ);}
 @media(max-width:640px){.cot-conn-grid{grid-template-columns:1fr;}}
 .cot-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
 .cot-stat{text-align:center;background:var(--glass2);border-radius:10px;padding:16px 8px;}
@@ -297,14 +310,15 @@ select option{background:#1F3245;color:#F5F0E8;}
 .cot-sug-crm{font-size:8px;color:var(--ivory3);text-decoration:none;flex-shrink:0;white-space:nowrap;}
 .cot-sug-crm:hover{color:var(--champ2);}
 .cot-conn-empty{grid-column:1/-1;padding:26px 10px;text-align:center;font-size:12px;color:var(--ivory3);font-style:italic;background:var(--glass);border:1px dashed var(--border);border-radius:10px;}
-.cot-conn-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:all .2s;cursor:pointer;}
+.cot-conn-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s,background-color .2s,opacity .2s;cursor:grab;display:flex;flex-direction:column;min-height:0;}
+.cot-conn-card:active{cursor:grabbing;}
 .cot-conn-card:hover{border-color:var(--border2);background:var(--glass2);}
 .cot-conn-card.sched{border-left:2px solid var(--champ);}
 .cot-conn-card.editing{cursor:default;border-color:var(--champ);background:var(--glass2);grid-column:1/-1;}
 .cot-cn{font-family:"Cormorant Garamond",serif;font-size:17px;color:var(--ivory);}
 .cot-cnote{font-size:11px;color:var(--ivory3);margin-top:3px;}
 .cot-ctags{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
-.cot-acts{display:flex;gap:4px;margin-top:10px;}
+.cot-acts{display:flex;gap:4px;margin-top:auto;padding-top:10px;}
 .cot-act{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--ivory3);cursor:pointer;font-family:"Jost",sans-serif;transition:all .15s;}
 .cot-act:hover{border-color:var(--border2);color:var(--champ2);}
 .cot-act.del:hover{border-color:#E07070;color:#E07070;}
@@ -837,7 +851,7 @@ select optgroup{background:#1F3245;color:#C9A87C;}
     </div>
     <div style="margin-bottom:10px;"><div class="label" style="font-size:9px;margin-bottom:5px;">Notes</div><input id="car-notes" class="qa-in" style="width:100%;padding:6px 8px;"></div>
     <div style="display:flex;gap:8px;">
-     <button class="pill pill-solid" style="font-size:11px;" onclick="saveVehicle()">Save Vehicle</button>
+     <button class="pill pill-solid" style="font-size:11px;" onclick="saveVehicle()" id="car-save-btn">Save Vehicle</button>
      <button class="pill pill-ghost" style="font-size:11px;" onclick="toggleCarAddForm(false)">Cancel</button>
     </div>
    </div>
@@ -1516,7 +1530,20 @@ function addEvent(){
  if(!title||!date)return;
  const ev={id:Date.now(),date,time:document.getElementById('ev-time').value||'',title,note:document.getElementById('ev-notes').value,cat:document.getElementById('ev-cat').value};
  events.push(ev);
- closeModal('m-ev');buildWeek();if(date===selDay)renderEvents();saveData();showToast('Event saved ✓');
+ closeModal('m-ev');buildWeek();if(date===selDay)renderEvents();saveData();
+ if(cotPendingSchedId){
+  const c=cotConns.find(x=>String(x.id)===String(cotPendingSchedId));
+  if(c){
+   c.sched=true;
+   c.sched_date=date;
+   cotPatchConn(c.id,{sched:true});
+   renderCotConns();
+   showToast(c.name+' scheduled ✓');
+  }
+  cotPendingSchedId=null;
+  return;
+ }
+ showToast('Event saved ✓');
 }
 
 function deleteEvent(id){
@@ -1709,7 +1736,7 @@ function openModal(id){
  if(id==='m-content'){document.getElementById('con-name').value='';document.getElementById('con-status').value='';}
  document.getElementById(id).classList.add('open');
 }
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='m-ev')cotClearPendingSched();}
 
 // ── PANEL NAV ─────────────────────────────────────────
 function showPanel(name,triggerEl){
@@ -2033,6 +2060,105 @@ function filterCot(f,el){
  renderCotConns();
 }
 
+// ── COT drag & drop ───────────────────────────────────
+// Card order is a personal preference, not shared data, so it lives in
+// localStorage rather than adding a column to jp58_cot_connections.
+const COT_ORDER_KEY='jp58_cot_order';
+function cotGetOrder(){try{return JSON.parse(localStorage.getItem(COT_ORDER_KEY)||'[]');}catch(e){return [];}}
+function cotSetOrder(ids){try{localStorage.setItem(COT_ORDER_KEY,JSON.stringify(ids));}catch(e){}}
+
+// Sort the filtered list by the saved order; anything unknown (newly added)
+// keeps its natural position at the end.
+function cotApplyOrder(list){
+ const order=cotGetOrder();
+ if(!order.length) return list;
+ const pos=new Map(order.map((id,i)=>[String(id),i]));
+ return list.slice().sort((a,b)=>{
+  const pa=pos.has(String(a.id))?pos.get(String(a.id)):Number.MAX_SAFE_INTEGER;
+  const pb=pos.has(String(b.id))?pos.get(String(b.id)):Number.MAX_SAFE_INTEGER;
+  return pa-pb;
+ });
+}
+
+let cotDragId=null;
+function cotDragStart(e,id){
+ cotDragId=String(id);
+ e.dataTransfer.effectAllowed='move';
+ try{e.dataTransfer.setData('text/plain',cotDragId);}catch(err){}
+ const card=e.currentTarget; if(card) card.classList.add('dragging');
+}
+function cotDragEnd(e){
+ cotDragId=null;
+ document.querySelectorAll('.cot-conn-card.dragging').forEach(el=>el.classList.remove('dragging'));
+ document.querySelectorAll('.cot-conn-card.drag-over').forEach(el=>el.classList.remove('drag-over'));
+ document.querySelectorAll('.cot-conn-grid.drop-on').forEach(el=>el.classList.remove('drop-on'));
+}
+function cotDragOverCard(e){
+ if(!cotDragId) return;
+ e.preventDefault(); e.stopPropagation();
+ e.dataTransfer.dropEffect='move';
+ const card=e.currentTarget;
+ if(card && card.dataset.id!==cotDragId) card.classList.add('drag-over');
+}
+function cotDragLeaveCard(e){
+ const card=e.currentTarget; if(card) card.classList.remove('drag-over');
+}
+function cotDragOverZone(e){
+ if(!cotDragId) return;
+ e.preventDefault();
+ e.dataTransfer.dropEffect='move';
+ const z=e.currentTarget; if(z) z.classList.add('drop-on');
+}
+function cotDragLeaveZone(e){
+ const z=e.currentTarget; if(z) z.classList.remove('drop-on');
+}
+
+// Reorder: pull the dragged card out and reinsert it before the target.
+function cotDropOnCard(e,targetId){
+ if(!cotDragId) return;
+ e.preventDefault(); e.stopPropagation();
+ const dragId=cotDragId;
+ if(String(targetId)===dragId){ cotDragEnd(e); return; }
+ const target=cotConns.find(x=>String(x.id)===String(targetId));
+ const dragged=cotConns.find(x=>String(x.id)===dragId);
+ if(!target||!dragged){ cotDragEnd(e); return; }
+ // Crossing into the other section flips the scheduled state to match.
+ const shouldSched=!!target.sched;
+ if(dragged.sched!==shouldSched){
+  dragged.sched=shouldSched;
+  cotPatchConn(dragged.id,{sched:shouldSched});
+ }
+ const ordered=cotApplyOrder(cotConns).map(c=>String(c.id));
+ const from=ordered.indexOf(dragId);
+ if(from>-1) ordered.splice(from,1);
+ const to=ordered.indexOf(String(targetId));
+ ordered.splice(to<0?ordered.length:to,0,dragId);
+ cotSetOrder(ordered);
+ cotDragEnd(e);
+ renderCotConns();
+}
+
+// Dropping on empty space in a section moves the card to the end of it.
+function cotDropZone(e,zone){
+ if(!cotDragId) return;
+ e.preventDefault();
+ const dragged=cotConns.find(x=>String(x.id)===cotDragId);
+ if(!dragged){ cotDragEnd(e); return; }
+ const shouldSched=(zone==='done');
+ if(dragged.sched!==shouldSched){
+  dragged.sched=shouldSched;
+  cotPatchConn(dragged.id,{sched:shouldSched});
+  showToast(dragged.name+(shouldSched?' moved to Already connected':' moved back to pending'));
+ }
+ const ordered=cotApplyOrder(cotConns).map(c=>String(c.id));
+ const from=ordered.indexOf(cotDragId);
+ if(from>-1) ordered.splice(from,1);
+ ordered.push(cotDragId);
+ cotSetOrder(ordered);
+ cotDragEnd(e);
+ renderCotConns();
+}
+
 function renderCotConns(){
  const f=cotConns.filter(c=>{
   if(cotActiveF==='all')return true;
@@ -2045,8 +2171,25 @@ function renderCotConns(){
  });
  const el=document.getElementById('cot-conn-list');
  if(!el)return;
- el.innerHTML=f.length?f.map(c=>c.id===cotConnEditingId?cotConnEditCardHtml(c):cotConnCardHtml(c)).join('')
-  :'<div class="cot-conn-empty">No connections in this filter yet.</div>';
+ // Pending stays on top; anything already scheduled drops to its own section
+ // below, so the list reads as "who's still waiting" vs "who I've seen".
+ // Each section gets its own grid so grid-auto-rows:1fr can equalise card
+ // heights without the section headings being stretched too.
+ const card=c=>c.id===cotConnEditingId?cotConnEditCardHtml(c):cotConnCardHtml(c);
+ const ordered=cotApplyOrder(f);
+ const pending=ordered.filter(c=>!c.sched);
+ const done=ordered.filter(c=>c.sched);
+ const secHead=(label,n)=>`<div class="cot-sec-head"><div class="cot-sec-label">${label}</div><div class="cot-sec-rule"></div><div class="cot-sec-n">${n}</div></div>`;
+ const emptyMsg=zone=>zone==='pending'?'Everyone here is scheduled.':'Drag someone here once you have seen them.';
+ const grid=(zone,items)=>`<div class="cot-conn-grid${items.length?'':' cot-grid-empty'}" data-zone="${zone}" ondragover="cotDragOverZone(event)" ondragleave="cotDragLeaveZone(event)" ondrop="cotDropZone(event,'${zone}')">${items.length?items.map(card).join(''):`<div class="cot-drop-hint">${emptyMsg(zone)}</div>`}</div>`;
+ let html='';
+ if(!pending.length && !done.length){
+  html='<div class="cot-conn-empty">No connections in this filter yet.</div>';
+ }else{
+  html += secHead('To schedule',pending.length) + grid('pending',pending);
+  html += secHead('Already connected',done.length) + grid('done',done);
+ }
+ el.innerHTML=html;
  const s=cotConns.filter(c=>c.sched).length;
  const tn=document.getElementById('cot-sn-t');if(tn)tn.textContent=cotConns.length;
  const ts=document.getElementById('cot-sn-s');if(ts)ts.textContent=s;
@@ -2055,9 +2198,13 @@ function renderCotConns(){
 
 function cotConnCardHtml(c){
  return `
-  <div class="cot-conn-card${c.sched?' sched':''}" onclick="cotOpenConnEdit('${c.id}')">
+  <div class="cot-conn-card${c.sched?' sched':''}" data-id="${c.id}" draggable="true"
+   ondragstart="cotDragStart(event,'${c.id}')" ondragend="cotDragEnd(event)"
+   ondragover="cotDragOverCard(event)" ondragleave="cotDragLeaveCard(event)" ondrop="cotDropOnCard(event,'${c.id}')"
+   onclick="cotOpenConnEdit('${c.id}')">
    <div class="cot-cn">${c.sched?'✦ ':''}${c.name}</div>
    ${c.mls_number?`<a href="https://58clientsandproperties.netlify.app?open=${encodeURIComponent(c.mls_number)}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;font-size:9px;color:var(--teal2);margin-top:2px;text-decoration:none;">Open in CRM ↗</a>`:''}
+   ${c.sched&&c.sched_date?`<div style="font-size:9px;color:var(--teal2);margin-top:3px;letter-spacing:.06em;">${new Date(c.sched_date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div>`:''}
    <div class="cot-cnote">${c.note||''}</div>
    <div class="cot-ctags">
     <span class="pill ${c.type==='coffee'?'pill-champ':'pill-ghost'}" style="font-size:9px;padding:2px 8px;background:${c.type==='coffee'?'rgba(201,168,124,0.15)':'rgba(196,122,90,0.12)'};border-color:${c.type==='coffee'?'var(--border2)':'rgba(196,122,90,0.3)'};color:${c.type==='coffee'?'var(--champ2)':'#D4957A'}">${c.type==='coffee'?'☕':'🥃'}</span>
@@ -2113,7 +2260,35 @@ function cotSaveConnEdit(id){
  showToast(name+' updated ✓');
 }
 
-function cotToggleSched(id){const c=cotConns.find(x=>String(x.id)===String(id));if(c){c.sched=!c.sched;renderCotConns();cotPatchConn(c.id,{sched:c.sched});showToast(c.name+(c.sched?' scheduled ✓':' unscheduled'));}}
+// Scheduling a connection now opens the Add Event modal pre-filled with the
+// Coffee or Tequila theme and the person's name, so the calendar and the
+// connection list stay in step. Un-scheduling stays a plain toggle.
+let cotPendingSchedId = null;
+function cotToggleSched(id){
+ const c=cotConns.find(x=>String(x.id)===String(id));
+ if(!c) return;
+ if(c.sched){
+  c.sched=false;renderCotConns();cotPatchConn(c.id,{sched:false});
+  showToast(c.name+' moved back to pending');
+  return;
+ }
+ cotPendingSchedId = c.id;
+ openModal('m-ev');
+ const isCoffee = c.type==='coffee';
+ const t=document.getElementById('ev-title');
+ if(t) t.value = (isCoffee?'Coffee':'Tequila')+' — '+c.name;
+ const cat=document.getElementById('ev-cat');
+ if(cat) cat.value = isCoffee?'coffee':'tequila';
+ const note=document.getElementById('ev-notes');
+ if(note) note.value = c.note || '';
+ const time=document.getElementById('ev-time');
+ if(time) time.value = isCoffee?'8:00 AM':'5:00 PM';
+ const d=document.getElementById('ev-date'); if(d) d.focus();
+}
+
+// If the user closes the event modal without saving, drop the pending link
+// so the connection isn't silently marked as scheduled later.
+function cotClearPendingSched(){ cotPendingSchedId = null; }
 function cotDelConn(id){cotConns=cotConns.filter(x=>String(x.id)!==String(id));if(cotConnEditingId===id)cotConnEditingId=null;renderCotConns();renderCotSuggested();cotDeleteConn(id);showToast('Removed ✓');}
 function addCotConn(){
  const name=document.getElementById('cot-cn').value.trim();
@@ -2350,20 +2525,44 @@ async function loadCars(){
  }catch(e){console.log('cars load err',e);}
 }
 
+let vehEditingId = null;
+const VEH_FIELDS = ['car-make','car-model','car-year','car-vin','car-plate','car-ins-co','car-ins-policy','car-ins-exp','car-reg-exp','car-notes'];
 function toggleCarAddForm(show){
  const wrap = document.getElementById('car-add-wrap');
  if(!wrap) return;
  const willShow = show===undefined ? wrap.style.display==='none' : show;
  wrap.style.display = willShow ? 'block' : 'none';
  if(!willShow){
-  ['car-make','car-model','car-year','car-vin','car-plate','car-ins-co','car-ins-policy','car-ins-exp','car-reg-exp','car-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  VEH_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  vehEditingId = null;
+  const b=document.getElementById('car-save-btn'); if(b) b.textContent='Save Vehicle';
+  const t=document.getElementById('car-add-toggle-btn'); if(t) t.textContent='+ Add Vehicle';
  }
+}
+
+// Open an existing vehicle in the same form, pre-filled, and switch it to update mode.
+function editVehicle(id){
+ const v = vehicles.find(x=>String(x.id)===String(id));
+ if(!v) return;
+ vehEditingId = v.id;
+ const wrap = document.getElementById('car-add-wrap');
+ if(wrap) wrap.style.display='block';
+ const set=(elId,val)=>{const el=document.getElementById(elId); if(el) el.value = val||'';};
+ set('car-make',v.make); set('car-model',v.model); set('car-year',v.year);
+ set('car-vin',v.vin); set('car-plate',v.plate);
+ set('car-ins-co',v.insurance_company); set('car-ins-policy',v.policy_number);
+ set('car-ins-exp',v.insurance_expiration); set('car-reg-exp',v.registration_expiration);
+ set('car-notes',v.notes);
+ const b=document.getElementById('car-save-btn'); if(b) b.textContent='Update Vehicle';
+ const t=document.getElementById('car-add-toggle-btn'); if(t) t.textContent='Cancel edit';
+ if(wrap) wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 async function saveVehicle(){
  const make = document.getElementById('car-make').value.trim();
  const model = document.getElementById('car-model').value.trim();
  if(!make && !model){showToast('Add at least a make or model');return;}
+ if(vehEditingId){ return updateVehicle(vehEditingId); }
  const entry = {
   id: 'v_'+Date.now().toString(36),
   make, model,
@@ -2388,6 +2587,36 @@ async function saveVehicle(){
  toggleCarAddForm(false);
  renderVehicles();
  showToast('Vehicle saved ✓');
+}
+
+// PATCH the existing row instead of inserting a new one — no duplicates.
+async function updateVehicle(id){
+ const v = vehicles.find(x=>String(x.id)===String(id));
+ if(!v){ showToast('Vehicle not found'); return; }
+ const val = elId => { const el=document.getElementById(elId); return el ? el.value.trim() : ''; };
+ const patch = {
+  make: val('car-make'), model: val('car-model'), year: val('car-year'),
+  vin: val('car-vin'), plate: val('car-plate'),
+  insurance_company: val('car-ins-co'), policy_number: val('car-ins-policy'),
+  insurance_expiration: val('car-ins-exp'), registration_expiration: val('car-reg-exp'),
+  notes: val('car-notes')
+ };
+ try{
+  const res = await fetch(`${SB_URL}/rest/v1/jp58_vehicles?id=eq.${encodeURIComponent(id)}`,{
+   method:'PATCH',
+   headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+   body: JSON.stringify(patch)
+  });
+  if(!res.ok) throw new Error('status '+res.status);
+ }catch(e){
+  console.log('vehicle update err',e);
+  showToast('Could not save to Supabase — check connection');
+  return;
+ }
+ Object.assign(v, patch);
+ toggleCarAddForm(false);
+ renderVehicles();
+ showToast('Vehicle updated ✓');
 }
 
 async function deleteVehicle(id){
@@ -2416,7 +2645,10 @@ function renderVehicles(){
   <div class="gc" style="padding:14px 16px;">
    <div style="display:flex;align-items:flex-start;justify-content:space-between;">
     <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ivory);">${[v.year,v.make,v.model].filter(Boolean).join(' ')||'Vehicle'}</div>
-    <button onclick="deleteVehicle('${v.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+     <button onclick="editVehicle('${v.id}')" title="Edit vehicle" style="background:none;border:none;cursor:pointer;color:var(--champ2);padding:0;display:flex;align-items:center;"><i data-lucide="pencil" style="width:13px;height:13px;stroke:currentColor;stroke-width:1.5;"></i></button>
+     <button onclick="deleteVehicle('${v.id}')" class="mini-del" style="opacity:1;font-size:13px;">×</button>
+    </div>
    </div>
    ${v.plate?`<div style="font-size:11px;color:var(--ivory3);margin-top:2px;">Plate: ${v.plate}</div>`:''}
    ${v.vin?`<div style="font-size:11px;color:var(--ivory3);margin-top:2px;">VIN: ${v.vin}</div>`:''}
@@ -2425,6 +2657,7 @@ function renderVehicles(){
    ${v.registration_expiration?`<div style="font-size:11px;color:var(--ivory3);">Registration exp: ${v.registration_expiration}</div>`:''}
    ${v.notes?`<div style="font-size:11px;color:var(--ivory3);font-style:italic;margin-top:6px;">${v.notes}</div>`:''}
   </div>`).join('');
+ if(window.lucide)lucide.createIcons();
 }
 
 async function addCarMaintenance(){
@@ -2772,6 +3005,7 @@ async function icalLoadEvents(retry){
   const res = await fetch('/api/ical');
   if(!res.ok) throw new Error('ical fetch failed: '+res.status);
   const events = await res.json();
+  const errBox = document.querySelector('.gcal-error'); if(errBox) errBox.remove();
   window._icalEvents = events; // store globally for home panel
   renderEvents(); // refresh home with gcal events
   buildWeek(); // refresh week strip dots
@@ -2801,8 +3035,33 @@ async function icalLoadEvents(retry){
   // or a slow calendar fetch on the server, so a single bad load doesn't
   // leave the Dashboard looking empty for the rest of the visit.
   if(!retry){ setTimeout(()=>icalLoadEvents(true), 4000); return; }
+  console.error('[JP58] Google Calendar failed to load:', e);
   if(el) el.innerHTML = '<div style="font-size:12px;color:var(--ivory3);padding:8px 0;">Could not load — check calendar sharing settings</div>';
+  // The #ical-events-list element does not exist on the Dashboard, so without
+  // this the failure was invisible: the week simply read "Free day". Show it
+  // where Jeannette actually looks.
+  icalShowError(e);
  }
+}
+
+// Visible banner on the Dashboard when the calendar feed fails, with the real
+// reason — so a broken feed never again looks like an empty week.
+function icalShowError(e){
+ const homeList = document.getElementById('ev-list');
+ if(!homeList) return;
+ if(homeList.querySelector('.gcal-error')) return;
+ const box = document.createElement('div');
+ box.className = 'gcal-error';
+ box.style.cssText = 'margin-top:10px;padding:9px 12px;border-radius:8px;border:1px solid rgba(196,122,90,.35);background:rgba(196,122,90,.10);';
+ box.innerHTML = '<div style="font-size:11px;color:#D4957A;letter-spacing:.04em;">Google Calendar not loading</div>'
+  + '<div style="font-size:10px;color:var(--ivory3);margin-top:3px;">' + String(e && e.message ? e.message : e) + '</div>'
+  + '<div style="font-size:10px;color:var(--ivory3);margin-top:4px;">Only JP58 events are showing. <span style="color:var(--champ2);cursor:pointer;text-decoration:underline;" onclick="icalRetryNow()">Retry</span></div>';
+ homeList.appendChild(box);
+}
+
+function icalRetryNow(){
+ const b = document.querySelector('.gcal-error'); if(b) b.remove();
+ icalLoadEvents();
 }
 
 function updateHomeFromICal(events){
